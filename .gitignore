@@ -1,0 +1,13 @@
+.idea
+target
+allObservationsTypesAndSelectors.yml
+abego.properties
+untracked-data
+tmp
+bin
+**/.settings
+**/.classpath
+**/.project
+**/*.iml
+**/*-ub.*
+htmlReport/

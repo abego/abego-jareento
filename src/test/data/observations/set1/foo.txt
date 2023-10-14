@@ -1,0 +1,1 @@
+just to check if non-csv-files are ignored

@@ -1,0 +1,624 @@
+Classfile jar:file:/Users/ub/work/project/sd/project/sampleproject/sampleproject/target/sampleproject-0.1.0-SNAPSHOT.jar!/com/example/sample2/SynSub.class
+  Last modified Jun 14, 2023; size 455 bytes
+  MD5 checksum 00c40cc1ac951f7750deaa04f3d84a94
+  Compiled from "SynSub.java"
+public class com.example.sample2.SynSub extends com.example.sample2.SynBase
+  minor version: 0
+  major version: 49
+  flags: ACC_PUBLIC, ACC_SUPER
+Constant pool:
+   #1 = Methodref          #4.#16         // com/example/sample2/SynBase."<init>":()V
+   #2 = Methodref          #17.#18        // java/lang/Integer.valueOf:(I)Ljava/lang/Integer;
+   #3 = Class              #19            // com/example/sample2/SynSub
+   #4 = Class              #20            // com/example/sample2/SynBase
+   #5 = Utf8               <init>
+   #6 = Utf8               ()V
+   #7 = Utf8               Code
+   #8 = Utf8               LineNumberTable
+   #9 = Utf8               LocalVariableTable
+  #10 = Utf8               this
+  #11 = Utf8               Lcom/example/sample2/SynSub;
+  #12 = Utf8               value
+  #13 = Utf8               ()Ljava/lang/Integer;
+  #14 = Utf8               SourceFile
+  #15 = Utf8               SynSub.java
+  #16 = NameAndType        #5:#6          // "<init>":()V
+  #17 = Class              #21            // java/lang/Integer
+  #18 = NameAndType        #22:#23        // valueOf:(I)Ljava/lang/Integer;
+  #19 = Utf8               com/example/sample2/SynSub
+  #20 = Utf8               com/example/sample2/SynBase
+  #21 = Utf8               java/lang/Integer
+  #22 = Utf8               valueOf
+  #23 = Utf8               (I)Ljava/lang/Integer;
+{
+  public com.example.sample2.SynSub();
+    descriptor: ()V
+    flags: ACC_PUBLIC
+    Code:
+      stack=1, locals=1, args_size=1
+         0: aload_0
+         1: invokespecial #1                  // Method com/example/sample2/SynBase."<init>":()V
+         4: return
+      LineNumberTable:
+        line 5: 0
+      LocalVariableTable:
+        Start  Length  Slot  Name   Signature
+            0       5     0  this   Lcom/example/sample2/SynSub;
+
+  public java.lang.Integer value();
+    descriptor: ()Ljava/lang/Integer;
+    flags: ACC_PUBLIC
+    Code:
+      stack=1, locals=1, args_size=1
+         0: iconst_1
+         1: invokestatic  #2                  // Method java/lang/Integer.valueOf:(I)Ljava/lang/Integer;
+         4: areturn
+      LineNumberTable:
+        line 7: 0
+      LocalVariableTable:
+        Start  Length  Slot  Name   Signature
+            0       5     0  this   Lcom/example/sample2/SynSub;
+}
+SourceFile: "SynSub.java"
+Classfile jar:file:/Users/ub/work/project/sd/project/sampleproject/sampleproject/target/sampleproject-0.1.0-SNAPSHOT.jar!/com/example/sample2/SynBase.class
+  Last modified Jun 14, 2023; size 286 bytes
+  MD5 checksum f294b7c765c2e30784c3b1de1d538afb
+  Compiled from "SynBase.java"
+public class com.example.sample2.SynBase
+  minor version: 0
+  major version: 49
+  flags: ACC_PUBLIC, ACC_SUPER
+Constant pool:
+   #1 = Methodref          #3.#13         // java/lang/Object."<init>":()V
+   #2 = Class              #14            // com/example/sample2/SynBase
+   #3 = Class              #15            // java/lang/Object
+   #4 = Utf8               <init>
+   #5 = Utf8               ()V
+   #6 = Utf8               Code
+   #7 = Utf8               LineNumberTable
+   #8 = Utf8               LocalVariableTable
+   #9 = Utf8               this
+  #10 = Utf8               Lcom/example/sample2/SynBase;
+  #11 = Utf8               SourceFile
+  #12 = Utf8               SynBase.java
+  #13 = NameAndType        #4:#5          // "<init>":()V
+  #14 = Utf8               com/example/sample2/SynBase
+  #15 = Utf8               java/lang/Object
+{
+  public com.example.sample2.SynBase();
+    descriptor: ()V
+    flags: ACC_PUBLIC
+    Code:
+      stack=1, locals=1, args_size=1
+         0: aload_0
+         1: invokespecial #1                  // Method java/lang/Object."<init>":()V
+         4: return
+      LineNumberTable:
+        line 3: 0
+      LocalVariableTable:
+        Start  Length  Slot  Name   Signature
+            0       5     0  this   Lcom/example/sample2/SynBase;
+}
+SourceFile: "SynBase.java"
+Classfile jar:file:/Users/ub/work/project/sd/project/sampleproject/sampleproject/target/sampleproject-0.1.0-SNAPSHOT.jar!/com/example/inheritance/Sub1.class
+  Last modified Jun 14, 2023; size 615 bytes
+  MD5 checksum d4c4216c62e4b94d9c9f969bb9db90ec
+  Compiled from "Sub1.java"
+public class com.example.inheritance.Sub1 extends com.example.inheritance.Base
+  minor version: 0
+  major version: 49
+  flags: ACC_PUBLIC, ACC_SUPER
+Constant pool:
+   #1 = Methodref          #4.#22         // com/example/inheritance/Base."<init>":()V
+   #2 = Methodref          #4.#23         // com/example/inheritance/Base.methodBase1:(Ljava/lang/String;)V
+   #3 = Class              #24            // com/example/inheritance/Sub1
+   #4 = Class              #25            // com/example/inheritance/Base
+   #5 = Class              #26            // com/example/inheritance/Sub1$Sub1_InnerClass
+   #6 = Utf8               Sub1_InnerClass
+   #7 = Utf8               InnerClasses
+   #8 = Utf8               <init>
+   #9 = Utf8               ()V
+  #10 = Utf8               Code
+  #11 = Utf8               LineNumberTable
+  #12 = Utf8               LocalVariableTable
+  #13 = Utf8               this
+  #14 = Utf8               Lcom/example/inheritance/Sub1;
+  #15 = Utf8               methodSub1
+  #16 = Utf8               methodBase1
+  #17 = Utf8               (Ljava/lang/String;)V
+  #18 = Utf8               a
+  #19 = Utf8               Ljava/lang/String;
+  #20 = Utf8               SourceFile
+  #21 = Utf8               Sub1.java
+  #22 = NameAndType        #8:#9          // "<init>":()V
+  #23 = NameAndType        #16:#17        // methodBase1:(Ljava/lang/String;)V
+  #24 = Utf8               com/example/inheritance/Sub1
+  #25 = Utf8               com/example/inheritance/Base
+  #26 = Utf8               com/example/inheritance/Sub1$Sub1_InnerClass
+{
+  public com.example.inheritance.Sub1();
+    descriptor: ()V
+    flags: ACC_PUBLIC
+    Code:
+      stack=1, locals=1, args_size=1
+         0: aload_0
+         1: invokespecial #1                  // Method com/example/inheritance/Base."<init>":()V
+         4: return
+      LineNumberTable:
+        line 3: 0
+      LocalVariableTable:
+        Start  Length  Slot  Name   Signature
+            0       5     0  this   Lcom/example/inheritance/Sub1;
+
+  void methodSub1();
+    descriptor: ()V
+    flags:
+    Code:
+      stack=0, locals=1, args_size=1
+         0: return
+      LineNumberTable:
+        line 12: 0
+      LocalVariableTable:
+        Start  Length  Slot  Name   Signature
+            0       1     0  this   Lcom/example/inheritance/Sub1;
+
+  void methodBase1(java.lang.String);
+    descriptor: (Ljava/lang/String;)V
+    flags:
+    Code:
+      stack=2, locals=2, args_size=2
+         0: aload_0
+         1: aload_1
+         2: invokespecial #2                  // Method com/example/inheritance/Base.methodBase1:(Ljava/lang/String;)V
+         5: return
+      LineNumberTable:
+        line 16: 0
+        line 17: 5
+      LocalVariableTable:
+        Start  Length  Slot  Name   Signature
+            0       6     0  this   Lcom/example/inheritance/Sub1;
+            0       6     1     a   Ljava/lang/String;
+}
+SourceFile: "Sub1.java"
+InnerClasses:
+     public static #6= #5 of #3; //Sub1_InnerClass=class com/example/inheritance/Sub1$Sub1_InnerClass of class com/example/inheritance/Sub1
+Classfile jar:file:/Users/ub/work/project/sd/project/sampleproject/sampleproject/target/sampleproject-0.1.0-SNAPSHOT.jar!/com/example/inheritance/Sub1$Sub1_InnerClass.class
+  Last modified Jun 14, 2023; size 642 bytes
+  MD5 checksum b9698434c553a129b2ee309a0c260ebc
+  Compiled from "Sub1.java"
+public class com.example.inheritance.Sub1$Sub1_InnerClass extends com.example.inheritance.Base$Base_InnerClass
+  minor version: 0
+  major version: 49
+  flags: ACC_PUBLIC, ACC_SUPER
+Constant pool:
+   #1 = Methodref          #4.#20         // com/example/inheritance/Base$Base_InnerClass."<init>":()V
+   #2 = Methodref          #4.#21         // com/example/inheritance/Base$Base_InnerClass.innerMethodBase1:(Ljava/lang/String;)V
+   #3 = Class              #23            // com/example/inheritance/Sub1$Sub1_InnerClass
+   #4 = Class              #25            // com/example/inheritance/Base$Base_InnerClass
+   #5 = Utf8               <init>
+   #6 = Utf8               ()V
+   #7 = Utf8               Code
+   #8 = Utf8               LineNumberTable
+   #9 = Utf8               LocalVariableTable
+  #10 = Utf8               this
+  #11 = Utf8               Sub1_InnerClass
+  #12 = Utf8               InnerClasses
+  #13 = Utf8               Lcom/example/inheritance/Sub1$Sub1_InnerClass;
+  #14 = Utf8               innerMethodBase1
+  #15 = Utf8               (Ljava/lang/String;)V
+  #16 = Utf8               a
+  #17 = Utf8               Ljava/lang/String;
+  #18 = Utf8               SourceFile
+  #19 = Utf8               Sub1.java
+  #20 = NameAndType        #5:#6          // "<init>":()V
+  #21 = NameAndType        #14:#15        // innerMethodBase1:(Ljava/lang/String;)V
+  #22 = Class              #27            // com/example/inheritance/Sub1
+  #23 = Utf8               com/example/inheritance/Sub1$Sub1_InnerClass
+  #24 = Class              #28            // com/example/inheritance/Base
+  #25 = Utf8               com/example/inheritance/Base$Base_InnerClass
+  #26 = Utf8               Base_InnerClass
+  #27 = Utf8               com/example/inheritance/Sub1
+  #28 = Utf8               com/example/inheritance/Base
+{
+  public com.example.inheritance.Sub1$Sub1_InnerClass();
+    descriptor: ()V
+    flags: ACC_PUBLIC
+    Code:
+      stack=1, locals=1, args_size=1
+         0: aload_0
+         1: invokespecial #1                  // Method com/example/inheritance/Base$Base_InnerClass."<init>":()V
+         4: return
+      LineNumberTable:
+        line 4: 0
+      LocalVariableTable:
+        Start  Length  Slot  Name   Signature
+            0       5     0  this   Lcom/example/inheritance/Sub1$Sub1_InnerClass;
+
+  void innerMethodBase1(java.lang.String);
+    descriptor: (Ljava/lang/String;)V
+    flags:
+    Code:
+      stack=2, locals=2, args_size=2
+         0: aload_0
+         1: aload_1
+         2: invokespecial #2                  // Method com/example/inheritance/Base$Base_InnerClass.innerMethodBase1:(Ljava/lang/String;)V
+         5: return
+      LineNumberTable:
+        line 7: 0
+        line 8: 5
+      LocalVariableTable:
+        Start  Length  Slot  Name   Signature
+            0       6     0  this   Lcom/example/inheritance/Sub1$Sub1_InnerClass;
+            0       6     1     a   Ljava/lang/String;
+}
+SourceFile: "Sub1.java"
+InnerClasses:
+     public static #11= #3 of #22; //Sub1_InnerClass=class com/example/inheritance/Sub1$Sub1_InnerClass of class com/example/inheritance/Sub1
+     public static #26= #4 of #24; //Base_InnerClass=class com/example/inheritance/Base$Base_InnerClass of class com/example/inheritance/Base
+Classfile jar:file:/Users/ub/work/project/sd/project/sampleproject/sampleproject/target/sampleproject-0.1.0-SNAPSHOT.jar!/com/example/inheritance/InterfaceA.class
+  Last modified Jun 14, 2023; size 158 bytes
+  MD5 checksum 7e0e340801fe9388e5e7db8c660ce2e5
+  Compiled from "InterfaceA.java"
+public interface com.example.inheritance.InterfaceA
+  minor version: 0
+  major version: 49
+  flags: ACC_PUBLIC, ACC_INTERFACE, ACC_ABSTRACT
+Constant pool:
+  #1 = Class              #7              // com/example/inheritance/InterfaceA
+  #2 = Class              #8              // java/lang/Object
+  #3 = Utf8               methodInterfaceA
+  #4 = Utf8               ()V
+  #5 = Utf8               SourceFile
+  #6 = Utf8               InterfaceA.java
+  #7 = Utf8               com/example/inheritance/InterfaceA
+  #8 = Utf8               java/lang/Object
+{
+  public abstract void methodInterfaceA();
+    descriptor: ()V
+    flags: ACC_PUBLIC, ACC_ABSTRACT
+}
+SourceFile: "InterfaceA.java"
+Classfile jar:file:/Users/ub/work/project/sd/project/sampleproject/sampleproject/target/sampleproject-0.1.0-SNAPSHOT.jar!/com/example/inheritance/Sub2.class
+  Last modified Jun 14, 2023; size 473 bytes
+  MD5 checksum 57d02ff67b918ad3e0bfdc72a4cc313c
+  Compiled from "Sub2.java"
+public class com.example.inheritance.Sub2 implements com.example.inheritance.InterfaceA
+  minor version: 0
+  major version: 49
+  flags: ACC_PUBLIC, ACC_SUPER
+Constant pool:
+   #1 = Methodref          #3.#16         // java/lang/Object."<init>":()V
+   #2 = Class              #17            // com/example/inheritance/Sub2
+   #3 = Class              #18            // java/lang/Object
+   #4 = Class              #19            // com/example/inheritance/InterfaceA
+   #5 = Utf8               <init>
+   #6 = Utf8               ()V
+   #7 = Utf8               Code
+   #8 = Utf8               LineNumberTable
+   #9 = Utf8               LocalVariableTable
+  #10 = Utf8               this
+  #11 = Utf8               Lcom/example/inheritance/Sub2;
+  #12 = Utf8               methodSub2
+  #13 = Utf8               methodInterfaceA
+  #14 = Utf8               SourceFile
+  #15 = Utf8               Sub2.java
+  #16 = NameAndType        #5:#6          // "<init>":()V
+  #17 = Utf8               com/example/inheritance/Sub2
+  #18 = Utf8               java/lang/Object
+  #19 = Utf8               com/example/inheritance/InterfaceA
+{
+  public com.example.inheritance.Sub2();
+    descriptor: ()V
+    flags: ACC_PUBLIC
+    Code:
+      stack=1, locals=1, args_size=1
+         0: aload_0
+         1: invokespecial #1                  // Method java/lang/Object."<init>":()V
+         4: return
+      LineNumberTable:
+        line 3: 0
+      LocalVariableTable:
+        Start  Length  Slot  Name   Signature
+            0       5     0  this   Lcom/example/inheritance/Sub2;
+
+  void methodSub2();
+    descriptor: ()V
+    flags:
+    Code:
+      stack=0, locals=1, args_size=1
+         0: return
+      LineNumberTable:
+        line 6: 0
+      LocalVariableTable:
+        Start  Length  Slot  Name   Signature
+            0       1     0  this   Lcom/example/inheritance/Sub2;
+
+  public void methodInterfaceA();
+    descriptor: ()V
+    flags: ACC_PUBLIC
+    Code:
+      stack=0, locals=1, args_size=1
+         0: return
+      LineNumberTable:
+        line 10: 0
+      LocalVariableTable:
+        Start  Length  Slot  Name   Signature
+            0       1     0  this   Lcom/example/inheritance/Sub2;
+}
+SourceFile: "Sub2.java"
+Classfile jar:file:/Users/ub/work/project/sd/project/sampleproject/sampleproject/target/sampleproject-0.1.0-SNAPSHOT.jar!/com/example/inheritance/Base$Base_InnerClass.class
+  Last modified Jun 14, 2023; size 621 bytes
+  MD5 checksum fe3529e5cb598d4f98421f6c591204c0
+  Compiled from "Base.java"
+public class com.example.inheritance.Base$Base_InnerClass
+  minor version: 0
+  major version: 49
+  flags: ACC_PUBLIC, ACC_SUPER
+Constant pool:
+   #1 = Methodref          #3.#20         // java/lang/Object."<init>":()V
+   #2 = Class              #22            // com/example/inheritance/Base$Base_InnerClass
+   #3 = Class              #23            // java/lang/Object
+   #4 = Utf8               <init>
+   #5 = Utf8               ()V
+   #6 = Utf8               Code
+   #7 = Utf8               LineNumberTable
+   #8 = Utf8               LocalVariableTable
+   #9 = Utf8               this
+  #10 = Utf8               Base_InnerClass
+  #11 = Utf8               InnerClasses
+  #12 = Utf8               Lcom/example/inheritance/Base$Base_InnerClass;
+  #13 = Utf8               innerMethodBase1
+  #14 = Utf8               (Ljava/lang/String;)V
+  #15 = Utf8               a
+  #16 = Utf8               Ljava/lang/String;
+  #17 = Utf8               innerMethodBase2
+  #18 = Utf8               SourceFile
+  #19 = Utf8               Base.java
+  #20 = NameAndType        #4:#5          // "<init>":()V
+  #21 = Class              #24            // com/example/inheritance/Base
+  #22 = Utf8               com/example/inheritance/Base$Base_InnerClass
+  #23 = Utf8               java/lang/Object
+  #24 = Utf8               com/example/inheritance/Base
+{
+  public com.example.inheritance.Base$Base_InnerClass();
+    descriptor: ()V
+    flags: ACC_PUBLIC
+    Code:
+      stack=1, locals=1, args_size=1
+         0: aload_0
+         1: invokespecial #1                  // Method java/lang/Object."<init>":()V
+         4: return
+      LineNumberTable:
+        line 4: 0
+      LocalVariableTable:
+        Start  Length  Slot  Name   Signature
+            0       5     0  this   Lcom/example/inheritance/Base$Base_InnerClass;
+
+  void innerMethodBase1(java.lang.String);
+    descriptor: (Ljava/lang/String;)V
+    flags:
+    Code:
+      stack=0, locals=2, args_size=2
+         0: return
+      LineNumberTable:
+        line 5: 0
+      LocalVariableTable:
+        Start  Length  Slot  Name   Signature
+            0       1     0  this   Lcom/example/inheritance/Base$Base_InnerClass;
+            0       1     1     a   Ljava/lang/String;
+
+  void innerMethodBase2(java.lang.String);
+    descriptor: (Ljava/lang/String;)V
+    flags:
+    Code:
+      stack=0, locals=2, args_size=2
+         0: return
+      LineNumberTable:
+        line 6: 0
+      LocalVariableTable:
+        Start  Length  Slot  Name   Signature
+            0       1     0  this   Lcom/example/inheritance/Base$Base_InnerClass;
+            0       1     1     a   Ljava/lang/String;
+}
+SourceFile: "Base.java"
+InnerClasses:
+     public static #10= #2 of #21; //Base_InnerClass=class com/example/inheritance/Base$Base_InnerClass of class com/example/inheritance/Base
+Classfile jar:file:/Users/ub/work/project/sd/project/sampleproject/sampleproject/target/sampleproject-0.1.0-SNAPSHOT.jar!/com/example/inheritance/Base.class
+  Last modified Jun 14, 2023; size 595 bytes
+  MD5 checksum 96e68b2f8820dd6ff4657efbb34b0c9d
+  Compiled from "Base.java"
+public class com.example.inheritance.Base
+  minor version: 0
+  major version: 49
+  flags: ACC_PUBLIC, ACC_SUPER
+Constant pool:
+   #1 = Methodref          #3.#21         // java/lang/Object."<init>":()V
+   #2 = Class              #22            // com/example/inheritance/Base
+   #3 = Class              #23            // java/lang/Object
+   #4 = Class              #24            // com/example/inheritance/Base$Base_InnerClass
+   #5 = Utf8               Base_InnerClass
+   #6 = Utf8               InnerClasses
+   #7 = Utf8               <init>
+   #8 = Utf8               ()V
+   #9 = Utf8               Code
+  #10 = Utf8               LineNumberTable
+  #11 = Utf8               LocalVariableTable
+  #12 = Utf8               this
+  #13 = Utf8               Lcom/example/inheritance/Base;
+  #14 = Utf8               methodBase1
+  #15 = Utf8               (Ljava/lang/String;)V
+  #16 = Utf8               a
+  #17 = Utf8               Ljava/lang/String;
+  #18 = Utf8               methodBase2
+  #19 = Utf8               SourceFile
+  #20 = Utf8               Base.java
+  #21 = NameAndType        #7:#8          // "<init>":()V
+  #22 = Utf8               com/example/inheritance/Base
+  #23 = Utf8               java/lang/Object
+  #24 = Utf8               com/example/inheritance/Base$Base_InnerClass
+{
+  public com.example.inheritance.Base();
+    descriptor: ()V
+    flags: ACC_PUBLIC
+    Code:
+      stack=1, locals=1, args_size=1
+         0: aload_0
+         1: invokespecial #1                  // Method java/lang/Object."<init>":()V
+         4: return
+      LineNumberTable:
+        line 3: 0
+      LocalVariableTable:
+        Start  Length  Slot  Name   Signature
+            0       5     0  this   Lcom/example/inheritance/Base;
+
+  void methodBase1(java.lang.String);
+    descriptor: (Ljava/lang/String;)V
+    flags:
+    Code:
+      stack=0, locals=2, args_size=2
+         0: return
+      LineNumberTable:
+        line 8: 0
+      LocalVariableTable:
+        Start  Length  Slot  Name   Signature
+            0       1     0  this   Lcom/example/inheritance/Base;
+            0       1     1     a   Ljava/lang/String;
+
+  void methodBase2(java.lang.String);
+    descriptor: (Ljava/lang/String;)V
+    flags:
+    Code:
+      stack=0, locals=2, args_size=2
+         0: return
+      LineNumberTable:
+        line 9: 0
+      LocalVariableTable:
+        Start  Length  Slot  Name   Signature
+            0       1     0  this   Lcom/example/inheritance/Base;
+            0       1     1     a   Ljava/lang/String;
+}
+SourceFile: "Base.java"
+InnerClasses:
+     public static #5= #4 of #2; //Base_InnerClass=class com/example/inheritance/Base$Base_InnerClass of class com/example/inheritance/Base
+Classfile jar:file:/Users/ub/work/project/sd/project/sampleproject/sampleproject/target/sampleproject-0.1.0-SNAPSHOT.jar!/com/example/inheritance/Main.class
+  Last modified Jun 14, 2023; size 1053 bytes
+  MD5 checksum 6e494152938262fe18047d5b6ef659a8
+  Compiled from "Main.java"
+public class com.example.inheritance.Main
+  minor version: 0
+  major version: 49
+  flags: ACC_PUBLIC, ACC_SUPER
+Constant pool:
+   #1 = Methodref          #12.#32        // java/lang/Object."<init>":()V
+   #2 = String             #33            //
+   #3 = Methodref          #34.#35        // com/example/inheritance/Base.methodBase1:(Ljava/lang/String;)V
+   #4 = Methodref          #34.#36        // com/example/inheritance/Base.methodBase2:(Ljava/lang/String;)V
+   #5 = InterfaceMethodref #37.#38        // com/example/inheritance/InterfaceA.methodInterfaceA:()V
+   #6 = Methodref          #39.#35        // com/example/inheritance/Sub1.methodBase1:(Ljava/lang/String;)V
+   #7 = Methodref          #39.#36        // com/example/inheritance/Sub1.methodBase2:(Ljava/lang/String;)V
+   #8 = Methodref          #39.#40        // com/example/inheritance/Sub1.methodSub1:()V
+   #9 = Methodref          #41.#42        // com/example/inheritance/Sub2.methodSub2:()V
+  #10 = Methodref          #41.#38        // com/example/inheritance/Sub2.methodInterfaceA:()V
+  #11 = Class              #43            // com/example/inheritance/Main
+  #12 = Class              #44            // java/lang/Object
+  #13 = Utf8               <init>
+  #14 = Utf8               ()V
+  #15 = Utf8               Code
+  #16 = Utf8               LineNumberTable
+  #17 = Utf8               LocalVariableTable
+  #18 = Utf8               this
+  #19 = Utf8               Lcom/example/inheritance/Main;
+  #20 = Utf8               entry
+  #21 = Utf8               (Lcom/example/inheritance/Base;Lcom/example/inheritance/InterfaceA;Lcom/example/inheritance/Sub1;Lcom/example/inheritance/Sub2;)V
+  #22 = Utf8               b
+  #23 = Utf8               Lcom/example/inheritance/Base;
+  #24 = Utf8               ia
+  #25 = Utf8               Lcom/example/inheritance/InterfaceA;
+  #26 = Utf8               s1
+  #27 = Utf8               Lcom/example/inheritance/Sub1;
+  #28 = Utf8               s2
+  #29 = Utf8               Lcom/example/inheritance/Sub2;
+  #30 = Utf8               SourceFile
+  #31 = Utf8               Main.java
+  #32 = NameAndType        #13:#14        // "<init>":()V
+  #33 = Utf8
+  #34 = Class              #45            // com/example/inheritance/Base
+  #35 = NameAndType        #46:#47        // methodBase1:(Ljava/lang/String;)V
+  #36 = NameAndType        #48:#47        // methodBase2:(Ljava/lang/String;)V
+  #37 = Class              #49            // com/example/inheritance/InterfaceA
+  #38 = NameAndType        #50:#14        // methodInterfaceA:()V
+  #39 = Class              #51            // com/example/inheritance/Sub1
+  #40 = NameAndType        #52:#14        // methodSub1:()V
+  #41 = Class              #53            // com/example/inheritance/Sub2
+  #42 = NameAndType        #54:#14        // methodSub2:()V
+  #43 = Utf8               com/example/inheritance/Main
+  #44 = Utf8               java/lang/Object
+  #45 = Utf8               com/example/inheritance/Base
+  #46 = Utf8               methodBase1
+  #47 = Utf8               (Ljava/lang/String;)V
+  #48 = Utf8               methodBase2
+  #49 = Utf8               com/example/inheritance/InterfaceA
+  #50 = Utf8               methodInterfaceA
+  #51 = Utf8               com/example/inheritance/Sub1
+  #52 = Utf8               methodSub1
+  #53 = Utf8               com/example/inheritance/Sub2
+  #54 = Utf8               methodSub2
+{
+  public com.example.inheritance.Main();
+    descriptor: ()V
+    flags: ACC_PUBLIC
+    Code:
+      stack=1, locals=1, args_size=1
+         0: aload_0
+         1: invokespecial #1                  // Method java/lang/Object."<init>":()V
+         4: return
+      LineNumberTable:
+        line 3: 0
+      LocalVariableTable:
+        Start  Length  Slot  Name   Signature
+            0       5     0  this   Lcom/example/inheritance/Main;
+
+  public static void entry(com.example.inheritance.Base, com.example.inheritance.InterfaceA, com.example.inheritance.Sub1, com.example.inheritance.Sub2);
+    descriptor: (Lcom/example/inheritance/Base;Lcom/example/inheritance/InterfaceA;Lcom/example/inheritance/Sub1;Lcom/example/inheritance/Sub2;)V
+    flags: ACC_PUBLIC, ACC_STATIC
+    Code:
+      stack=2, locals=4, args_size=4
+         0: aload_0
+         1: ldc           #2                  // String
+         3: invokevirtual #3                  // Method com/example/inheritance/Base.methodBase1:(Ljava/lang/String;)V
+         6: aload_0
+         7: ldc           #2                  // String
+         9: invokevirtual #4                  // Method com/example/inheritance/Base.methodBase2:(Ljava/lang/String;)V
+        12: aload_1
+        13: invokeinterface #5,  1            // InterfaceMethod com/example/inheritance/InterfaceA.methodInterfaceA:()V
+        18: aload_2
+        19: ldc           #2                  // String
+        21: invokevirtual #6                  // Method com/example/inheritance/Sub1.methodBase1:(Ljava/lang/String;)V
+        24: aload_2
+        25: ldc           #2                  // String
+        27: invokevirtual #7                  // Method com/example/inheritance/Sub1.methodBase2:(Ljava/lang/String;)V
+        30: aload_2
+        31: invokevirtual #8                  // Method com/example/inheritance/Sub1.methodSub1:()V
+        34: aload_3
+        35: invokevirtual #9                  // Method com/example/inheritance/Sub2.methodSub2:()V
+        38: aload_3
+        39: invokevirtual #10                 // Method com/example/inheritance/Sub2.methodInterfaceA:()V
+        42: return
+      LineNumberTable:
+        line 5: 0
+        line 6: 6
+        line 8: 12
+        line 10: 18
+        line 11: 24
+        line 12: 30
+        line 14: 34
+        line 15: 38
+        line 16: 42
+      LocalVariableTable:
+        Start  Length  Slot  Name   Signature
+            0      43     0     b   Lcom/example/inheritance/Base;
+            0      43     1    ia   Lcom/example/inheritance/InterfaceA;
+            0      43     2    s1   Lcom/example/inheritance/Sub1;
+            0      43     3    s2   Lcom/example/inheritance/Sub2;
+}
+SourceFile: "Main.java"

@@ -1,0 +1,93 @@
+Compiled from "CallsSample.java"
+public class org.abego.javaanalysis.sample.calls.CallsSample$Main {
+  public org.abego.javaanalysis.sample.calls.CallsSample$Main();
+    Code:
+       0: aload_0
+       1: invokespecial #1                  // Method java/lang/Object."<init>":()V
+       4: return
+
+  void meth3(org.abego.javaanalysis.sample.calls.CallsSample$SubA, java.util.function.Consumer<java.lang.String>);
+    Code:
+       0: aload_1
+       1: aload_2
+       2: invokevirtual #7                  // Method org/abego/javaanalysis/sample/calls/CallsSample$SubA.meth1:(Ljava/util/function/Consumer;)V
+       5: aload_1
+       6: aload_2
+       7: invokevirtual #13                 // Method org/abego/javaanalysis/sample/calls/CallsSample$SubA.meth2:(Ljava/util/function/Consumer;)V
+      10: return
+
+  void meth4(org.abego.javaanalysis.sample.calls.CallsSample$Root, java.util.function.Consumer<java.lang.String>);
+    Code:
+       0: aload_1
+       1: aload_2
+       2: invokevirtual #16                 // Method org/abego/javaanalysis/sample/calls/CallsSample$Root.meth1:(Ljava/util/function/Consumer;)V
+       5: aload_1
+       6: aload_2
+       7: invokevirtual #19                 // Method org/abego/javaanalysis/sample/calls/CallsSample$Root.meth2:(Ljava/util/function/Consumer;)V
+      10: return
+}
+Compiled from "CallsSample.java"
+public class org.abego.javaanalysis.sample.calls.CallsSample$Root {
+  public org.abego.javaanalysis.sample.calls.CallsSample$Root();
+    Code:
+       0: aload_0
+       1: invokespecial #1                  // Method java/lang/Object."<init>":()V
+       4: return
+
+  void meth1(java.util.function.Consumer<java.lang.String>);
+    Code:
+       0: aload_1
+       1: ldc           #7                  // String Base#meth1()
+       3: invokeinterface #9,  2            // InterfaceMethod java/util/function/Consumer.accept:(Ljava/lang/Object;)V
+       8: return
+
+  void meth2(java.util.function.Consumer<java.lang.String>);
+    Code:
+       0: aload_1
+       1: ldc           #15                 // String Base#meth2()
+       3: invokeinterface #9,  2            // InterfaceMethod java/util/function/Consumer.accept:(Ljava/lang/Object;)V
+       8: return
+}
+Compiled from "CallsSample.java"
+public class org.abego.javaanalysis.sample.calls.CallsSample$SubA extends org.abego.javaanalysis.sample.calls.CallsSample$Root {
+  public org.abego.javaanalysis.sample.calls.CallsSample$SubA();
+    Code:
+       0: aload_0
+       1: invokespecial #1                  // Method org/abego/javaanalysis/sample/calls/CallsSample$Root."<init>":()V
+       4: return
+
+  void meth1(java.util.function.Consumer<java.lang.String>);
+    Code:
+       0: aload_1
+       1: ldc           #7                  // String SubA#meth1()
+       3: invokeinterface #9,  2            // InterfaceMethod java/util/function/Consumer.accept:(Ljava/lang/Object;)V
+       8: return
+
+  void meth3(org.abego.javaanalysis.sample.calls.CallsSample$SubA, java.util.function.Consumer<java.lang.String>);
+    Code:
+       0: aload_1
+       1: aload_2
+       2: invokevirtual #15                 // Method meth1:(Ljava/util/function/Consumer;)V
+       5: aload_1
+       6: aload_2
+       7: invokevirtual #21                 // Method meth2:(Ljava/util/function/Consumer;)V
+      10: return
+
+  void meth4(org.abego.javaanalysis.sample.calls.CallsSample$Root, java.util.function.Consumer<java.lang.String>);
+    Code:
+       0: aload_1
+       1: aload_2
+       2: invokevirtual #24                 // Method org/abego/javaanalysis/sample/calls/CallsSample$Root.meth1:(Ljava/util/function/Consumer;)V
+       5: aload_1
+       6: aload_2
+       7: invokevirtual #25                 // Method org/abego/javaanalysis/sample/calls/CallsSample$Root.meth2:(Ljava/util/function/Consumer;)V
+      10: return
+}
+Compiled from "CallsSample.java"
+public class org.abego.javaanalysis.sample.calls.CallsSample {
+  public org.abego.javaanalysis.sample.calls.CallsSample();
+    Code:
+       0: aload_0
+       1: invokespecial #1                  // Method java/lang/Object."<init>":()V
+       4: return
+}

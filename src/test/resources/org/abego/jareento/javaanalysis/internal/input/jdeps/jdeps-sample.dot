@@ -1,0 +1,11 @@
+digraph "abego-commons-base-0.12.0-SNAPSHOT.jar" {
+    // Path: target/abego-commons-base-0.12.0-SNAPSHOT.jar
+   "org.abego.commons.annotation.SPI"                 -> "java.lang.Object"; // "normal" item
+   "org.abego.commons.annotation.package-info"        -> "java.lang.Object"; // item with "-" in class name
+   "org.abego.commons.blackboard.Blackboard"          -> "org.abego.commons.annotation.SPI"; // reference to an existing node
+   "org.abego.commons.blackboard.Blackboard"          -> "org.abego.commons.seq.Seq (abego-commons-base-0.12.0-SNAPSHOT.jar)"; // item with non-JRE reference
+   "org.abego.commons.blackboard.BlackboardDefault"   -> "java.lang.invoke.MethodHandles$Lookup"; // item with "to" class name containing "$"
+   "org.abego.commons.diff.FileDiffUtil$DirectoryDifferencesOptions" -> "java.lang.Class"; // item with "from" class name containing "$"
+   "org.abego.commons.diff.internal.DiffImpl$1"       -> "org.abego.commons.seq.AbstractSeq (abego-commons-base-0.12.0-SNAPSHOT.jar)"; // item with "from" class name containing "$1" 
+   "org.abego.commons.diff.internal.DiffImpl$1$1"     -> "java.util.NoSuchElementException"; // item with "from" class name containing "$1$1"
+}

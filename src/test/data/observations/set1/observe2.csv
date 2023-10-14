@@ -1,0 +1,2 @@
+ClassC,#contains:,String,True|False
+ClassA,#insert:at:,String,True,String
