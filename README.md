@@ -14,6 +14,14 @@ __Maven:__
 </dependency>
 ```
 
+## Setup
+
+- Make sure the Maven command line tool (`mvn`) is in the PATH or set the 
+  property `abego.maven.tool` to the path to the Maven tool. The property
+  `abego.maven.tool` is part of the `abego.maven`
+  [Properties group](https://github.com/abego/commons/wiki/Properties-Group),
+  using the shared group `abego` .
+ 
 ## Development
 
 You may check out the source code from
