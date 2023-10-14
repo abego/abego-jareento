@@ -20,9 +20,9 @@
 
         <m2e.jdt.annotationpath>/abego-commons/ide/eclipse/eea</m2e.jdt.annotationpath>
 
-        <abego-commons-base.version>1.0.0</abego-commons-base.version>
-        <abego-commons-swing.version>1.0.0</abego-commons-swing.version>
-        <abego-commons-test.version>1.0.0</abego-commons-test.version>
+        <abego-commons-base.version>1.1.0</abego-commons-base.version>
+        <abego-commons-swing.version>1.1.0</abego-commons-swing.version>
+        <abego-commons-test.version>1.1.0</abego-commons-test.version>
         <abego-stringgraph-base.version>0.5.0</abego-stringgraph-base.version>
         <abego-stringpool.version>0.1.0</abego-stringpool.version>
         <archunit.version>0.13.1</archunit.version>
