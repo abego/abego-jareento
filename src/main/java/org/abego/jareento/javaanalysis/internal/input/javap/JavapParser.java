@@ -83,6 +83,9 @@ class JavapParser {
 
         default void onEnd() {
         }
+        
+        default void onSourcefile(String sourcefile) {
+        }
     }
 
     private JavapParser() {
@@ -258,7 +261,7 @@ class JavapParser {
         // SourceFile line
         b.onMatch("SourceFile: \"([^\"]+)\"", (c, s) -> {
             String sourceFile = c.m().group(1);
-            //TODO System.out.println("SourceFile: "+sourceFile);//TODO
+            handler.onSourcefile(sourceFile);
         });
 
         // Constant pool line

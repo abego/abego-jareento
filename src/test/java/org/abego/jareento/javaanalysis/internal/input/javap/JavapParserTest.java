@@ -48,6 +48,12 @@ class JavapParserTest {
         }
 
         @Override
+        public  void onClassfileSHA256(String classfile, String sha256) {
+            append("sha256", sha256, classfile);
+            endLine();
+        }
+
+        @Override
         public void onJavaFilename(String classfile, String javafilename) {
             append("javafilename", javafilename, classfile);
             endLine();
@@ -119,6 +125,12 @@ class JavapParserTest {
             append("from", from);
             append("to", to);
             append("target", target);
+            endLine();
+        }
+
+        @Override
+        public void onSourcefile(String sourcefile) {
+            append("sourcefile", sourcefile);
             endLine();
         }
 
@@ -212,6 +224,7 @@ class JavapParserTest {
                         instruction: 1: invokestatic; arguments: #2; className: com.example.sample2.SynSub; methodName: value; returnType: java.lang.Integer; comment: Method java/lang/Integer.valueOf:(I)Ljava/lang/Integer;
                         instruction: 4: areturn; className: com.example.sample2.SynSub; methodName: value; returnType: java.lang.Integer
                         exception: this   Lcom/example/sample2/SynSub;; from: 0; to: 5; target: 0
+                        sourcefile: SynSub.java
                         classfile-end: jar:file:/Users/ub/work/project/sd/project/sampleproject/sampleproject/target/sampleproject-0.1.0-SNAPSHOT.jar!/com/example/sample2/SynSub.class
                         classfile: jar:file:/Users/ub/work/project/sd/project/sampleproject/sampleproject/target/sampleproject-0.1.0-SNAPSHOT.jar!/com/example/sample2/SynBase.class
                         bytecodeSize: 286 (jar:file:/Users/ub/work/project/sd/project/sampleproject/sampleproject/target/sampleproject-0.1.0-SNAPSHOT.jar!/com/example/sample2/SynBase.class)
@@ -224,6 +237,7 @@ class JavapParserTest {
                         instruction: 1: invokespecial; arguments: #1; className: com.example.sample2.SynBase; methodName: com.example.sample2.SynBase; comment: Method java/lang/Object."<init>":()V
                         instruction: 4: return; className: com.example.sample2.SynBase; methodName: com.example.sample2.SynBase
                         exception: this   Lcom/example/sample2/SynBase;; from: 0; to: 5; target: 0
+                        sourcefile: SynBase.java
                         classfile-end: jar:file:/Users/ub/work/project/sd/project/sampleproject/sampleproject/target/sampleproject-0.1.0-SNAPSHOT.jar!/com/example/sample2/SynBase.class
                         classfile: jar:file:/Users/ub/work/project/sd/project/sampleproject/sampleproject/target/sampleproject-0.1.0-SNAPSHOT.jar!/com/example/inheritance/Sub1.class
                         bytecodeSize: 615 (jar:file:/Users/ub/work/project/sd/project/sampleproject/sampleproject/target/sampleproject-0.1.0-SNAPSHOT.jar!/com/example/inheritance/Sub1.class)
@@ -247,6 +261,7 @@ class JavapParserTest {
                         instruction: 5: return; className: com.example.inheritance.Sub1; methodName: methodBase1; parameters: java.lang.String; returnType: void
                         exception: this   Lcom/example/inheritance/Sub1;; from: 0; to: 6; target: 0
                         exception: a   Ljava/lang/String;; from: 0; to: 6; target: 1
+                        sourcefile: Sub1.java
                         classfile-end: jar:file:/Users/ub/work/project/sd/project/sampleproject/sampleproject/target/sampleproject-0.1.0-SNAPSHOT.jar!/com/example/inheritance/Sub1.class
                         classfile: jar:file:/Users/ub/work/project/sd/project/sampleproject/sampleproject/target/sampleproject-0.1.0-SNAPSHOT.jar!/com/example/inheritance/Sub1$Sub1_InnerClass.class
                         bytecodeSize: 642 (jar:file:/Users/ub/work/project/sd/project/sampleproject/sampleproject/target/sampleproject-0.1.0-SNAPSHOT.jar!/com/example/inheritance/Sub1$Sub1_InnerClass.class)
@@ -267,6 +282,7 @@ class JavapParserTest {
                         instruction: 5: return; className: com.example.inheritance.Sub1$Sub1_InnerClass; methodName: innerMethodBase1; parameters: java.lang.String; returnType: void
                         exception: this   Lcom/example/inheritance/Sub1$Sub1_InnerClass;; from: 0; to: 6; target: 0
                         exception: a   Ljava/lang/String;; from: 0; to: 6; target: 1
+                        sourcefile: Sub1.java
                         classfile-end: jar:file:/Users/ub/work/project/sd/project/sampleproject/sampleproject/target/sampleproject-0.1.0-SNAPSHOT.jar!/com/example/inheritance/Sub1$Sub1_InnerClass.class
                         classfile: jar:file:/Users/ub/work/project/sd/project/sampleproject/sampleproject/target/sampleproject-0.1.0-SNAPSHOT.jar!/com/example/inheritance/InterfaceA.class
                         bytecodeSize: 158 (jar:file:/Users/ub/work/project/sd/project/sampleproject/sampleproject/target/sampleproject-0.1.0-SNAPSHOT.jar!/com/example/inheritance/InterfaceA.class)
@@ -274,6 +290,7 @@ class JavapParserTest {
                         javafilename: InterfaceA.java (jar:file:/Users/ub/work/project/sd/project/sampleproject/sampleproject/target/sampleproject-0.1.0-SNAPSHOT.jar!/com/example/inheritance/InterfaceA.class)
                         class: com.example.inheritance.InterfaceA; access: public; type: interface
                         method: methodInterfaceA; class: com.example.inheritance.InterfaceA; access: public; modifier: abstract; returnType: void
+                        sourcefile: InterfaceA.java
                         classfile-end: jar:file:/Users/ub/work/project/sd/project/sampleproject/sampleproject/target/sampleproject-0.1.0-SNAPSHOT.jar!/com/example/inheritance/InterfaceA.class
                         classfile: jar:file:/Users/ub/work/project/sd/project/sampleproject/sampleproject/target/sampleproject-0.1.0-SNAPSHOT.jar!/com/example/inheritance/Sub2.class
                         bytecodeSize: 473 (jar:file:/Users/ub/work/project/sd/project/sampleproject/sampleproject/target/sampleproject-0.1.0-SNAPSHOT.jar!/com/example/inheritance/Sub2.class)
@@ -292,6 +309,7 @@ class JavapParserTest {
                         method: methodInterfaceA; class: com.example.inheritance.Sub2; access: public; returnType: void
                         instruction: 0: return; className: com.example.inheritance.Sub2; methodName: methodInterfaceA; returnType: void
                         exception: this   Lcom/example/inheritance/Sub2;; from: 0; to: 1; target: 0
+                        sourcefile: Sub2.java
                         classfile-end: jar:file:/Users/ub/work/project/sd/project/sampleproject/sampleproject/target/sampleproject-0.1.0-SNAPSHOT.jar!/com/example/inheritance/Sub2.class
                         classfile: jar:file:/Users/ub/work/project/sd/project/sampleproject/sampleproject/target/sampleproject-0.1.0-SNAPSHOT.jar!/com/example/inheritance/Base$Base_InnerClass.class
                         bytecodeSize: 621 (jar:file:/Users/ub/work/project/sd/project/sampleproject/sampleproject/target/sampleproject-0.1.0-SNAPSHOT.jar!/com/example/inheritance/Base$Base_InnerClass.class)
@@ -313,6 +331,7 @@ class JavapParserTest {
                         instruction: 0: return; className: com.example.inheritance.Base$Base_InnerClass; methodName: innerMethodBase2; parameters: java.lang.String; returnType: void
                         exception: this   Lcom/example/inheritance/Base$Base_InnerClass;; from: 0; to: 1; target: 0
                         exception: a   Ljava/lang/String;; from: 0; to: 1; target: 1
+                        sourcefile: Base.java
                         classfile-end: jar:file:/Users/ub/work/project/sd/project/sampleproject/sampleproject/target/sampleproject-0.1.0-SNAPSHOT.jar!/com/example/inheritance/Base$Base_InnerClass.class
                         classfile: jar:file:/Users/ub/work/project/sd/project/sampleproject/sampleproject/target/sampleproject-0.1.0-SNAPSHOT.jar!/com/example/inheritance/Base.class
                         bytecodeSize: 595 (jar:file:/Users/ub/work/project/sd/project/sampleproject/sampleproject/target/sampleproject-0.1.0-SNAPSHOT.jar!/com/example/inheritance/Base.class)
@@ -334,6 +353,7 @@ class JavapParserTest {
                         instruction: 0: return; className: com.example.inheritance.Base; methodName: methodBase2; parameters: java.lang.String; returnType: void
                         exception: this   Lcom/example/inheritance/Base;; from: 0; to: 1; target: 0
                         exception: a   Ljava/lang/String;; from: 0; to: 1; target: 1
+                        sourcefile: Base.java
                         classfile-end: jar:file:/Users/ub/work/project/sd/project/sampleproject/sampleproject/target/sampleproject-0.1.0-SNAPSHOT.jar!/com/example/inheritance/Base.class
                         classfile: jar:file:/Users/ub/work/project/sd/project/sampleproject/sampleproject/target/sampleproject-0.1.0-SNAPSHOT.jar!/com/example/inheritance/Main.class
                         bytecodeSize: 1053 (jar:file:/Users/ub/work/project/sd/project/sampleproject/sampleproject/target/sampleproject-0.1.0-SNAPSHOT.jar!/com/example/inheritance/Main.class)
@@ -376,6 +396,7 @@ class JavapParserTest {
                         exception: ia   Lcom/example/inheritance/InterfaceA;; from: 0; to: 43; target: 1
                         exception: s1   Lcom/example/inheritance/Sub1;; from: 0; to: 43; target: 2
                         exception: s2   Lcom/example/inheritance/Sub2;; from: 0; to: 43; target: 3
+                        sourcefile: Main.java
                         classfile-end: jar:file:/Users/ub/work/project/sd/project/sampleproject/sampleproject/target/sampleproject-0.1.0-SNAPSHOT.jar!/com/example/inheritance/Main.class
                         """,
                 logger.getText());
