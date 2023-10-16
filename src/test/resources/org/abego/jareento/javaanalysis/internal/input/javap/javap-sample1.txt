@@ -182,6 +182,8 @@ Constant pool:
 SourceFile: "Sub1.java"
 InnerClasses:
      public static #6= #5 of #3; //Sub1_InnerClass=class com/example/inheritance/Sub1$Sub1_InnerClass of class com/example/inheritance/Sub1
+NestMembers:
+  com/example/inheritance/Sub1$Sub1_InnerClass
 Classfile jar:file:/Users/ub/work/project/sd/project/sampleproject/sampleproject/target/sampleproject-0.1.0-SNAPSHOT.jar!/com/example/inheritance/Sub1$Sub1_InnerClass.class
   Last modified Jun 14, 2023; size 642 bytes
   MD5 checksum b9698434c553a129b2ee309a0c260ebc

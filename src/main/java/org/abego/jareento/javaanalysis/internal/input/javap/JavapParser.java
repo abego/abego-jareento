@@ -103,6 +103,7 @@ class JavapParser {
         boolean isInConstantPoolBlock = false;
         boolean isInBootstrapMethodsBlock = false;
         boolean isInInnerClassesBlock = false;
+        boolean isNestMembersBlock = false;
         boolean isInRuntimeVisibleAnnotationsBlock = false;
 
         public boolean isInAnyBlock() {
@@ -110,6 +111,7 @@ class JavapParser {
                     isInConstantPoolBlock ||
                     isInBootstrapMethodsBlock ||
                     isInInnerClassesBlock ||
+                    isNestMembersBlock ||
                     isInRuntimeVisibleAnnotationsBlock;
         }
 
@@ -117,6 +119,7 @@ class JavapParser {
             isInInstructionBlock = false;
             isInConstantPoolBlock = false;
             isInInnerClassesBlock = false;
+            isNestMembersBlock = false;
             isInBootstrapMethodsBlock = false;
             isInRuntimeVisibleAnnotationsBlock = false;
         }
@@ -126,9 +129,10 @@ class JavapParser {
         ScriptBuilder<MyState> b = LineProcessing.newScriptBuilder(MyState::new);
 
         b.onMatch("\\S.*", (c, s) -> {
-            // any line without indention ends "InnerClasses" or 
-            // "RuntimeVisibleAnnotations" blocks
+            // any line without indention ends some blocks, like
+            // "InnerClasses" or "RuntimeVisibleAnnotations" 
             s.isInInnerClassesBlock = false;
+            s.isNestMembersBlock = false;
             s.isInRuntimeVisibleAnnotationsBlock = false;
 
             c.more(); // check for more rules
@@ -353,6 +357,8 @@ class JavapParser {
 
         // InnerClasses line
         b.onMatch("InnerClasses:", (c, s) -> s.isInInnerClassesBlock = true);
+        // NestMembers line
+        b.onMatch("NestMembers:", (c, s) -> s.isNestMembersBlock = true);
         // Inner class line
         b.onMatch("\\s+((public )|(private ))?(static )?(final )?#\\d+(= #\\d+ of #\\d+)?;.+", (c, s) -> {
         });
