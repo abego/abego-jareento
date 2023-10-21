@@ -1,6 +1,7 @@
 # abego Jareento - The Java Reengineering Toolset
 
-Various modules and tools to support Java Software Reengineering.
+Various modules and tools to support Java 
+[Software Reengineering](https://github.com/abego/abego-jareento/wiki/Software-Reengineering).
 
 ## Download
 
