@@ -87,7 +87,7 @@ public class InputFromJavap implements JavaAnalysisProjectInput {
 
 
         @Override
-        public void onClass(String classname, String access, String modifier, String type, String extendedType, String[] implementedTypes) {
+        public void onClass(String classname, String access, String modifier, String type, String[] extendedTypes, String[] implementedTypes) {
             progressWithRange.update(classIndex++, classname);
 
             String rawClassname = JavaLangUtil.rawName(classname);
@@ -107,10 +107,11 @@ public class InputFromJavap implements JavaAnalysisProjectInput {
 //                }
             updateTypeParameters(typeParameters, classname);
             methodTypeParameters.clear();
-            if (!extendedType.isEmpty()) {
-                //TODO shall we also include generic type information?
-                builder.addTypeExtends(rawClassname, JavaLangUtil.rawName(extendedType));
-
+            if (extendedTypes.length != 0) {
+                for (String extendedType:extendedTypes) {
+                    //TODO shall we also include generic type information?
+                    builder.addTypeExtends(rawClassname, JavaLangUtil.rawName(extendedType));
+                }
             } else if (!isInterface) {
                 // when no 'extends' is defined extend for object (if not interface)
                 //TODO shall we also include generic type information?

@@ -60,12 +60,12 @@ class JavapParserTest {
         }
 
         @Override
-        public void onClass(String classname, String access, String modifier, String type, String extendedType, String[] implementedTypes) {
+        public void onClass(String classname, String access, String modifier, String type, String[] extendedTypes, String[] implementedTypes) {
             append("class", classname);
             append("access", access);
             append("modifier", modifier);
             append("type", type);
-            append("extends", extendedType);
+            append("extends", String.join(", ", extendedTypes));
             append("implements", String.join(", ", implementedTypes));
             endLine();
         }

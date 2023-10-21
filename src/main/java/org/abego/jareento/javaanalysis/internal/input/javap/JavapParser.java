@@ -57,7 +57,7 @@ class JavapParser {
         default void onJavaFilename(String classfile, String javaFilename) {
         }
 
-        default void onClass(String classname, String access, String modifier, String type, String extendedType, String[] implementedTypes) {
+        default void onClass(String classname, String access, String modifier, String type, String[] extendedTypes, String[] implementedTypes) {
         }
 
         default void onClassEnd(String classname) {
@@ -192,25 +192,28 @@ class JavapParser {
                     .group(4));
 
             s.className = scanner.nextItem();
-            String extendsText = "";
+            List<String> extendsTexts = new ArrayList<>();
             List<String> implementsTexts = new ArrayList<>();
             String nextItem = scanner.nextItem();
             if (nextItem.equals("extends")) {
-                extendsText = scanner.nextItem();
                 nextItem = scanner.nextItem();
+                while (!nextItem.isEmpty() && !nextItem.equals("implements")) {
+                    extendsTexts.add(nextItem);
+                    nextItem = scanner.nextItem();
+                }
             }
             if (nextItem.equals("implements")) {
-                String i = scanner.nextItem();
-                while (!i.isEmpty()) {
-                    implementsTexts.add(i);
-                    i = scanner.nextItem();
+                nextItem = scanner.nextItem();
+                while (!nextItem.isEmpty()) {
+                    implementsTexts.add(nextItem);
+                    nextItem = scanner.nextItem();
                 }
             }
             handler.onClass(s.className,
                     access,
                     modifier,
                     type,
-                    extendsText,
+                    extendsTexts.toArray(new String[0]),
                     implementsTexts.toArray(new String[0]));
         });
 
