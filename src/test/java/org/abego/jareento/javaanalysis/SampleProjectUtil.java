@@ -116,7 +116,8 @@ public class SampleProjectUtil {
 
             FileUtil.withFilesInDirectoryAndDeeperDo(contentRoot, f -> {
                 String entryName =
-                        contentRoot.toPath().relativize(f.toPath()).toString();
+                        contentRoot.toPath().relativize(f.toPath()).toString()
+								.replaceAll("\\\\","/");
                 addNewJarEntry(jarStream, entryName, f);
             });
         } catch (IOException e) {

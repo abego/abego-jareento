@@ -1,5 +1,6 @@
 package org.abego.jareento.cli;
 
+import org.abego.commons.lang.StringUtil;
 import org.abego.commons.test.JUnit5Util;
 import org.junit.jupiter.api.Test;
 
@@ -37,7 +38,7 @@ class CheckForProblemsAppTest {
                 Available Problem Reporters:
                 \t[ID]\t[Title]
                 \tStandard\tWrites problems as tab-separated lines to a file 'problem.txt'.
-                """, actual);
+                """, StringUtil.unixString(actual));
     }
 
     @Test
