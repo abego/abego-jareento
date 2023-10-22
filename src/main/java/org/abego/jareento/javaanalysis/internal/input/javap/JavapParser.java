@@ -107,7 +107,7 @@ class JavapParser {
         boolean isInBootstrapMethodsBlock = false;
         boolean isInInnerClassesBlock = false;
         boolean isNestMembersBlock = false;
-        boolean isInRuntimeVisibleAnnotationsBlock = false;
+        boolean isInRuntimeAnnotationsBlock = false;
 
         public boolean isInAnyBlock() {
             return isInInstructionBlock ||
@@ -115,7 +115,7 @@ class JavapParser {
                     isInBootstrapMethodsBlock ||
                     isInInnerClassesBlock ||
                     isNestMembersBlock ||
-                    isInRuntimeVisibleAnnotationsBlock;
+                    isInRuntimeAnnotationsBlock;
         }
 
         public void endAllBlocks() {
@@ -124,7 +124,7 @@ class JavapParser {
             isInInnerClassesBlock = false;
             isNestMembersBlock = false;
             isInBootstrapMethodsBlock = false;
-            isInRuntimeVisibleAnnotationsBlock = false;
+            isInRuntimeAnnotationsBlock = false;
         }
     }
 
@@ -133,10 +133,10 @@ class JavapParser {
 
         b.onMatch("\\S.*", (c, s) -> {
             // any line without indention ends some blocks, like
-            // "InnerClasses" or "RuntimeVisibleAnnotations" 
+            // "InnerClasses" or "Runtime...Annotations" 
             s.isInInnerClassesBlock = false;
             s.isNestMembersBlock = false;
-            s.isInRuntimeVisibleAnnotationsBlock = false;
+            s.isInRuntimeAnnotationsBlock = false;
 
             c.more(); // check for more rules
         });
@@ -353,7 +353,7 @@ class JavapParser {
                 });
 
         // field 
-        // (must come after "method" rule, as it also matches som method pattern)
+        // (must come after "method" rule, as it also matches some method pattern)
         b.onMatch("  " + ACCESS_REGEX + "((?:static ))?([^ ]+ )?([^\\(]+);", (c, s) ->
                 handler.onField(s.className,
                         trim(c.m().group(4)),
@@ -372,9 +372,9 @@ class JavapParser {
 //        b.onMatch("     #\\d+; //.+", (c, s) -> {
 //        });
 
-        // RuntimeVisibleAnnotations line
-        b.onMatch("RuntimeVisibleAnnotations:", (c, s) ->
-                s.isInRuntimeVisibleAnnotationsBlock = true);
+        // Runtime[...]Annotations line
+        b.onMatch("Runtime.*Annotations:", (c, s) ->
+                s.isInRuntimeAnnotationsBlock = true);
         // Runtime Visible Annotation
         b.onMatch("  \\d+: #\\d+\\((#\\d+=c#\\d+)?\\)", (c, s) -> {
         });
