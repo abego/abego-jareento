@@ -49,12 +49,25 @@ public interface JareentoSyntax {
      * Identifies the syntax of a <em>qualified name</em>
      * ({@linkplain JareentoSyntax#QUALIFIED_NAME_SYNTAX}) of a (Java) type.
      * <p>
-     * The qualifier identifies the type's package. Generics and Arrays are not included.
+     * The qualifier identifies the type's package or its outer type. 
+     * Generics and Arrays are not included.
      * <p>
      * Example: {@code java.lang.String}
      * <p>
      */
     String QUALIFIED_TYPE_NAME_SYNTAX = "QualifiedTypeName";
+
+    /**
+     * Identifies the syntax of a <em>qualified name</em>,
+     * ({@linkplain JareentoSyntax#QUALIFIED_NAME_SYNTAX}) of a (Java) type,
+     * or an array of a (Java) type.
+     * <p>
+     * The qualifier identifies the type's package or its outer type. Generics are not included.
+     * <p>
+     * Examples: {@code java.lang.String}, {@code com.example.SomeType[][]}
+     * <p>
+     */
+    String QUALIFIED_TYPE_OR_ARRAY_NAME_SYNTAX = "QualifiedTypeOrArrayName";
 
     /**
      * Identifies the syntax of <em>qualified signature of a method</em>.

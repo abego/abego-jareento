@@ -3,12 +3,12 @@ package org.abego.jareento.javaanalysis.internal;
 import javax.annotation.Syntax;
 import java.io.File;
 
-import static org.abego.jareento.base.JareentoSyntax.QUALIFIED_TYPE_NAME_SYNTAX;
+import static org.abego.jareento.base.JareentoSyntax.QUALIFIED_TYPE_OR_ARRAY_NAME_SYNTAX;
 
 public interface JavaAnalysisProjectStateBuilder {
     void setSourceRoots(File[] sourceRoots);
 
-    void addClass(@Syntax(QUALIFIED_TYPE_NAME_SYNTAX) String name);
+    void addClass(@Syntax(QUALIFIED_TYPE_OR_ARRAY_NAME_SYNTAX) String name);
 
     void addReference(String from, String to);
 

@@ -26,7 +26,7 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import static java.util.logging.Logger.getLogger;
-import static org.abego.jareento.base.JareentoSyntax.QUALIFIED_TYPE_NAME_SYNTAX;
+import static org.abego.jareento.base.JareentoSyntax.QUALIFIED_TYPE_OR_ARRAY_NAME_SYNTAX;
 import static org.abego.jareento.javaanalysis.internal.IDsImpl.newIDs;
 import static org.abego.jareento.shared.FullMethodDeclarator.fullMethodDeclaratorText;
 import static org.abego.jareento.shared.SyntaxUtil.qualifier;
@@ -60,6 +60,7 @@ public class JavaAnalysisProjectStateUsingStringGraph implements JavaAnalysisPro
     private static final String HAS_SCOPE = "hasScope";
     private static final String BASE_SCOPE = "baseScope";
     private static final String HAS_RAW_TYPE = "hasRawType";
+    private static final String IS_ARRAY_OF = "isArrayOf";
     private static final String CALLS = "calls";
     private static final String IN_CLASSFILE = "inClassfile";
 
@@ -91,17 +92,23 @@ public class JavaAnalysisProjectStateUsingStringGraph implements JavaAnalysisPro
         }
 
         @Override
-        public void addClass(@Syntax(QUALIFIED_TYPE_NAME_SYNTAX) String name) {
+        public void addClass(@Syntax(QUALIFIED_TYPE_OR_ARRAY_NAME_SYNTAX) String name) {
             // Check for a typical error
-            if (name.indexOf('<') >= 0 || name.indexOf('[') >= 0) {
-                throw new IllegalArgumentException("Class name must not contain '<...>' or '[]'. Got: " + name);
+            if (name.indexOf('<') >= 0) {
+                throw new IllegalArgumentException("Class name must not contain '<...>'. Got: " + name);
             }
-
+            
             String packagePath = qualifier(name);
             addInstance(graphBuilder, CLASS, name);
             if (!packagePath.isEmpty()) {
                 addInstance(graphBuilder, PACKAGE, packagePath);
                 graphBuilder.addEdge(packagePath, CONTAINS, name);
+            }
+
+            if (name.endsWith("[]")) {
+                String arrayElementType = name.substring(0, name.length() - 2);
+                addClass(arrayElementType);
+                graphBuilder.addEdge(name,IS_ARRAY_OF, arrayElementType);
             }
         }
 
