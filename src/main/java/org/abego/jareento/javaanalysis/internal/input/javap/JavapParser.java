@@ -137,10 +137,13 @@ class JavapParser {
             s.isInInnerClassesBlock = false;
             s.isNestMembersBlock = false;
             s.isInRuntimeAnnotationsBlock = false;
+            s.isInConstantPoolBlock = false;
 
             c.more(); // check for more rules
         });
 
+        b.onMatch((c,s)->s.isInConstantPoolBlock, (c,s)->{});
+        
         b.onMatch("Classfile (.+)", (c, s) -> {
             if (!s.classFile.isEmpty()) {
                 handler.onClassfileEnd(s.classFile);

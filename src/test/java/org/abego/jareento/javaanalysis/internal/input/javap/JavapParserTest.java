@@ -213,7 +213,6 @@ class JavapParserTest {
                         md5: 00c40cc1ac951f7750deaa04f3d84a94 (jar:file:/Users/ub/work/project/sd/project/sampleproject/sampleproject/target/sampleproject-0.1.0-SNAPSHOT.jar!/com/example/sample2/SynSub.class)
                         javafilename: SynSub.java (jar:file:/Users/ub/work/project/sd/project/sampleproject/sampleproject/target/sampleproject-0.1.0-SNAPSHOT.jar!/com/example/sample2/SynSub.class)
                         class: com.example.sample2.SynSub; access: public; type: class; extends: com.example.sample2.SynBase
-                        field: = Utf8               Lcom/example/sample2/SynSub; class: com.example.sample2.SynSub; type: #11
                         method: com.example.sample2.SynSub; class: com.example.sample2.SynSub; access: public
                         instruction: 0: aload_0; className: com.example.sample2.SynSub; methodName: com.example.sample2.SynSub
                         instruction: 1: invokespecial; arguments: #1; className: com.example.sample2.SynSub; methodName: com.example.sample2.SynSub; comment: Method com/example/sample2/SynBase."<init>":()V
@@ -224,6 +223,7 @@ class JavapParserTest {
                         instruction: 1: invokestatic; arguments: #2; className: com.example.sample2.SynSub; methodName: value; returnType: java.lang.Integer; comment: Method java/lang/Integer.valueOf:(I)Ljava/lang/Integer;
                         instruction: 4: areturn; className: com.example.sample2.SynSub; methodName: value; returnType: java.lang.Integer
                         exception: this   Lcom/example/sample2/SynSub;; from: 0; to: 5; target: 0
+                        class-end (com.example.sample2.SynSub)
                         sourcefile: SynSub.java
                         classfile-end: jar:file:/Users/ub/work/project/sd/project/sampleproject/sampleproject/target/sampleproject-0.1.0-SNAPSHOT.jar!/com/example/sample2/SynSub.class
                         classfile: jar:file:/Users/ub/work/project/sd/project/sampleproject/sampleproject/target/sampleproject-0.1.0-SNAPSHOT.jar!/com/example/sample2/SynBase.class
@@ -231,12 +231,12 @@ class JavapParserTest {
                         md5: f294b7c765c2e30784c3b1de1d538afb (jar:file:/Users/ub/work/project/sd/project/sampleproject/sampleproject/target/sampleproject-0.1.0-SNAPSHOT.jar!/com/example/sample2/SynBase.class)
                         javafilename: SynBase.java (jar:file:/Users/ub/work/project/sd/project/sampleproject/sampleproject/target/sampleproject-0.1.0-SNAPSHOT.jar!/com/example/sample2/SynBase.class)
                         class: com.example.sample2.SynBase; access: public; type: class
-                        field: = Utf8               Lcom/example/sample2/SynBase; class: com.example.sample2.SynBase; type: #10
                         method: com.example.sample2.SynBase; class: com.example.sample2.SynBase; access: public
                         instruction: 0: aload_0; className: com.example.sample2.SynBase; methodName: com.example.sample2.SynBase
                         instruction: 1: invokespecial; arguments: #1; className: com.example.sample2.SynBase; methodName: com.example.sample2.SynBase; comment: Method java/lang/Object."<init>":()V
                         instruction: 4: return; className: com.example.sample2.SynBase; methodName: com.example.sample2.SynBase
                         exception: this   Lcom/example/sample2/SynBase;; from: 0; to: 5; target: 0
+                        class-end (com.example.sample2.SynBase)
                         sourcefile: SynBase.java
                         classfile-end: jar:file:/Users/ub/work/project/sd/project/sampleproject/sampleproject/target/sampleproject-0.1.0-SNAPSHOT.jar!/com/example/sample2/SynBase.class
                         classfile: jar:file:/Users/ub/work/project/sd/project/sampleproject/sampleproject/target/sampleproject-0.1.0-SNAPSHOT.jar!/com/example/inheritance/Sub1.class
@@ -244,8 +244,6 @@ class JavapParserTest {
                         md5: d4c4216c62e4b94d9c9f969bb9db90ec (jar:file:/Users/ub/work/project/sd/project/sampleproject/sampleproject/target/sampleproject-0.1.0-SNAPSHOT.jar!/com/example/inheritance/Sub1.class)
                         javafilename: Sub1.java (jar:file:/Users/ub/work/project/sd/project/sampleproject/sampleproject/target/sampleproject-0.1.0-SNAPSHOT.jar!/com/example/inheritance/Sub1.class)
                         class: com.example.inheritance.Sub1; access: public; type: class; extends: com.example.inheritance.Base
-                        field: = Utf8               Lcom/example/inheritance/Sub1; class: com.example.inheritance.Sub1; type: #14
-                        field: = Utf8               Ljava/lang/String; class: com.example.inheritance.Sub1; type: #19
                         method: com.example.inheritance.Sub1; class: com.example.inheritance.Sub1; access: public
                         instruction: 0: aload_0; className: com.example.inheritance.Sub1; methodName: com.example.inheritance.Sub1
                         instruction: 1: invokespecial; arguments: #1; className: com.example.inheritance.Sub1; methodName: com.example.inheritance.Sub1; comment: Method com/example/inheritance/Base."<init>":()V
@@ -261,6 +259,7 @@ class JavapParserTest {
                         instruction: 5: return; className: com.example.inheritance.Sub1; methodName: methodBase1; parameters: java.lang.String; returnType: void
                         exception: this   Lcom/example/inheritance/Sub1;; from: 0; to: 6; target: 0
                         exception: a   Ljava/lang/String;; from: 0; to: 6; target: 1
+                        class-end (com.example.inheritance.Sub1)
                         sourcefile: Sub1.java
                         classfile-end: jar:file:/Users/ub/work/project/sd/project/sampleproject/sampleproject/target/sampleproject-0.1.0-SNAPSHOT.jar!/com/example/inheritance/Sub1.class
                         classfile: jar:file:/Users/ub/work/project/sd/project/sampleproject/sampleproject/target/sampleproject-0.1.0-SNAPSHOT.jar!/com/example/inheritance/Sub1$Sub1_InnerClass.class
@@ -268,8 +267,6 @@ class JavapParserTest {
                         md5: b9698434c553a129b2ee309a0c260ebc (jar:file:/Users/ub/work/project/sd/project/sampleproject/sampleproject/target/sampleproject-0.1.0-SNAPSHOT.jar!/com/example/inheritance/Sub1$Sub1_InnerClass.class)
                         javafilename: Sub1.java (jar:file:/Users/ub/work/project/sd/project/sampleproject/sampleproject/target/sampleproject-0.1.0-SNAPSHOT.jar!/com/example/inheritance/Sub1$Sub1_InnerClass.class)
                         class: com.example.inheritance.Sub1$Sub1_InnerClass; access: public; type: class; extends: com.example.inheritance.Base$Base_InnerClass
-                        field: = Utf8               Lcom/example/inheritance/Sub1$Sub1_InnerClass; class: com.example.inheritance.Sub1$Sub1_InnerClass; type: #13
-                        field: = Utf8               Ljava/lang/String; class: com.example.inheritance.Sub1$Sub1_InnerClass; type: #17
                         method: com.example.inheritance.Sub1$Sub1_InnerClass; class: com.example.inheritance.Sub1$Sub1_InnerClass; access: public
                         instruction: 0: aload_0; className: com.example.inheritance.Sub1$Sub1_InnerClass; methodName: com.example.inheritance.Sub1$Sub1_InnerClass
                         instruction: 1: invokespecial; arguments: #1; className: com.example.inheritance.Sub1$Sub1_InnerClass; methodName: com.example.inheritance.Sub1$Sub1_InnerClass; comment: Method com/example/inheritance/Base$Base_InnerClass."<init>":()V
@@ -282,6 +279,7 @@ class JavapParserTest {
                         instruction: 5: return; className: com.example.inheritance.Sub1$Sub1_InnerClass; methodName: innerMethodBase1; parameters: java.lang.String; returnType: void
                         exception: this   Lcom/example/inheritance/Sub1$Sub1_InnerClass;; from: 0; to: 6; target: 0
                         exception: a   Ljava/lang/String;; from: 0; to: 6; target: 1
+                        class-end (com.example.inheritance.Sub1$Sub1_InnerClass)
                         sourcefile: Sub1.java
                         classfile-end: jar:file:/Users/ub/work/project/sd/project/sampleproject/sampleproject/target/sampleproject-0.1.0-SNAPSHOT.jar!/com/example/inheritance/Sub1$Sub1_InnerClass.class
                         classfile: jar:file:/Users/ub/work/project/sd/project/sampleproject/sampleproject/target/sampleproject-0.1.0-SNAPSHOT.jar!/com/example/inheritance/InterfaceA.class
@@ -290,6 +288,7 @@ class JavapParserTest {
                         javafilename: InterfaceA.java (jar:file:/Users/ub/work/project/sd/project/sampleproject/sampleproject/target/sampleproject-0.1.0-SNAPSHOT.jar!/com/example/inheritance/InterfaceA.class)
                         class: com.example.inheritance.InterfaceA; access: public; type: interface
                         method: methodInterfaceA; class: com.example.inheritance.InterfaceA; access: public; modifier: abstract; returnType: void
+                        class-end (com.example.inheritance.InterfaceA)
                         sourcefile: InterfaceA.java
                         classfile-end: jar:file:/Users/ub/work/project/sd/project/sampleproject/sampleproject/target/sampleproject-0.1.0-SNAPSHOT.jar!/com/example/inheritance/InterfaceA.class
                         classfile: jar:file:/Users/ub/work/project/sd/project/sampleproject/sampleproject/target/sampleproject-0.1.0-SNAPSHOT.jar!/com/example/inheritance/Sub2.class
@@ -297,7 +296,6 @@ class JavapParserTest {
                         md5: 57d02ff67b918ad3e0bfdc72a4cc313c (jar:file:/Users/ub/work/project/sd/project/sampleproject/sampleproject/target/sampleproject-0.1.0-SNAPSHOT.jar!/com/example/inheritance/Sub2.class)
                         javafilename: Sub2.java (jar:file:/Users/ub/work/project/sd/project/sampleproject/sampleproject/target/sampleproject-0.1.0-SNAPSHOT.jar!/com/example/inheritance/Sub2.class)
                         class: com.example.inheritance.Sub2; access: public; type: class; implements: com.example.inheritance.InterfaceA
-                        field: = Utf8               Lcom/example/inheritance/Sub2; class: com.example.inheritance.Sub2; type: #11
                         method: com.example.inheritance.Sub2; class: com.example.inheritance.Sub2; access: public
                         instruction: 0: aload_0; className: com.example.inheritance.Sub2; methodName: com.example.inheritance.Sub2
                         instruction: 1: invokespecial; arguments: #1; className: com.example.inheritance.Sub2; methodName: com.example.inheritance.Sub2; comment: Method java/lang/Object."<init>":()V
@@ -309,6 +307,7 @@ class JavapParserTest {
                         method: methodInterfaceA; class: com.example.inheritance.Sub2; access: public; returnType: void
                         instruction: 0: return; className: com.example.inheritance.Sub2; methodName: methodInterfaceA; returnType: void
                         exception: this   Lcom/example/inheritance/Sub2;; from: 0; to: 1; target: 0
+                        class-end (com.example.inheritance.Sub2)
                         sourcefile: Sub2.java
                         classfile-end: jar:file:/Users/ub/work/project/sd/project/sampleproject/sampleproject/target/sampleproject-0.1.0-SNAPSHOT.jar!/com/example/inheritance/Sub2.class
                         classfile: jar:file:/Users/ub/work/project/sd/project/sampleproject/sampleproject/target/sampleproject-0.1.0-SNAPSHOT.jar!/com/example/inheritance/Base$Base_InnerClass.class
@@ -316,8 +315,6 @@ class JavapParserTest {
                         md5: fe3529e5cb598d4f98421f6c591204c0 (jar:file:/Users/ub/work/project/sd/project/sampleproject/sampleproject/target/sampleproject-0.1.0-SNAPSHOT.jar!/com/example/inheritance/Base$Base_InnerClass.class)
                         javafilename: Base.java (jar:file:/Users/ub/work/project/sd/project/sampleproject/sampleproject/target/sampleproject-0.1.0-SNAPSHOT.jar!/com/example/inheritance/Base$Base_InnerClass.class)
                         class: com.example.inheritance.Base$Base_InnerClass; access: public; type: class
-                        field: = Utf8               Lcom/example/inheritance/Base$Base_InnerClass; class: com.example.inheritance.Base$Base_InnerClass; type: #12
-                        field: = Utf8               Ljava/lang/String; class: com.example.inheritance.Base$Base_InnerClass; type: #16
                         method: com.example.inheritance.Base$Base_InnerClass; class: com.example.inheritance.Base$Base_InnerClass; access: public
                         instruction: 0: aload_0; className: com.example.inheritance.Base$Base_InnerClass; methodName: com.example.inheritance.Base$Base_InnerClass
                         instruction: 1: invokespecial; arguments: #1; className: com.example.inheritance.Base$Base_InnerClass; methodName: com.example.inheritance.Base$Base_InnerClass; comment: Method java/lang/Object."<init>":()V
@@ -331,6 +328,7 @@ class JavapParserTest {
                         instruction: 0: return; className: com.example.inheritance.Base$Base_InnerClass; methodName: innerMethodBase2; parameters: java.lang.String; returnType: void
                         exception: this   Lcom/example/inheritance/Base$Base_InnerClass;; from: 0; to: 1; target: 0
                         exception: a   Ljava/lang/String;; from: 0; to: 1; target: 1
+                        class-end (com.example.inheritance.Base$Base_InnerClass)
                         sourcefile: Base.java
                         classfile-end: jar:file:/Users/ub/work/project/sd/project/sampleproject/sampleproject/target/sampleproject-0.1.0-SNAPSHOT.jar!/com/example/inheritance/Base$Base_InnerClass.class
                         classfile: jar:file:/Users/ub/work/project/sd/project/sampleproject/sampleproject/target/sampleproject-0.1.0-SNAPSHOT.jar!/com/example/inheritance/Base.class
@@ -338,8 +336,6 @@ class JavapParserTest {
                         md5: 96e68b2f8820dd6ff4657efbb34b0c9d (jar:file:/Users/ub/work/project/sd/project/sampleproject/sampleproject/target/sampleproject-0.1.0-SNAPSHOT.jar!/com/example/inheritance/Base.class)
                         javafilename: Base.java (jar:file:/Users/ub/work/project/sd/project/sampleproject/sampleproject/target/sampleproject-0.1.0-SNAPSHOT.jar!/com/example/inheritance/Base.class)
                         class: com.example.inheritance.Base; access: public; type: class
-                        field: = Utf8               Lcom/example/inheritance/Base; class: com.example.inheritance.Base; type: #13
-                        field: = Utf8               Ljava/lang/String; class: com.example.inheritance.Base; type: #17
                         method: com.example.inheritance.Base; class: com.example.inheritance.Base; access: public
                         instruction: 0: aload_0; className: com.example.inheritance.Base; methodName: com.example.inheritance.Base
                         instruction: 1: invokespecial; arguments: #1; className: com.example.inheritance.Base; methodName: com.example.inheritance.Base; comment: Method java/lang/Object."<init>":()V
@@ -353,6 +349,7 @@ class JavapParserTest {
                         instruction: 0: return; className: com.example.inheritance.Base; methodName: methodBase2; parameters: java.lang.String; returnType: void
                         exception: this   Lcom/example/inheritance/Base;; from: 0; to: 1; target: 0
                         exception: a   Ljava/lang/String;; from: 0; to: 1; target: 1
+                        class-end (com.example.inheritance.Base)
                         sourcefile: Base.java
                         classfile-end: jar:file:/Users/ub/work/project/sd/project/sampleproject/sampleproject/target/sampleproject-0.1.0-SNAPSHOT.jar!/com/example/inheritance/Base.class
                         classfile: jar:file:/Users/ub/work/project/sd/project/sampleproject/sampleproject/target/sampleproject-0.1.0-SNAPSHOT.jar!/com/example/inheritance/Main.class
@@ -360,11 +357,6 @@ class JavapParserTest {
                         md5: 6e494152938262fe18047d5b6ef659a8 (jar:file:/Users/ub/work/project/sd/project/sampleproject/sampleproject/target/sampleproject-0.1.0-SNAPSHOT.jar!/com/example/inheritance/Main.class)
                         javafilename: Main.java (jar:file:/Users/ub/work/project/sd/project/sampleproject/sampleproject/target/sampleproject-0.1.0-SNAPSHOT.jar!/com/example/inheritance/Main.class)
                         class: com.example.inheritance.Main; access: public; type: class
-                        field: = Utf8               Lcom/example/inheritance/Main; class: com.example.inheritance.Main; type: #19
-                        field: = Utf8               Lcom/example/inheritance/Base; class: com.example.inheritance.Main; type: #23
-                        field: = Utf8               Lcom/example/inheritance/InterfaceA; class: com.example.inheritance.Main; type: #25
-                        field: = Utf8               Lcom/example/inheritance/Sub1; class: com.example.inheritance.Main; type: #27
-                        field: = Utf8               Lcom/example/inheritance/Sub2; class: com.example.inheritance.Main; type: #29
                         method: com.example.inheritance.Main; class: com.example.inheritance.Main; access: public
                         instruction: 0: aload_0; className: com.example.inheritance.Main; methodName: com.example.inheritance.Main
                         instruction: 1: invokespecial; arguments: #1; className: com.example.inheritance.Main; methodName: com.example.inheritance.Main; comment: Method java/lang/Object."<init>":()V
@@ -396,6 +388,7 @@ class JavapParserTest {
                         exception: ia   Lcom/example/inheritance/InterfaceA;; from: 0; to: 43; target: 1
                         exception: s1   Lcom/example/inheritance/Sub1;; from: 0; to: 43; target: 2
                         exception: s2   Lcom/example/inheritance/Sub2;; from: 0; to: 43; target: 3
+                        class-end (com.example.inheritance.Main)
                         sourcefile: Main.java
                         classfile-end: jar:file:/Users/ub/work/project/sd/project/sampleproject/sampleproject/target/sampleproject-0.1.0-SNAPSHOT.jar!/com/example/inheritance/Main.class
                         """,
