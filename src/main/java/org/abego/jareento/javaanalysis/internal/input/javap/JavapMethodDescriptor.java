@@ -1,12 +1,8 @@
 package org.abego.jareento.javaanalysis.internal.input.javap;
 
-import org.abego.commons.lang.StringUtil;
+import org.abego.jareento.shared.SyntaxUtil;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.function.Function;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 class JavapMethodDescriptor {
     public final String className;
@@ -14,47 +10,13 @@ class JavapMethodDescriptor {
     public final String[] parameters;
     public final String returnType;
 
-    private static final Pattern LINE_PATTERN = Pattern.compile(
-            "(?:(?:(?:Interface)?Method \"??(?:([\\[\\w$/]+;?)\"??\\.)?)" +
-                    "|(?:InvokeDynamic #\\d+:))" +
-                    "(\"?[\\w<>$]+\"?):\\(([^)]*)\\)(.+)*");
-
-    private JavapMethodDescriptor(
+    public JavapMethodDescriptor(
             String className, String methodName, String[] parameters, String returnType) {
         this.className = className;
-        this.methodName = methodName;
+        this.methodName = methodName.equals("\"<init>\"")
+                ? SyntaxUtil.simpleName(className) : methodName;
         this.parameters = parameters;
         this.returnType = returnType;
-    }
-
-    public static JavapMethodDescriptor parseFromJavapInvokeComment(String text) {
-        Matcher m = LINE_PATTERN.matcher(text);
-        if (!m.matches()) {
-            throw new IllegalArgumentException("Error in method descriptor: " + text);
-        }
-
-        String className = "";
-        if (m.group(1) != null) {
-            String s = m.group(1);
-            className = s.startsWith("[")
-                    ? new JavapFieldAndReturnDescriptorParser(s).nextJavaType()
-                    : StringUtil.slashesToDots(s);
-        }
-
-        String methodName = m.group(2);
-
-        JavapFieldAndReturnDescriptorParser parser = new JavapFieldAndReturnDescriptorParser(m.group(3));
-        List<String> paramTypes = new ArrayList<>();
-        String s = parser.nextJavaType();
-        while (!s.isEmpty()) {
-            paramTypes.add(s);
-            s = parser.nextJavaType();
-        }
-        String[] params = paramTypes.toArray(new String[0]);
-
-        String returnType = new JavapFieldAndReturnDescriptorParser(m.group(4)).nextJavaType();
-
-        return new JavapMethodDescriptor(className, methodName, params, returnType);
     }
 
     public String getSignature() {

@@ -12,15 +12,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintStream;
 import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 import static java.util.logging.Logger.getLogger;
 import static org.abego.commons.lang.StringUtil.sortedUnixLines;
@@ -38,9 +32,9 @@ class InputFromJavapTest {
         String actual = methodCallsTestHelper(tempDir, "javap-sample1.txt");
 
         assertEquals("""
-                        com.example.inheritance.Base$Base_InnerClass."<init>"() - invokespecial-com.example.inheritance.Sub1$Sub1_InnerClass#com.example.inheritance.Sub1$Sub1_InnerClass():@1
+                        com.example.inheritance.Base$Base_InnerClass.Base$Base_InnerClass() - invokespecial-com.example.inheritance.Sub1$Sub1_InnerClass#Sub1$Sub1_InnerClass():void@1
                         com.example.inheritance.Base$Base_InnerClass.innerMethodBase1(java.lang.String) - invokespecial-com.example.inheritance.Sub1$Sub1_InnerClass#innerMethodBase1(java.lang.String):void@2
-                        com.example.inheritance.Base."<init>"() - invokespecial-com.example.inheritance.Sub1#com.example.inheritance.Sub1():@1
+                        com.example.inheritance.Base.Base() - invokespecial-com.example.inheritance.Sub1#Sub1():void@1
                         com.example.inheritance.Base.methodBase1(java.lang.String) - invokespecial-com.example.inheritance.Sub1#methodBase1(java.lang.String):void@2
                         com.example.inheritance.Base.methodBase1(java.lang.String) - invokevirtual-com.example.inheritance.Main#entry(com.example.inheritance.Base, com.example.inheritance.InterfaceA, com.example.inheritance.Sub1, com.example.inheritance.Sub2):void@3
                         com.example.inheritance.Base.methodBase2(java.lang.String) - invokevirtual-com.example.inheritance.Main#entry(com.example.inheritance.Base, com.example.inheritance.InterfaceA, com.example.inheritance.Sub1, com.example.inheritance.Sub2):void@9
@@ -50,13 +44,13 @@ class InputFromJavapTest {
                         com.example.inheritance.Sub1.methodSub1() - invokevirtual-com.example.inheritance.Main#entry(com.example.inheritance.Base, com.example.inheritance.InterfaceA, com.example.inheritance.Sub1, com.example.inheritance.Sub2):void@31
                         com.example.inheritance.Sub2.methodInterfaceA() - invokevirtual-com.example.inheritance.Main#entry(com.example.inheritance.Base, com.example.inheritance.InterfaceA, com.example.inheritance.Sub1, com.example.inheritance.Sub2):void@39
                         com.example.inheritance.Sub2.methodSub2() - invokevirtual-com.example.inheritance.Main#entry(com.example.inheritance.Base, com.example.inheritance.InterfaceA, com.example.inheritance.Sub1, com.example.inheritance.Sub2):void@35
-                        com.example.sample2.SynBase."<init>"() - invokespecial-com.example.sample2.SynSub#com.example.sample2.SynSub():@1
+                        com.example.sample2.SynBase.SynBase() - invokespecial-com.example.sample2.SynSub#SynSub():void@1
                         java.lang.Integer.valueOf(int) - invokestatic-com.example.sample2.SynSub#value():java.lang.Integer@1
-                        java.lang.Object."<init>"() - invokespecial-com.example.inheritance.Base#com.example.inheritance.Base():@1
-                        java.lang.Object."<init>"() - invokespecial-com.example.inheritance.Base$Base_InnerClass#com.example.inheritance.Base$Base_InnerClass():@1
-                        java.lang.Object."<init>"() - invokespecial-com.example.inheritance.Main#com.example.inheritance.Main():@1
-                        java.lang.Object."<init>"() - invokespecial-com.example.inheritance.Sub2#com.example.inheritance.Sub2():@1
-                        java.lang.Object."<init>"() - invokespecial-com.example.sample2.SynBase#com.example.sample2.SynBase():@1""",
+                        java.lang.Object.Object() - invokespecial-com.example.inheritance.Base#Base():void@1
+                        java.lang.Object.Object() - invokespecial-com.example.inheritance.Base$Base_InnerClass#Base$Base_InnerClass():void@1
+                        java.lang.Object.Object() - invokespecial-com.example.inheritance.Main#Main():void@1
+                        java.lang.Object.Object() - invokespecial-com.example.inheritance.Sub2#Sub2():void@1
+                        java.lang.Object.Object() - invokespecial-com.example.sample2.SynBase#SynBase():void@1""",
                 sortedUnixLines(actual));
     }
 
@@ -65,21 +59,21 @@ class InputFromJavapTest {
         String actual = methodCallsTestHelper(tempDir, "javap-CallsSample.txt");
 
         assertEquals("""
-                        java.lang.Object."<init>"() - invokespecial-org.abego.javaanalysis.sample.calls.CallsSample#org.abego.javaanalysis.sample.calls.CallsSample():@1
-                        java.lang.Object."<init>"() - invokespecial-org.abego.javaanalysis.sample.calls.CallsSample$Main#org.abego.javaanalysis.sample.calls.CallsSample$Main():@1
-                        java.lang.Object."<init>"() - invokespecial-org.abego.javaanalysis.sample.calls.CallsSample$Root#org.abego.javaanalysis.sample.calls.CallsSample$Root():@1
-                        java.util.function.Consumer.accept(java.lang.Object) - invokeinterface-org.abego.javaanalysis.sample.calls.CallsSample$Root#meth1(java.util.function.Consumer):void@3
-                        java.util.function.Consumer.accept(java.lang.Object) - invokeinterface-org.abego.javaanalysis.sample.calls.CallsSample$Root#meth2(java.util.function.Consumer):void@3
-                        java.util.function.Consumer.accept(java.lang.Object) - invokeinterface-org.abego.javaanalysis.sample.calls.CallsSample$SubA#meth1(java.util.function.Consumer):void@3
-                        org.abego.javaanalysis.sample.calls.CallsSample$Root."<init>"() - invokespecial-org.abego.javaanalysis.sample.calls.CallsSample$SubA#org.abego.javaanalysis.sample.calls.CallsSample$SubA():@1
-                        org.abego.javaanalysis.sample.calls.CallsSample$Root.meth1(java.util.function.Consumer) - invokevirtual-org.abego.javaanalysis.sample.calls.CallsSample$Main#meth4(org.abego.javaanalysis.sample.calls.CallsSample$Root, java.util.function.Consumer):void@2
-                        org.abego.javaanalysis.sample.calls.CallsSample$Root.meth1(java.util.function.Consumer) - invokevirtual-org.abego.javaanalysis.sample.calls.CallsSample$SubA#meth4(org.abego.javaanalysis.sample.calls.CallsSample$Root, java.util.function.Consumer):void@2
-                        org.abego.javaanalysis.sample.calls.CallsSample$Root.meth2(java.util.function.Consumer) - invokevirtual-org.abego.javaanalysis.sample.calls.CallsSample$Main#meth4(org.abego.javaanalysis.sample.calls.CallsSample$Root, java.util.function.Consumer):void@7
-                        org.abego.javaanalysis.sample.calls.CallsSample$Root.meth2(java.util.function.Consumer) - invokevirtual-org.abego.javaanalysis.sample.calls.CallsSample$SubA#meth3(org.abego.javaanalysis.sample.calls.CallsSample$SubA, java.util.function.Consumer):void@7
-                        org.abego.javaanalysis.sample.calls.CallsSample$Root.meth2(java.util.function.Consumer) - invokevirtual-org.abego.javaanalysis.sample.calls.CallsSample$SubA#meth4(org.abego.javaanalysis.sample.calls.CallsSample$Root, java.util.function.Consumer):void@7
-                        org.abego.javaanalysis.sample.calls.CallsSample$SubA.meth1(java.util.function.Consumer) - invokevirtual-org.abego.javaanalysis.sample.calls.CallsSample$Main#meth3(org.abego.javaanalysis.sample.calls.CallsSample$SubA, java.util.function.Consumer):void@2
-                        org.abego.javaanalysis.sample.calls.CallsSample$SubA.meth1(java.util.function.Consumer) - invokevirtual-org.abego.javaanalysis.sample.calls.CallsSample$SubA#meth3(org.abego.javaanalysis.sample.calls.CallsSample$SubA, java.util.function.Consumer):void@2
-                        org.abego.javaanalysis.sample.calls.CallsSample$SubA.meth2(java.util.function.Consumer) - invokevirtual-org.abego.javaanalysis.sample.calls.CallsSample$Main#meth3(org.abego.javaanalysis.sample.calls.CallsSample$SubA, java.util.function.Consumer):void@7
+                        calls.CallsSample$Root.CallsSample$Root() - invokespecial-calls.CallsSample$SubA#CallsSample$SubA():void@1
+                        calls.CallsSample$Root.meth1(java.util.function.Consumer) - invokevirtual-calls.CallsSample$Main#meth4(calls.CallsSample$Root, java.util.function.Consumer):void@2
+                        calls.CallsSample$Root.meth1(java.util.function.Consumer) - invokevirtual-calls.CallsSample$SubA#meth4(calls.CallsSample$Root, java.util.function.Consumer):void@2
+                        calls.CallsSample$Root.meth2(java.util.function.Consumer) - invokevirtual-calls.CallsSample$Main#meth4(calls.CallsSample$Root, java.util.function.Consumer):void@7
+                        calls.CallsSample$Root.meth2(java.util.function.Consumer) - invokevirtual-calls.CallsSample$SubA#meth4(calls.CallsSample$Root, java.util.function.Consumer):void@7
+                        calls.CallsSample$SubA.meth1(java.util.function.Consumer) - invokevirtual-calls.CallsSample$Main#meth3(calls.CallsSample$SubA, java.util.function.Consumer):void@2
+                        calls.CallsSample$SubA.meth1(java.util.function.Consumer) - invokevirtual-calls.CallsSample$SubA#meth3(calls.CallsSample$SubA, java.util.function.Consumer):void@2
+                        calls.CallsSample$SubA.meth2(java.util.function.Consumer) - invokevirtual-calls.CallsSample$Main#meth3(calls.CallsSample$SubA, java.util.function.Consumer):void@7
+                        calls.CallsSample$SubA.meth2(java.util.function.Consumer) - invokevirtual-calls.CallsSample$SubA#meth3(calls.CallsSample$SubA, java.util.function.Consumer):void@7
+                        java.lang.Object.Object() - invokespecial-calls.CallsSample#CallsSample():void@1
+                        java.lang.Object.Object() - invokespecial-calls.CallsSample$Main#CallsSample$Main():void@1
+                        java.lang.Object.Object() - invokespecial-calls.CallsSample$Root#CallsSample$Root():void@1
+                        java.util.function.Consumer.accept(java.lang.Object) - invokeinterface-calls.CallsSample$Root#meth1(java.util.function.Consumer):void@3
+                        java.util.function.Consumer.accept(java.lang.Object) - invokeinterface-calls.CallsSample$Root#meth2(java.util.function.Consumer):void@3
+                        java.util.function.Consumer.accept(java.lang.Object) - invokeinterface-calls.CallsSample$SubA#meth1(java.util.function.Consumer):void@3
                         """,
                 unixString(actual));
     }
@@ -115,25 +109,26 @@ class InputFromJavapTest {
 
         String rootCalls = reportMethodCalls(project, "calls.CallsSample$Root", m -> true);
         assertEquals("""
-                org.abego.javaanalysis.sample.calls.CallsSample$Root#meth1(java.util.function.Consumer):void:
-                  - invokevirtual-org.abego.javaanalysis.sample.calls.CallsSample$Main#meth4(org.abego.javaanalysis.sample.calls.CallsSample$Root, java.util.function.Consumer):void@2
-                  - invokevirtual-org.abego.javaanalysis.sample.calls.CallsSample$SubA#meth4(org.abego.javaanalysis.sample.calls.CallsSample$Root, java.util.function.Consumer):void@2
-                org.abego.javaanalysis.sample.calls.CallsSample$Root#meth2(java.util.function.Consumer):void:
-                  - invokevirtual-org.abego.javaanalysis.sample.calls.CallsSample$Main#meth3(org.abego.javaanalysis.sample.calls.CallsSample$SubA, java.util.function.Consumer):void@7
-                  - invokevirtual-org.abego.javaanalysis.sample.calls.CallsSample$Main#meth4(org.abego.javaanalysis.sample.calls.CallsSample$Root, java.util.function.Consumer):void@7
-                  - invokevirtual-org.abego.javaanalysis.sample.calls.CallsSample$SubA#meth3(org.abego.javaanalysis.sample.calls.CallsSample$SubA, java.util.function.Consumer):void@7
-                  - invokevirtual-org.abego.javaanalysis.sample.calls.CallsSample$SubA#meth4(org.abego.javaanalysis.sample.calls.CallsSample$Root, java.util.function.Consumer):void@7
-                org.abego.javaanalysis.sample.calls.CallsSample$Root#org.abego.javaanalysis.sample.calls.CallsSample$Root()::
+                calls.CallsSample$Root#CallsSample$Root():void:
+                  - invokespecial-calls.CallsSample$SubA#CallsSample$SubA():void@1
+                calls.CallsSample$Root#meth1(java.util.function.Consumer):void:
+                  - invokevirtual-calls.CallsSample$Main#meth4(calls.CallsSample$Root, java.util.function.Consumer):void@2
+                  - invokevirtual-calls.CallsSample$SubA#meth4(calls.CallsSample$Root, java.util.function.Consumer):void@2
+                calls.CallsSample$Root#meth2(java.util.function.Consumer):void:
+                  - invokevirtual-calls.CallsSample$Main#meth3(calls.CallsSample$SubA, java.util.function.Consumer):void@7
+                  - invokevirtual-calls.CallsSample$Main#meth4(calls.CallsSample$Root, java.util.function.Consumer):void@7
+                  - invokevirtual-calls.CallsSample$SubA#meth3(calls.CallsSample$SubA, java.util.function.Consumer):void@7
+                  - invokevirtual-calls.CallsSample$SubA#meth4(calls.CallsSample$Root, java.util.function.Consumer):void@7
                 """, rootCalls);
 
-        String subACalls = reportMethodCalls(project, "org.abego.javaanalysis.sample.calls.CallsSample$SubA", m -> true);
+        String subACalls = reportMethodCalls(project, "calls.CallsSample$SubA", m -> true);
         assertEquals("""
-                org.abego.javaanalysis.sample.calls.CallsSample$SubA#meth1(java.util.function.Consumer):void:
-                  - invokevirtual-org.abego.javaanalysis.sample.calls.CallsSample$Main#meth3(org.abego.javaanalysis.sample.calls.CallsSample$SubA, java.util.function.Consumer):void@2
-                  - invokevirtual-org.abego.javaanalysis.sample.calls.CallsSample$SubA#meth3(org.abego.javaanalysis.sample.calls.CallsSample$SubA, java.util.function.Consumer):void@2
-                org.abego.javaanalysis.sample.calls.CallsSample$SubA#meth3(org.abego.javaanalysis.sample.calls.CallsSample$SubA, java.util.function.Consumer):void:
-                org.abego.javaanalysis.sample.calls.CallsSample$SubA#meth4(org.abego.javaanalysis.sample.calls.CallsSample$Root, java.util.function.Consumer):void:
-                org.abego.javaanalysis.sample.calls.CallsSample$SubA#org.abego.javaanalysis.sample.calls.CallsSample$SubA()::
+                calls.CallsSample$SubA#CallsSample$SubA():void:
+                calls.CallsSample$SubA#meth1(java.util.function.Consumer):void:
+                  - invokevirtual-calls.CallsSample$Main#meth3(calls.CallsSample$SubA, java.util.function.Consumer):void@2
+                  - invokevirtual-calls.CallsSample$SubA#meth3(calls.CallsSample$SubA, java.util.function.Consumer):void@2
+                calls.CallsSample$SubA#meth3(calls.CallsSample$SubA, java.util.function.Consumer):void:
+                calls.CallsSample$SubA#meth4(calls.CallsSample$Root, java.util.function.Consumer):void:
                 """, subACalls);
     }
 
@@ -153,7 +148,7 @@ class InputFromJavapTest {
         assertEquals("""
                 meth1(java.util.function.Consumer);meth2(java.util.function.Consumer)
                 meth1(java.util.function.Consumer);meth2(java.util.function.Consumer)
-                "<init>"()
+                Object()
                 """, result.toString());
     }
 
@@ -171,23 +166,6 @@ class InputFromJavapTest {
             }
         });
         return result.toString();
-    }
-
-    private static void dumpMethodsWithMultipleReturnTypes(
-            JavaAnalysisProject project, String fileName) throws FileNotFoundException {
-        PrintStream out = new PrintStream(fileName);
-        Function<String, String> keyProvider = id -> project.classOfMethod(id) + "." + project.signatureOfMethod(id);
-        Map<String, List<String>> result = project.methods().idStream()
-                .collect(Collectors.groupingBy(keyProvider));
-        for (Map.Entry<String, List<String>> e : result.entrySet()) {
-            if (e.getValue().size() > 1) {
-                out.println(e.getKey() + ":");
-                for (String s : e.getValue()) {
-                    out.println("  - " + s);
-                }
-            }
-        }
-        out.close();
     }
 
 }

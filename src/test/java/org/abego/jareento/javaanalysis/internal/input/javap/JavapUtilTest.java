@@ -40,7 +40,7 @@ class JavapUtilTest {
         JavapMethodDescriptor desc =
                 JavapUtil.parseFromJavapInvokeComment(text,"com.example.SomeClass");
 
-        assertEquals("", desc.className);
+        assertEquals("com.example.SomeClass", desc.className);
         assertEquals("fillRectangle", desc.methodName);
         assertEquals("void", desc.returnType);
         assertEquals("java.lang.Object|java.awt.Rectangle[]", String.join("|", desc.parameters));

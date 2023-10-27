@@ -20,7 +20,7 @@ public class JareentoServiceAPITest {
     private final JareentoServiceAPI jareentoServiceAPI = loadService(JareentoServiceAPI.class);
 
     @Test
-    void removeSelectedMethodsAndFixOverrides(@TempDir File tempDir) {
+    void removeSelectedMethodsAndFixOverrides(@TempDir File mavenDir) {
 
         File sourcesDir = new File(mavenDir, "src/main/java");
         File expectedDir = new File(mavenDir, "expected/removeSelectedMethodsAndFixOverrides-expected");

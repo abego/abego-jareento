@@ -5,10 +5,10 @@ import org.abego.commons.lang.SeparatedItemScanner;
 import org.abego.commons.lineprocessing.LineProcessing;
 import org.abego.commons.lineprocessing.LineProcessing.ScriptBuilder;
 import org.abego.jareento.base.JareentoException;
+import org.abego.jareento.shared.SyntaxUtil;
 import org.eclipse.jdt.annotation.Nullable;
 
 import java.io.BufferedInputStream;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -83,7 +83,7 @@ class JavapParser {
 
         default void onEnd() {
         }
-        
+
         default void onSourcefile(String sourcefile) {
         }
     }
@@ -108,6 +108,7 @@ class JavapParser {
         boolean isInInnerClassesBlock = false;
         boolean isNestMembersBlock = false;
         boolean isInRuntimeAnnotationsBlock = false;
+        @Nullable Runnable descriptorAction = null;
 
         public boolean isInAnyBlock() {
             return isInInstructionBlock ||
@@ -142,8 +143,8 @@ class JavapParser {
             c.more(); // check for more rules
         });
 
-        b.onMatch((c,s)->s.isInConstantPoolBlock, (c,s)->{});
-        
+        b.onMatch((c, s) -> s.isInConstantPoolBlock, (c, s) -> {});
+
         b.onMatch("Classfile (.+)", (c, s) -> {
             if (!s.classFile.isEmpty()) {
                 handler.onClassfileEnd(s.classFile);
@@ -175,10 +176,14 @@ class JavapParser {
 
         // static initializer
         b.onMatch("  static \\{\\};", (c, s) -> {
-            s.methodName = "\"<cinit>\"";
-            s.parameters = "";
-            s.returnType = "";
-            handler.onStaticInitialization(s.className);
+            checkNoDescriptorAction(c, s);
+
+            s.descriptorAction = () -> {
+                s.methodName = "\"<cinit>\"";
+                s.parameters = "";
+                s.returnType = "";
+                handler.onStaticInitialization(s.className);
+            };
         });
 
         // class
@@ -294,6 +299,31 @@ class JavapParser {
         b.onMatch("    Code:", (c, s) -> {
         });
 
+        // ignore the "stack=..., locals=..., args_size=..." line
+        b.onMatch("\\s+stack=\\d+, locals=\\d+, args_size=\\d+", (c, s) -> {
+        });
+
+        // ignore the "LineNumberTable:" line
+        b.onMatch("\\s+LineNumberTable:", (c, s) -> {
+        });
+
+        // ignore the "line ...: ..." line
+        b.onMatch("\\s+line \\d+: \\d+", (c, s) -> {
+        });
+
+        // ignore the "LocalVariableTable:" line
+        b.onMatch("\\s+LocalVariableTable:", (c, s) -> {
+        });
+
+        // ignore the "Start  Length  Slot  Name   Signature" line
+        b.onMatch("\\s+Start\\s+Length\\s+Slot\\s+Name\\s+Signature", (c, s) -> {
+        });
+
+        // ignore the "flags:" line
+        b.onMatch("\\s+flags:", (c, s) -> {
+        });
+
+
         // ignore the "minor/major version" line
         b.onMatch("  ((minor)|(major)) version: \\d+", (c, s) -> {
         });
@@ -304,6 +334,10 @@ class JavapParser {
 
         // ignore the "super_class" line
         b.onMatch("  super_class: .+", (c, s) -> {
+        });
+
+        // ignore the "super_class" line
+        b.onMatch("\\s+Signature: .+", (c, s) -> {
         });
 
         // ignore the "interfaces/fields/methods/attributes" line
@@ -331,38 +365,71 @@ class JavapParser {
         b.onMatch(
                 "  " + ACCESS_REGEX + "((?:default )?(?:abstract )?(?:static )?(?:final )?(?:native )?(?:synchronized )?)?(?:(<[^>]+>) )?([^\\(]+)\\(([^\\)]*)\\)(?: throws ([^;]+))?;",
                 (c, s) -> {
+                    checkNoDescriptorAction(c, s);
                     String returnTypeAndMethodName = trim(c.m().group(4));
                     SeparatedItemScanner scanner = SeparatedItemScanner.newSeparatedItemScanner(returnTypeAndMethodName);
                     String item1 = scanner.nextItem();
                     String item2 = scanner.nextItem();
                     if (item2.isEmpty()) {
                         // only one item (the method name) found
-                        s.returnType = "";
                         s.methodName = trim(item1);
                     } else {
-                        // return type and method name found;
-                        s.returnType = trim(item1);
+                        // return type and method name found; methodName 2nd
                         s.methodName = trim(item2);
                     }
-                    s.parameters = trim(c.m().group(5));
-                    handler.onMethod(s.className,
-                            s.methodName,
-                            trim(c.m().group(1)),
-                            trim(c.m().group(2)),
-                            s.returnType,
-                            s.parameters,
-                            trim(c.m().group(6)),
-                            trim(c.m().group(3)));
+                    if (s.methodName.equals(s.className)) {
+                        // constructor
+                        s.methodName = SyntaxUtil.simpleName(s.methodName);
+                    }
+                    // we need to postpone the onMethod event because the
+                    // parameter types and return type information in this line
+                    // is not always correct (e.g. for enum constructors).
+                    // The correct info is in the `descriptor` line immediately 
+                    // following.
+                    String access = trim(c.m().group(1));
+                    String modifier = trim(c.m().group(2));
+                    String exceptions = trim(c.m().group(6));
+                    String typeParametersOfMethod = trim(c.m().group(3));
+                    s.descriptorAction = () ->
+                            handler.onMethod(s.className,
+                                    s.methodName,
+                                    access,
+                                    modifier,
+                                    s.returnType,
+                                    s.parameters,
+                                    exceptions,
+                                    typeParametersOfMethod);
                 });
+
+        // descriptor line
+        b.onMatch("\\s+descriptor: (.+)", (c, s) -> {
+            if (s.descriptorAction == null) {
+                throw new IllegalStateException(
+                        "Unexpected `descriptor:` line, no action defined: " + c.line());
+            }
+            ParameterAndReturnTypes types = JavapUtil.parseJavapDescriptor(c.m()
+                    .group(1));
+            s.parameters = parameterTypesListTextOrNull(types.parameterTypes());
+            s.returnType = types.returnType();
+            s.descriptorAction.run();
+            s.descriptorAction = null;
+        });
 
         // field 
         // (must come after "method" rule, as it also matches some method pattern)
-        b.onMatch("  " + ACCESS_REGEX + "((?:static ))?([^ ]+ )?([^\\(]+);", (c, s) ->
-                handler.onField(s.className,
-                        trim(c.m().group(4)),
-                        trim(c.m().group(1)),
-                        trim(c.m().group(2)),
-                        trim(c.m().group(3))));
+        b.onMatch("  " + ACCESS_REGEX + "((?:static ))?([^ ]+ )?([^\\(]+);", (c, s) -> {
+            checkNoDescriptorAction(c, s);
+
+            String fieldName = trim(c.m().group(4));
+            String access = trim(c.m().group(1));
+            String modifier = trim(c.m().group(2));
+            s.descriptorAction = () ->
+                    handler.onField(s.className,
+                            fieldName,
+                            access,
+                            modifier,
+                            s.returnType);
+        });
 
         // InnerClasses line
         b.onMatch("InnerClasses:", (c, s) -> s.isInInnerClassesBlock = true);
@@ -408,6 +475,11 @@ class JavapParser {
         return b.build();
     }
 
+    private static void checkNoDescriptorAction(LineProcessing.Context c, MyState s) {
+        if (s.descriptorAction != null) {
+            System.out.println("Previous descriptor action was not processed. Defined before: " + c.line());
+        }
+    }
 
     private static String trim(@Nullable String string) {
         return string != null ? string.trim() : "";
@@ -434,15 +506,9 @@ class JavapParser {
                     e);
         }
     }
-
-    public void parseReader(BufferedReader reader, EventHandler handler) {
-        LineProcessing.Script script = newScript(handler);
-        try {
-            script.process(reader);
-        } catch (JareentoException e) {
-            throw e;
-        } catch (Exception e) {
-            throw new JareentoException("Error when reading javap output", e); //NON-NLS
-        }
+    
+    @Nullable
+    private static String parameterTypesListTextOrNull(String @Nullable [] types) {
+        return types != null ? String.join(", ", types) : null;
     }
 }

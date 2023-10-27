@@ -1,6 +1,7 @@
 package org.abego.jareento.javaanalysis.internal;
 
 import org.abego.commons.io.FileUtil;
+import org.abego.commons.lang.ArrayUtil;
 import org.abego.commons.lang.StringUtil;
 import org.abego.commons.util.CollectionUtil;
 import org.abego.commons.util.ListUtil;
@@ -83,9 +84,10 @@ class JavaAnalysisProjectStorageUsingStringGraph implements JavaAnalysisProjectS
 
         // Create a (new) JavaAnalysisProject and save it (if missing or out-dated)
         File[] dependencies = projectConfiguration.dependencies();
-        writeFileIfOutdated(projectFile, concatenate(disassemblyFile, dependencies),
+        File[] projectJarsAndDependencies = ArrayUtil.concatenate(jarFiles, dependencies);
+        writeFileIfOutdated(projectFile, concatenate(disassemblyFile, projectJarsAndDependencies),
                 f -> newJavaAnalysisProjectFromDisassemblyFile(
-                        projectURI, disassemblyFile, sourceRoots, dependencies, progress),
+                        projectURI, disassemblyFile, sourceRoots, projectJarsAndDependencies, progress),
                 () -> progress.accept("Found up-to-date java analysis project, using it: " + projectURI));
 
         return projectURI;
@@ -107,11 +109,10 @@ class JavaAnalysisProjectStorageUsingStringGraph implements JavaAnalysisProjectS
                         sourceRoots,
                         dependencies,
                         logStringsAsWarnings(LOGGER)));
-
         progress.accept(String.format("Created java analysis project '%s'.", projectURI));
     }
 
-    private JavaAnalysisProject newJavaAnalysisProjectFromInput(
+    private void newJavaAnalysisProjectFromInput(
             URI uri,
             JavaAnalysisProjectInput input,
             File[] sourceRoots,
@@ -124,7 +125,7 @@ class JavaAnalysisProjectStorageUsingStringGraph implements JavaAnalysisProjectS
         input.feed(builder, problemConsumer);
         JavaAnalysisProjectStateWithSave state = builder.build();
         state.save();
-        return JavaAnalysisProjectImpl.newJavaAnalysisProject(state);
+        JavaAnalysisProjectImpl.newJavaAnalysisProject(state);
     }
 
 
