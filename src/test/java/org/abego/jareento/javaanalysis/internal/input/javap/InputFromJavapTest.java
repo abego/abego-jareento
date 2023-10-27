@@ -113,7 +113,7 @@ class InputFromJavapTest {
     void withMethodCallsToMethodsOfClassDoTest(@TempDir File tempDir) {
         JavaAnalysisProject project = createProjectUsingJavapData(tempDir, "javap-CallsSample.txt");
 
-        String rootCalls = reportMethodCalls(project, "org.abego.javaanalysis.sample.calls.CallsSample$Root", m -> true);
+        String rootCalls = reportMethodCalls(project, "calls.CallsSample$Root", m -> true);
         assertEquals("""
                 org.abego.javaanalysis.sample.calls.CallsSample$Root#meth1(java.util.function.Consumer):void:
                   - invokevirtual-org.abego.javaanalysis.sample.calls.CallsSample$Main#meth4(org.abego.javaanalysis.sample.calls.CallsSample$Root, java.util.function.Consumer):void@2
@@ -142,7 +142,7 @@ class InputFromJavapTest {
         JavaAnalysisProject project = createProjectUsingJavapData(tempDir, "javap-CallsSample.txt");
 
         StringBuilder result = new StringBuilder();
-        project.methodsOfClass("org.abego.javaanalysis.sample.calls.CallsSample$Main")
+        project.methodsOfClass("calls.CallsSample$Main")
                 .idStream()
                 .forEach(methodId -> {
                     String calledMethods = JavaAnalysisProjectUtil.

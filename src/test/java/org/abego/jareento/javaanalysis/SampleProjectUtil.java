@@ -28,7 +28,7 @@ import static org.abego.commons.util.ServiceLoaderUtil.loadService;
 
 public class SampleProjectUtil {
 
-    public static final String SAMPLE_PROJECTS_ROOT_PATH = "/org/abego/jareento/sample/";
+    public static final String SAMPLE_PROJECTS_ROOT_PATH = "/org/abego/jareento/sample-projects/";
 
     /**
      * Copies the sample project with the given {@code projectName} from the 
@@ -44,16 +44,18 @@ public class SampleProjectUtil {
     public static JavaAnalysisProject setupSampleProject(
             String projectName, File directory) {
         JavaAnalysisAPI javaAnalysisAPI = loadService(JavaAnalysisAPI.class);
-        
+
         File srcDir = new File(directory, "src");
+        File srcMainDir = new File(srcDir, "main");
+        File srcMainJavaDir = new File(srcMainDir, "java");
         File targetDir = new File(directory, "target");
         File classesDir = new File(targetDir, "classes");
         File jarFile = new File(targetDir, projectName +".jar");
         
         FileUtil.copyResourcesInLocationDeep(SampleProjectUtil.class,
-                SAMPLE_PROJECTS_ROOT_PATH + projectName+"/src", srcDir);
+                SAMPLE_PROJECTS_ROOT_PATH + projectName+"/src", srcMainJavaDir);
 
-        List<File> sourceFiles = allJavaFilesInDirectoryAndDeeper(srcDir);
+        List<File> sourceFiles = allJavaFilesInDirectoryAndDeeper(srcMainJavaDir);
         var diagnostics = compileJavaFiles(sourceFiles, classesDir);
 
         if (!diagnostics.isEmpty()) {
@@ -76,7 +78,7 @@ public class SampleProjectUtil {
                 javaAnalysisAPI.newJavaAnalysisProjectConfiguration(
                         projectName,
                         directory,
-                        new File[]{srcDir},
+                        new File[]{srcMainJavaDir},
                         new File[]{jarFile},
                         new File[]{});
 

@@ -1,4 +1,4 @@
-package org.abego.jareento.javaanalysis.sample.calls;
+package calls;
 
 import java.util.function.Consumer;
 

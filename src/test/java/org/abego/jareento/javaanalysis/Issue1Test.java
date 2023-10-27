@@ -25,7 +25,7 @@ public class Issue1Test {
                 # info of methodCalls in method issue1.InterfaceC#methodInterfaceC():void
                 invokeinterface-issue1.InterfaceC#methodInterfaceC():void@1
                 - signature: methodInterfaceB()
-                - scope: issue1.InterfaceB
+                - scope: issue1.InterfaceC
                 """, info.toString());
     }
 

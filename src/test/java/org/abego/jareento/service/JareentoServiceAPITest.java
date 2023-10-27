@@ -22,15 +22,12 @@ public class JareentoServiceAPITest {
     @Test
     void removeSelectedMethodsAndFixOverrides(@TempDir File tempDir) {
 
-        File mavenDir = new File(tempDir, "project");
         File sourcesDir = new File(mavenDir, "src/main/java");
-        File expectedDir = new File(tempDir, "expected");
-        File storageDirectory = new File(tempDir, "storage");
+        File expectedDir = new File(mavenDir, "expected/removeSelectedMethodsAndFixOverrides-expected");
+        File storageDirectory = new File(mavenDir, "storage");
 
         copyResourcesInLocationDeep(getClass(),
-                "/org/abego/jareento/sample/sample2/project", mavenDir);
-        copyResourcesInLocationDeep(getClass(),
-                "/org/abego/jareento/sample/sample2/removeSelectedMethodsAndFixOverrides-expected", expectedDir);
+                "/org/abego/jareento/sample-projects/sample2", mavenDir);
 
         String[] classesToCheckForMethods = {
                 "com.example.sample2.SynBase"
