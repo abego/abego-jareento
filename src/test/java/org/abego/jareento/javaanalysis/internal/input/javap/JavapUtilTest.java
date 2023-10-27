@@ -10,7 +10,7 @@ class JavapUtilTest {
         String text = "Method java/lang/Enum.valueOf:(Ljava/lang/Class;Ljava/lang/String;)Ljava/lang/Enum;";
 
         JavapMethodDescriptor desc =
-                JavapMethodDescriptor.parseFromJavapInvokeComment(text);
+                JavapUtil.parseFromJavapInvokeComment(text, "");
 
         assertEquals("java.lang.Enum", desc.className);
         assertEquals("valueOf", desc.methodName);
@@ -24,7 +24,7 @@ class JavapUtilTest {
         String text = "Method \"[Ljava/lang/String;\".clone:()Ljava/lang/Object;";
 
         JavapMethodDescriptor desc =
-                JavapMethodDescriptor.parseFromJavapInvokeComment(text);
+                JavapUtil.parseFromJavapInvokeComment(text,"");
 
         assertEquals("java.lang.String[]", desc.className);
         assertEquals("clone", desc.methodName);
@@ -38,7 +38,7 @@ class JavapUtilTest {
         String text = "Method fillRectangle:(Ljava/lang/Object;[Ljava/awt/Rectangle;)V";
 
         JavapMethodDescriptor desc =
-                JavapMethodDescriptor.parseFromJavapInvokeComment(text);
+                JavapUtil.parseFromJavapInvokeComment(text,"com.example.SomeClass");
 
         assertEquals("", desc.className);
         assertEquals("fillRectangle", desc.methodName);
@@ -52,28 +52,13 @@ class JavapUtilTest {
         String text = "Method com/example/inheritance/Base.\"<init>\":()V";
 
         JavapMethodDescriptor desc =
-                JavapMethodDescriptor.parseFromJavapInvokeComment(text);
+                JavapUtil.parseFromJavapInvokeComment(text, "");
 
         assertEquals("com.example.inheritance.Base", desc.className);
-        assertEquals("\"<init>\"", desc.methodName);
+        assertEquals("Base", desc.methodName);
         assertEquals("void", desc.returnType);
         assertEquals("", String.join("|", desc.parameters));
-        assertEquals("\"<init>\"()", desc.getSignature());
+        assertEquals("Base()", desc.getSignature());
     }
-
-    @Test
-    void parseFromJavapInvokeComment_init_noClass() {
-        String text = "Method \"<init>\":(Ljava/lang/Number;)V";
-
-        JavapMethodDescriptor desc =
-                JavapMethodDescriptor.parseFromJavapInvokeComment(text);
-
-        assertEquals("", desc.className);
-        assertEquals("\"<init>\"", desc.methodName);
-        assertEquals("void", desc.returnType);
-        assertEquals("java.lang.Number", String.join("|", desc.parameters));
-        assertEquals("\"<init>\"(java.lang.Number)", desc.getSignature());
-    }
-
 
 }

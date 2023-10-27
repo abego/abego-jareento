@@ -166,7 +166,7 @@ public class InputFromJavap implements JavaAnalysisProjectInput {
         @Override
         public void onInstruction(String className, String methodName, String parameters, String returnType, int offset, String mnemonic, String arguments, String comment) {
             if (mnemonic.startsWith("invoke")) {
-                JavapMethodDescriptor calledMethod = JavapMethodDescriptor.parseFromJavapInvokeComment(comment);
+                JavapMethodDescriptor calledMethod = JavapUtil.parseFromJavapInvokeComment(comment, className);
                 String calledSignature = calledMethod.getSignature(JavaLangUtil::rawName);
                 String callingMethodSignature = signatureFromMethodNameAndParameters(methodName, parameters);
                 if (!methodTypeParameters.isEmpty()) {
