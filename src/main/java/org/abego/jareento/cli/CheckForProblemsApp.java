@@ -4,6 +4,7 @@ import org.abego.commons.lang.IterableUtil;
 import org.abego.jareento.javaanalysis.JavaAnalysisAPI;
 import org.abego.jareento.javaanalysis.ProblemChecker;
 import org.abego.jareento.javaanalysis.ProblemType;
+import org.abego.jareento.javaanalysis.Problems;
 import org.abego.jareento.javaanalysis.ProblemsReporter;
 
 import java.io.File;
@@ -17,11 +18,13 @@ import java.util.Set;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+import static java.util.Collections.emptyList;
 import static org.abego.commons.io.FileUtil.parseFiles;
 import static org.abego.commons.util.ListUtil.toList;
 import static org.abego.commons.util.ServiceLoaderUtil.loadService;
 
 public class CheckForProblemsApp {
+    private static final int EXIT_CODE_FOUND_PROBLEMS = 1;
     private final JavaAnalysisAPI javaAnalysisAPI = loadService(JavaAnalysisAPI.class);
 
     private record ParsedArgs(
@@ -32,10 +35,25 @@ public class CheckForProblemsApp {
             List<String> sourceRootsAndDependencies) {
     }
 
+    /**
+     * Check for problems as specified by the arguments.
+     * <p>
+     * Calling {@code main} without arguments will prompt a "usage"
+     * description to {@link System#out}, including a list of 
+     * available "problem checkers" and additional information.
+     * <p>
+     * Terminates with exit code != 0 when problems are found.
+     * Details on the problems are provided in additional files generated
+     * by the application.
+     */
     public static void main(String... args) {
         var app = new CheckForProblemsApp();
 
-        app.runWith(parseArgs(args));
+        Problems problems = app.runWith(parseArgs(args));
+        
+        if (!problems.isEmpty()) {
+            System.exit(EXIT_CODE_FOUND_PROBLEMS);
+        }
     }
 
     private static ParsedArgs parseArgs(String[] args) {
@@ -77,10 +95,11 @@ public class CheckForProblemsApp {
                 args.length == 0, silent, superSilent, checkerIds, sourceRootsAndDependencies);
     }
 
-    private void runWith(ParsedArgs args) {
+    private Problems runWith(ParsedArgs args) {
         if (args.printUsage()) {
-            printAvailableProblemChecker(System.out);
-            return;
+            printUsage(System.out);
+            printAvailableProblemCheckersAndReporters(System.out);
+            return javaAnalysisAPI.newProblems(emptyList());
         }
 
         checkArgs(args);
@@ -102,7 +121,7 @@ public class CheckForProblemsApp {
         printProblemsToCheck(problemCheckers, progress);
         printSourceRootsToCheck(sourceRootsAndDependencies, progress);
 
-        javaAnalysisAPI.checkForProblemsAndWriteReports(
+        return javaAnalysisAPI.checkForProblemsAndWriteReports(
                 sourceRootsAndDependencies,
                 problemCheckers,
                 problemsReporters,
@@ -134,7 +153,13 @@ public class CheckForProblemsApp {
                         .collect(Collectors.joining(" "))));
     }
 
-    private void printAvailableProblemChecker(PrintStream out) {
+    private void printAvailableProblemCheckersAndReporters(PrintStream out) {
+        printAvailableProblemCheckers(out, javaAnalysisAPI.getAllProblemCheckers());
+        out.println();
+        printAvailableProblemReporters(out, javaAnalysisAPI.getAllProblemsReporters());
+    }
+
+    private static void printUsage(PrintStream out) {
         out.println("Usage:");
         out.println("    <command> [-s] [-S] [-c problemCheckerId]+ [file]+");
         out.println();
@@ -154,10 +179,6 @@ public class CheckForProblemsApp {
         out.println("              root` directories is checked for problems.");
         out.println("              Multiple directories and `jar` files may be specified.");
         out.println();
-
-        printAvailableProblemCheckers(out, javaAnalysisAPI.getAllProblemCheckers());
-        out.println();
-        printAvailableProblemReporters(out, javaAnalysisAPI.getAllProblemsReporters());
     }
 
     private void printAvailableProblemCheckers(
