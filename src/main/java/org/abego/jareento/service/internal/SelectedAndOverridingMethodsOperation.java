@@ -1,7 +1,7 @@
 package org.abego.jareento.service.internal;
 
-import org.abego.jareento.base.JavaMethodSet;
-import org.abego.jareento.base.JavaMethodSetBuilder;
+import org.abego.jareento.base.JavaMethodDeclaratorSet;
+import org.abego.jareento.base.JavaMethodDeclaratorSetBuilder;
 import org.abego.jareento.javaanalysis.JavaAnalysisAPI;
 import org.abego.jareento.javaanalysis.JavaAnalysisProject;
 import org.abego.jareento.javaanalysis.JavaMethodSelector;
@@ -14,14 +14,11 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import static org.abego.commons.lang.StringUtil.indent;
-import static org.abego.jareento.base.JavaMethodSetBuilder.newJavaMethodSetBuilder;
+import static org.abego.jareento.base.JavaMethodDeclaratorSetBuilder.newJavaMethodSetBuilder;
 
 public class SelectedAndOverridingMethodsOperation {
-    @SuppressWarnings("FieldCanBeLocal")
-    private final JavaAnalysisAPI javaAnalysisAPI;
 
-    public SelectedAndOverridingMethodsOperation(JavaAnalysisAPI javaAnalysisAPI) {
-        this.javaAnalysisAPI = javaAnalysisAPI;
+    public SelectedAndOverridingMethodsOperation() {
     }
 
     public SelectedAndOverridingMethods getSelectedAndOverridingMethods(
@@ -31,25 +28,25 @@ public class SelectedAndOverridingMethodsOperation {
             Consumer<String> progress) {
 
 
-        JavaMethodSetBuilder selectedMethodsSetBuilder = newJavaMethodSetBuilder();
-        JavaMethodSetBuilder overridingMethodsSetBuilder = newJavaMethodSetBuilder();
+        JavaMethodDeclaratorSetBuilder selectedMethodsSetBuilder = newJavaMethodSetBuilder();
+        JavaMethodDeclaratorSetBuilder overridingMethodsSetBuilder = newJavaMethodSetBuilder();
 
         addSelectedAndOverridingMethods(
                 javaAnalysisProject, methodSelector, classesToCheckForMethods,
                 selectedMethodsSetBuilder, overridingMethodsSetBuilder, progress);
 
-        JavaMethodSet selectedMethods = selectedMethodsSetBuilder.build();
-        JavaMethodSet overridingMethods = overridingMethodsSetBuilder.build();
+        JavaMethodDeclaratorSet selectedMethods = selectedMethodsSetBuilder.build();
+        JavaMethodDeclaratorSet overridingMethods = overridingMethodsSetBuilder.build();
 
         return new SelectedAndOverridingMethods() {
 
             @Override
-            public JavaMethodSet selectedMethods() {
+            public JavaMethodDeclaratorSet selectedMethods() {
                 return selectedMethods;
             }
 
             @Override
-            public JavaMethodSet overridingMethods() {
+            public JavaMethodDeclaratorSet overridingMethods() {
                 return overridingMethods;
             }
         };
@@ -59,8 +56,8 @@ public class SelectedAndOverridingMethodsOperation {
             JavaAnalysisProject javaAnalysisProject,
             JavaMethodSelector methodSelector,
             String[] classnames,
-            JavaMethodSetBuilder selectedMethods,
-            JavaMethodSetBuilder overridingMethods,
+            JavaMethodDeclaratorSetBuilder selectedMethods,
+            JavaMethodDeclaratorSetBuilder overridingMethods,
             Consumer<String> progress) {
 
         progress.accept("Finding selected methods and affected overrides...");
@@ -73,7 +70,7 @@ public class SelectedAndOverridingMethodsOperation {
         }
         long afterCalc = System.currentTimeMillis();
         progress.accept(String.format("%d selected methods and %d affected overrides found. [%d ms]",
-                selectedMethods.methodCount(), overridingMethods.methodCount(),
+                selectedMethods.getSize(), overridingMethods.getSize(),
                 afterCalc - afterLoad));
     }
 
@@ -81,8 +78,8 @@ public class SelectedAndOverridingMethodsOperation {
             JavaAnalysisProject project,
             JavaMethodSelector methodSelector,
             String className,
-            JavaMethodSetBuilder selectedMethods,
-            JavaMethodSetBuilder overridingMethods) {
+            JavaMethodDeclaratorSetBuilder selectedMethods,
+            JavaMethodDeclaratorSetBuilder overridingMethods) {
 
         Set<String> selectedMethodsOfClass =
                 idsOfSelectedMethodsOfClass(project, className, methodSelector);

@@ -94,17 +94,18 @@ public interface JavaAnalysisProject {
     boolean isObjectInitializationMethod(String methodId);
 
     /**
-     * Returns the fullMethodDeclarator of the method with the given {@code methodId}.
+     * Returns the text of the MethodDeclarator of the method with the given 
+     * {@code methodId}.
      */
-    String fullDeclaratorOfMethod(String methodId);
+    String methodDeclaratorTextOfMethodWithId(String methodId);
 
     /**
-     * Returns the id of the method with the given {@code fullMethodDeclarator},
+     * Returns the id of the method with the given {@code methodDeclaratorText},
      * or throws an exception when the project does not contain such a method.
      * <p>
-     * See also {@link #fullDeclaratorOfMethod(String)}
+     * See also {@link #methodDeclaratorTextOfMethodWithId(String)}
      **/
-    String idOfMethodDeclaredAs(String fullMethodDeclarator);
+    String idOfMethodDeclaredAs(String methodDeclaratorText);
 
     /**
      * Returns all methods contained in this project.
@@ -148,7 +149,7 @@ public interface JavaAnalysisProject {
 
     JavaMethodCalls methodCallsWithSignature(String methodSignature);
 
-    JavaMethodCalls methodCallsWithSignatureToClass(String methodSignature, String className);
+    JavaMethodCalls methodCallsWithSignatureOnClass(String methodSignature, String className);
 
     /**
      * Returns the scope of the method call with the given {@code methodCallId}
@@ -180,7 +181,7 @@ public interface JavaAnalysisProject {
     default void withMethodCallsToMethodsOfClassDo(String className, BiConsumer<String, JavaMethodCalls> calledMethodAndMethodCalls) {
         methodsOfClass(className)
                 .idStream().sorted().forEach(calledMethodId -> {
-                    JavaMethodCalls methodCalls = methodCallsWithSignatureToClass(signatureOfMethod(calledMethodId), className);
+                    JavaMethodCalls methodCalls = methodCallsWithSignatureOnClass(signatureOfMethod(calledMethodId), className);
                     calledMethodAndMethodCalls.accept(calledMethodId, methodCalls);
                 });
     }

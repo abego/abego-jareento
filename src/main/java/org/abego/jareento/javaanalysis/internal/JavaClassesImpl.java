@@ -34,7 +34,7 @@ class JavaClassesImpl extends ManyImpl<JavaClass, JavaClasses> implements JavaCl
     }
 
     @Override
-    public JavaMethodSignatures methodSignatures() {
+    public JavaMethodSignatures getMethodSignatures() {
 
         return newJavaMethodSignatures(newIDs(() -> {
             Set<String> result = new HashSet<>();

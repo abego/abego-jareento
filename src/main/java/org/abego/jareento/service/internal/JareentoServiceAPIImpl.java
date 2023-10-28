@@ -27,7 +27,7 @@ public class JareentoServiceAPIImpl implements JareentoServiceAPI {
             JavaMethodSelector methodSelector,
             String[] classesToCheckForMethods,
             Consumer<String> progress) {
-        return new SelectedAndOverridingMethodsOperation(javaAnalysisAPI)
+        return new SelectedAndOverridingMethodsOperation()
                 .getSelectedAndOverridingMethods(
                         javaAnalysisProject, methodSelector, classesToCheckForMethods, progress);
     }

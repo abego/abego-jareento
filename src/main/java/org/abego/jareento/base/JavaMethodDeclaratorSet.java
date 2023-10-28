@@ -5,33 +5,34 @@ import org.eclipse.jdt.annotation.Nullable;
 import javax.annotation.Syntax;
 import java.util.stream.Stream;
 
-import static org.abego.jareento.base.JareentoSyntax.FULL_METHOD_DECLARATOR_SYNTAX;
+import static org.abego.jareento.base.JareentoSyntax.METHOD_DECLARATOR_SYNTAX;
 import static org.abego.jareento.base.JareentoSyntax.QUALIFIED_METHOD_SIGNATURE_SYNTAX;
 import static org.abego.jareento.base.JareentoSyntax.QUALIFIED_TYPE_NAME_SYNTAX;
 
 /**
  * A set of Java methods.
  */
-public interface JavaMethodSet {
+public interface JavaMethodDeclaratorSet {
     /**
      * Returns the number of methods in this object.
      */
     int getSize();
 
     /**
-     * Returns a Stream of FullMethodDeclarators of the methods in this object.
+     * Returns a Stream of String with the method declarators of the methods 
+     * in this object.
      */
-    @Syntax(FULL_METHOD_DECLARATOR_SYNTAX)
-    Stream<String> declaratorStream();
+    @Syntax(METHOD_DECLARATOR_SYNTAX)
+    Stream<String> stream();
 
     /**
-     * Returns the FullMethodDeclarator of the method in the given {@code type}
+     * Returns the text of the MethodDeclarator of the method in the given {@code type}
      * that has the requested {@code signature} or, null if no such method
      * exists.
      */
     @Nullable
-    @Syntax(FULL_METHOD_DECLARATOR_SYNTAX)
-    String fullMethodDeclaratorOfMethodOfTypeWithSignatureOrNull(
+    @Syntax(METHOD_DECLARATOR_SYNTAX)
+    String methodDeclaratorTextOfMethodOfTypeWithSignatureOrNull(
             @Syntax(QUALIFIED_TYPE_NAME_SYNTAX) String type,
             @Syntax(QUALIFIED_METHOD_SIGNATURE_SYNTAX) String signature);
 

@@ -19,5 +19,5 @@ public interface JavaClass extends WithId {
      */
     JavaClass getSuperclass();
 
-    JavaMethodSignatures methodSignatures();
+    JavaMethodSignatures getMethodSignatures();
 }

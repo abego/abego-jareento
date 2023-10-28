@@ -38,6 +38,7 @@ public class JareentoServiceAPITest {
                         "sample1",
                         mavenDir,
                         new File[]{sourcesDir});
+        //TODO: don't use methodId but method
         JavaMethodSelector methodSelector = (methodId, project) ->
                 // all methods but the constructor        
                 !project.isConstructor(methodId);
@@ -45,7 +46,7 @@ public class JareentoServiceAPITest {
         Consumer<String> progress = System.out::println;
 
         JavaAnalysisProjectStorage storage = javaAnalysisAPI
-                .javaAnalysisProjectStorage(storageDirectory.toURI());
+                .getJavaAnalysisProjectStorage(storageDirectory.toURI());
         JavaAnalysisProject project = storage.createAndLoadJavaAnalysisProject(
                 javaAnalysisProjectConfiguration, progress);
 

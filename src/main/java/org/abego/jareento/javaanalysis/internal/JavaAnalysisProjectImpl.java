@@ -25,7 +25,7 @@ import static org.abego.jareento.javaanalysis.internal.JavaClassImpl.newJavaClas
 import static org.abego.jareento.javaanalysis.internal.JavaMethodCallsImpl.newJavaMethodCalls;
 import static org.abego.jareento.javaanalysis.internal.JavaMethodSignaturesImpl.newJavaMethodSignatures;
 import static org.abego.jareento.javaanalysis.internal.JavaTypesImpl.newJavaTypes;
-import static org.abego.jareento.shared.FullMethodDeclarator.newFullMethodDeclarator;
+import static org.abego.jareento.shared.JavaMethodDeclarator.newJavaMethodDeclarator;
 
 public class JavaAnalysisProjectImpl implements JavaAnalysisProject {
     private static final Map<String, String> OBJECT_METHOD_SIGNATURES_TO_RETURN_TYPE = newObjectMethodSignatures();
@@ -127,11 +127,11 @@ public class JavaAnalysisProjectImpl implements JavaAnalysisProject {
                     OBJECT_METHOD_SIGNATURES_TO_RETURN_TYPE.get(methodSignature);
             String fullClassname = Object.class.getName();
             return returnType != null
-                    ? idOfMethodDeclaredAs(newFullMethodDeclarator(fullClassname, methodSignature, returnType).text())
+                    ? idOfMethodDeclaredAs(newJavaMethodDeclarator(fullClassname, methodSignature, returnType).getText())
                     : null;
 
         } else {
-            for (String classname : types.classnames()) {
+            for (String classname : types.names()) {
                 if (methodSignaturesOfClass(classname).contains(methodSignature)) {
                     return idOfMethodOfClassWithSignature(classname, methodSignature);
                 } else {
@@ -171,7 +171,7 @@ public class JavaAnalysisProjectImpl implements JavaAnalysisProject {
 
     @Override
     public JavaMethodCalls methodCallsToMethod(String methodId) {
-        return methodCallsWithSignatureToClass(
+        return methodCallsWithSignatureOnClass(
                 signatureOfMethod(methodId), classOfMethod(methodId));
     }
 
@@ -181,8 +181,8 @@ public class JavaAnalysisProjectImpl implements JavaAnalysisProject {
     }
 
     @Override
-    public JavaMethodCalls methodCallsWithSignatureToClass(String methodSignature, String className) {
-        return newJavaMethodCalls(state.methodCallsWithSignatureToClass(methodSignature, className), this);
+    public JavaMethodCalls methodCallsWithSignatureOnClass(String methodSignature, String className) {
+        return newJavaMethodCalls(state.methodCallsWithSignatureOnClass(methodSignature, className), this);
     }
 
     @Override
@@ -300,13 +300,13 @@ public class JavaAnalysisProjectImpl implements JavaAnalysisProject {
     }
 
     @Override
-    public String idOfMethodDeclaredAs(String fullMethodDeclarator) {
-        return state.idOfMethodDeclaredAs(fullMethodDeclarator);
+    public String idOfMethodDeclaredAs(String methodDeclaratorText) {
+        return state.idOfMethodDeclaredAs(methodDeclaratorText);
     }
 
     @Override
-    public String fullDeclaratorOfMethod(String methodId) {
-        return state.fullDeclaratorOfMethod(methodId);
+    public String methodDeclaratorTextOfMethodWithId(String methodId) {
+        return state.methodDeclaratorTextOfMethodWithId(methodId);
     }
 
     @Override

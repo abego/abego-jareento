@@ -26,7 +26,7 @@ class JavaTypesImpl extends ManyImpl<JavaType, JavaTypes> implements JavaTypes {
     }
 
     @Override
-    public Iterable<String> classnames() {
+    public Iterable<String> names() {
         return idSet();
     }
 }

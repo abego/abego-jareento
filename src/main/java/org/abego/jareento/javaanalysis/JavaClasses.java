@@ -4,7 +4,7 @@ import org.abego.jareento.base.Many;
 
 public interface JavaClasses extends Many<JavaClass, JavaClasses> {
 
-    JavaMethodSignatures methodSignatures();
+    JavaMethodSignatures getMethodSignatures();
 
     JavaClasses unitedWithClassNamed(String classname);
 

@@ -35,7 +35,7 @@ public interface JavaAnalysisProjectState {
     IDs methodCallsWithSignature(String methodSignature);
 
     @ID("JavaMethodCall")
-    IDs methodCallsWithSignatureToClass(String methodSignature, String className);
+    IDs methodCallsWithSignatureOnClass(String methodSignature, String className);
 
     String scopeOfMethodCall(String methodCallId);
 
@@ -103,9 +103,9 @@ public interface JavaAnalysisProjectState {
 
     String nameOfMethod(String methodId);
 
-    String idOfMethodDeclaredAs(String fullMethodDeclarator);
+    String idOfMethodDeclaredAs(String methodDeclaratorText);
 
-    String fullDeclaratorOfMethod(String methodId);
+    String methodDeclaratorTextOfMethodWithId(String methodId);
 
     String classOfMethod(String methodId);
 

@@ -21,7 +21,7 @@ import static org.abego.jareento.javaanalysis.internal.ProblemsImpl.newProblemsI
 public class JavaAnalysisAPIImpl implements JavaAnalysisAPI {
 
     @Override
-    public JavaAnalysisProjectStorage javaAnalysisProjectStorage(URI storageURI) {
+    public JavaAnalysisProjectStorage getJavaAnalysisProjectStorage(URI storageURI) {
         return new JavaAnalysisProjectStorageUsingStringGraph(this, storageURI);
     }
 

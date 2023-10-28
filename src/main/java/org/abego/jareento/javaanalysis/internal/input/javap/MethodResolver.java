@@ -235,7 +235,7 @@ class MethodResolver {
         project.classes().idStream().forEach(classname -> {
             JavaTypes types = project.extendedTypes(classname)
                     .unitedWith(project.implementedInterfaces(classname));
-            for (String supertype : types.classnames()) {
+            for (String supertype : types.names()) {
                 directlyInheritsFrom
                         .computeIfAbsent(classname, s -> new HashSet<>())
                         .add(supertype);
@@ -262,7 +262,7 @@ class MethodResolver {
             return null;
 
         } else {
-            for (String typename : types.classnames()) {
+            for (String typename : types.names()) {
                 @Nullable String id = resolveSignatureToMethodIdOrNull(signature, typename);
                 if (id != null) {
                     return id;

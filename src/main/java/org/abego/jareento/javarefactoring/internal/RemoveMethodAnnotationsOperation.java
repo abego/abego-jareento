@@ -7,7 +7,7 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter;
-import org.abego.jareento.base.JavaMethodSet;
+import org.abego.jareento.base.JavaMethodDeclaratorSet;
 import org.abego.jareento.javarefactoring.JavaRefactoringProject;
 import org.abego.jareento.javarefactoring.MethodAnnotationDescriptor;
 import org.abego.jareento.shared.commons.javaparser.JavaParserUtil;
@@ -68,7 +68,7 @@ class RemoveMethodAnnotationsOperation {
         progress.accept("Method annotations removed.");
     }
 
-    public static void removeMethodAnnotations(JavaRefactoringProject project, String annotationType, JavaMethodSet methodSet, Consumer<String> progress) {
+    public static void removeMethodAnnotations(JavaRefactoringProject project, String annotationType, JavaMethodDeclaratorSet methodSet, Consumer<String> progress) {
         progress.accept("Removing method annotations...");
         Consumer<String> innerProgress = indent(progress);
         Consumer<String> innerInnerProgress = indent(innerProgress);
@@ -76,7 +76,7 @@ class RemoveMethodAnnotationsOperation {
         innerProgress.accept(String.format("%d method annotations to remove.", methodSet.getSize()));
 
         AtomicInteger removeCount = new AtomicInteger();
-        Set<String> remainingMethods = methodSet.declaratorStream()
+        Set<String> remainingMethods = methodSet.stream()
                 .collect(Collectors.toSet());
         RemoveMethodAnnotationsOperation operation = newRemoveMethodAnnotationOperation(
                 m -> m.annotationType().equals(annotationType)
@@ -86,7 +86,9 @@ class RemoveMethodAnnotationsOperation {
                             String.format("Removing annotation '%s' from method %s#%s",
                                     annotationType,
                                     m.typeDeclaringMethod(), m.methodSignature()));
-                    remainingMethods.remove(methodSet.fullMethodDeclaratorOfMethodOfTypeWithSignatureOrNull(m.typeDeclaringMethod(), m.methodSignatureWithRawTypes()));
+                    remainingMethods.remove(
+                            methodSet.methodDeclaratorTextOfMethodOfTypeWithSignatureOrNull(
+                                    m.typeDeclaringMethod(), m.methodSignatureWithRawTypes()));
                     removeCount.getAndIncrement();
                 }
         );

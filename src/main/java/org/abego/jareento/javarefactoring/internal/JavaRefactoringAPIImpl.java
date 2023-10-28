@@ -1,6 +1,6 @@
 package org.abego.jareento.javarefactoring.internal;
 
-import org.abego.jareento.base.JavaMethodSet;
+import org.abego.jareento.base.JavaMethodDeclaratorSet;
 import org.abego.jareento.javarefactoring.JavaRefactoringAPI;
 import org.abego.jareento.javarefactoring.JavaRefactoringProject;
 import org.abego.jareento.javarefactoring.MethodAnnotationDescriptor;
@@ -18,7 +18,7 @@ public class JavaRefactoringAPIImpl implements JavaRefactoringAPI {
     }
 
     @Override
-    public void removeMethods(JavaRefactoringProject project, JavaMethodSet methodSet, Consumer<String> progress) {
+    public void removeMethods(JavaRefactoringProject project, JavaMethodDeclaratorSet methodSet, Consumer<String> progress) {
         RemoveMethodsOperation.removeMethods(project, methodSet, progress);
     }
 
@@ -28,7 +28,7 @@ public class JavaRefactoringAPIImpl implements JavaRefactoringAPI {
     }
 
     @Override
-    public void removeMethodAnnotations(JavaRefactoringProject project, String annotationType, JavaMethodSet methodSet, Consumer<String> progress) {
+    public void removeMethodAnnotations(JavaRefactoringProject project, String annotationType, JavaMethodDeclaratorSet methodSet, Consumer<String> progress) {
         RemoveMethodAnnotationsOperation.removeMethodAnnotations(project, annotationType, methodSet, progress);
     }
 

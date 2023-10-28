@@ -22,7 +22,7 @@ public interface JavaAnalysisAPI {
      * {@link URI} that is different from the URI of the
      * JavaAnalysisProjectStorage containing the project.
      */
-    JavaAnalysisProjectStorage javaAnalysisProjectStorage(URI storageURI);
+    JavaAnalysisProjectStorage getJavaAnalysisProjectStorage(URI storageURI);
     //endregion
 
     //region Configuration

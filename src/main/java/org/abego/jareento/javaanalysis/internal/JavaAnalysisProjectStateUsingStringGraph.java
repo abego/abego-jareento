@@ -4,7 +4,7 @@ import org.abego.commons.io.FileUtil;
 import org.abego.commons.lang.IntUtil;
 import org.abego.commons.lang.StringUtil;
 import org.abego.jareento.base.JareentoException;
-import org.abego.jareento.shared.FullMethodDeclarator;
+import org.abego.jareento.shared.JavaMethodDeclarator;
 import org.abego.stringgraph.core.Node;
 import org.abego.stringgraph.core.Nodes;
 import org.abego.stringgraph.core.StringGraph;
@@ -28,7 +28,8 @@ import java.util.stream.Collectors;
 import static java.util.logging.Logger.getLogger;
 import static org.abego.jareento.base.JareentoSyntax.QUALIFIED_TYPE_OR_ARRAY_NAME_SYNTAX;
 import static org.abego.jareento.javaanalysis.internal.IDsImpl.newIDs;
-import static org.abego.jareento.shared.FullMethodDeclarator.fullMethodDeclaratorText;
+import static org.abego.jareento.shared.JavaMethodDeclarator.methodDeclaratorText;
+import static org.abego.jareento.shared.JavaMethodDeclarator.newJavaMethodDeclarator;
 import static org.abego.jareento.shared.SyntaxUtil.qualifier;
 import static org.abego.jareento.util.JavaLangUtil.rawNameNoArray;
 
@@ -192,7 +193,7 @@ public class JavaAnalysisProjectStateUsingStringGraph implements JavaAnalysisPro
 
         @Override
         public String getMethodId(String typename, String methodSignature, String returnType) {
-            return fullMethodDeclaratorText(typename, methodSignature, returnType);
+            return methodDeclaratorText(typename, methodSignature, returnType);
         }
 
         @Override
@@ -311,7 +312,8 @@ public class JavaAnalysisProjectStateUsingStringGraph implements JavaAnalysisPro
 
     @Override
     public boolean isConstructor(String methodId) {
-        return !graph.nodes(methodId, RETURN_TYPE, "?").hasSingleNode();
+        JavaMethodDeclarator decl = newJavaMethodDeclarator(methodId);
+        return decl.getName().equals(decl.getSimpleClassname());
     }
 
     @Override
@@ -335,7 +337,7 @@ public class JavaAnalysisProjectStateUsingStringGraph implements JavaAnalysisPro
     }
 
     @Override
-    public IDs methodCallsWithSignatureToClass(String methodSignature, String className) {
+    public IDs methodCallsWithSignatureOnClass(String methodSignature, String className) {
         Nodes callsWithScopeOrBaseScope =
                 graph.nodes("?", HAS_SCOPE, className)
                         .union(graph.nodes("?", BASE_SCOPE, className));
@@ -535,31 +537,31 @@ public class JavaAnalysisProjectStateUsingStringGraph implements JavaAnalysisPro
     public String signatureOfMethod(String methodId) {
         // Shortcut: no need to check the graph for the signature as
         // that information is currently encoded in the methodId/
-        // fullMethodDeclarator.
-        return FullMethodDeclarator.newFullMethodDeclarator(
-                fullDeclaratorOfMethod(methodId)).signature();
+        // methodDeclarator.
+        return newJavaMethodDeclarator(
+                methodDeclaratorTextOfMethodWithId(methodId)).getSignatureText();
     }
 
     @Override
     public String nameOfMethod(String methodId) {
         // Shortcut: no need to check the graph for the method name as
         // that information is currently encoded in the methodId/
-        // fullMethodDeclarator.
-        return FullMethodDeclarator.newFullMethodDeclarator(
-                fullDeclaratorOfMethod(methodId)).name();
+        // methodDeclarator.
+        return newJavaMethodDeclarator(
+                methodDeclaratorTextOfMethodWithId(methodId)).getName();
     }
 
     @Override
-    public String idOfMethodDeclaredAs(String fullMethodDeclarator) {
-        // currently the methodId has the exact same value as the fullMethodDeclarator.
+    public String idOfMethodDeclaredAs(String methodDeclaratorText) {
+        // currently the methodId has the exact same value as the methodDeclarator.
         //TODO: check if the method exists using hasNode (when in StringGraph's 
         //  public API) and throw exception if not
-        return fullMethodDeclarator;
+        return methodDeclaratorText;
     }
 
     @Override
-    public String fullDeclaratorOfMethod(String methodId) {
-        // currently the methodId has the exact same value as the fullMethodDeclarator
+    public String methodDeclaratorTextOfMethodWithId(String methodId) {
+        // currently the methodId has the exact same value as the methodDeclarator
         return methodId;
     }
 
@@ -567,9 +569,9 @@ public class JavaAnalysisProjectStateUsingStringGraph implements JavaAnalysisPro
     public String classOfMethod(String methodId) {
         // Shortcut: no need to check the graph for the class as
         // that information is currently encoded in the methodId/
-        // fullMethodDeclarator.
-        return FullMethodDeclarator.newFullMethodDeclarator(
-                fullDeclaratorOfMethod(methodId)).classname();
+        // methodDeclarator.
+        return newJavaMethodDeclarator(
+                methodDeclaratorTextOfMethodWithId(methodId)).getClassname();
     }
 
     @Override

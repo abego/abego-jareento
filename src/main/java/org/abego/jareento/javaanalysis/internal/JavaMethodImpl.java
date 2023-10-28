@@ -43,7 +43,7 @@ class JavaMethodImpl implements JavaMethod {
 
     @Override
     public String getFullDeclarator() {
-        return project.fullDeclaratorOfMethod(id);
+        return project.methodDeclaratorTextOfMethodWithId(id);
     }
 
     @Override

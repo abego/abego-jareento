@@ -47,7 +47,7 @@ class JavaClassImpl implements JavaClass {
     }
 
     @Override
-    public JavaMethodSignatures methodSignatures() {
+    public JavaMethodSignatures getMethodSignatures() {
         return project.methodSignaturesOfClass(id);
     }
 

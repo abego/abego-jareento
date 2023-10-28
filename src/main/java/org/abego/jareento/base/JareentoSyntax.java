@@ -50,9 +50,9 @@ public interface JareentoSyntax {
      * ({@linkplain JareentoSyntax#QUALIFIED_NAME_SYNTAX}) of a (Java) type.
      * <p>
      * The qualifier identifies the type's package or its outer type. 
-     * Generics and Arrays are not included.
+     * Generics and Arrays are not included, but primitive types and {@code void} are.
      * <p>
-     * Example: {@code java.lang.String}
+     * Examples: {@code java.lang.String}, {code int}, {code void}
      * <p>
      */
     String QUALIFIED_TYPE_NAME_SYNTAX = "QualifiedTypeName";
@@ -85,9 +85,9 @@ public interface JareentoSyntax {
     String QUALIFIED_METHOD_SIGNATURE_SYNTAX = "QualifiedMethodSignature";
 
     /**
-     * Identifies the syntax of a <em>method declarator</em>.
+     * Identifies the syntax of a <em>simple method declarator</em>.
      * <p>
-     * The method declarator of a (Java) method is the concatenation of
+     * The simple method declarator of a (Java) method is the concatenation of
      * <ul>
      *     <li>its qualified classname ({@linkplain JareentoSyntax#QUALIFIED_TYPE_NAME_SYNTAX})</li>
      *     <li>a '#'</li>
@@ -96,19 +96,19 @@ public interface JareentoSyntax {
      * <p>
      * Example: <code>org.example.SampleClass#myMethod(java.lang.Object, java.lang.String)</code>
      */
-    String METHOD_DECLARATOR_SYNTAX = "MethodDeclarator";
+    String SIMPLE_METHOD_DECLARATOR_SYNTAX = "SimpleMethodDeclarator";
 
     /**
-     * Identifies the syntax of a <em>full method declarator</em>.
+     * Identifies the syntax of a <em>method declarator</em>.
      * <p>
-     * The full method declarator of a (Java) method is the concatenation of
+     * The method declarator of a (Java) method is the concatenation of
      * <ul>
-     *     <li>its method declarator ({@linkplain JareentoSyntax#METHOD_DECLARATOR_SYNTAX})</li>
+     *     <li>its simple method declarator ({@linkplain JareentoSyntax#SIMPLE_METHOD_DECLARATOR_SYNTAX})</li>
      *     <li>a ':'</li>
      *     <li>its fully qualified return type ({@linkplain JareentoSyntax#QUALIFIED_TYPE_NAME_SYNTAX}).</li>
      * </ul>
      * Example: <code>org.example.SampleClass#myMethod(java.lang.Object, java.lang.String):java.lang.String</code>
      */
-    String FULL_METHOD_DECLARATOR_SYNTAX = "FullMethodDeclarator";
+    String METHOD_DECLARATOR_SYNTAX = "MethodDeclarator";
     //endregion
 }
