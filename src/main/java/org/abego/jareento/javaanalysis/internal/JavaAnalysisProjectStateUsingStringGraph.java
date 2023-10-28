@@ -4,7 +4,7 @@ import org.abego.commons.io.FileUtil;
 import org.abego.commons.lang.IntUtil;
 import org.abego.commons.lang.StringUtil;
 import org.abego.jareento.base.JareentoException;
-import org.abego.jareento.shared.JavaMethodDeclarator;
+import org.abego.jareento.javaanalysis.JavaMethodDeclarator;
 import org.abego.stringgraph.core.Node;
 import org.abego.stringgraph.core.Nodes;
 import org.abego.stringgraph.core.StringGraph;
@@ -28,8 +28,8 @@ import java.util.stream.Collectors;
 import static java.util.logging.Logger.getLogger;
 import static org.abego.jareento.base.JareentoSyntax.QUALIFIED_TYPE_OR_ARRAY_NAME_SYNTAX;
 import static org.abego.jareento.javaanalysis.internal.IDsImpl.newIDs;
-import static org.abego.jareento.shared.JavaMethodDeclarator.methodDeclaratorText;
-import static org.abego.jareento.shared.JavaMethodDeclarator.newJavaMethodDeclarator;
+import static org.abego.jareento.shared.JavaMethodDeclaratorUtil.newJavaMethodDeclarator;
+import static org.abego.jareento.shared.JavaMethodDeclaratorUtil.methodDeclaratorText;
 import static org.abego.jareento.shared.SyntaxUtil.qualifier;
 import static org.abego.jareento.util.JavaLangUtil.rawNameNoArray;
 
@@ -313,7 +313,7 @@ public class JavaAnalysisProjectStateUsingStringGraph implements JavaAnalysisPro
     @Override
     public boolean isConstructor(String methodId) {
         JavaMethodDeclarator decl = newJavaMethodDeclarator(methodId);
-        return decl.getName().equals(decl.getSimpleClassname());
+        return decl.getMethodName().equals(decl.getSimpleClassname());
     }
 
     @Override
@@ -548,7 +548,7 @@ public class JavaAnalysisProjectStateUsingStringGraph implements JavaAnalysisPro
         // that information is currently encoded in the methodId/
         // methodDeclarator.
         return newJavaMethodDeclarator(
-                methodDeclaratorTextOfMethodWithId(methodId)).getName();
+                methodDeclaratorTextOfMethodWithId(methodId)).getMethodName();
     }
 
     @Override

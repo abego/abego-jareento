@@ -1,8 +1,7 @@
 package org.abego.jareento.service.internal;
 
-import org.abego.jareento.base.JavaMethodDeclaratorSet;
-import org.abego.jareento.base.JavaMethodDeclaratorSetBuilder;
-import org.abego.jareento.javaanalysis.JavaAnalysisAPI;
+import org.abego.jareento.javaanalysis.JavaMethodDeclarators;
+import org.abego.jareento.javaanalysis.JavaMethodDeclaratorsBuilder;
 import org.abego.jareento.javaanalysis.JavaAnalysisProject;
 import org.abego.jareento.javaanalysis.JavaMethodSelector;
 import org.abego.jareento.javaanalysis.JavaMethods;
@@ -14,7 +13,7 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import static org.abego.commons.lang.StringUtil.indent;
-import static org.abego.jareento.base.JavaMethodDeclaratorSetBuilder.newJavaMethodSetBuilder;
+import static org.abego.jareento.javaanalysis.JavaMethodDeclaratorsBuilder.newJavaMethodDeclaratorsBuilder;
 
 public class SelectedAndOverridingMethodsOperation {
 
@@ -28,25 +27,25 @@ public class SelectedAndOverridingMethodsOperation {
             Consumer<String> progress) {
 
 
-        JavaMethodDeclaratorSetBuilder selectedMethodsSetBuilder = newJavaMethodSetBuilder();
-        JavaMethodDeclaratorSetBuilder overridingMethodsSetBuilder = newJavaMethodSetBuilder();
+        JavaMethodDeclaratorsBuilder selectedMethodsSetBuilder = newJavaMethodDeclaratorsBuilder();
+        JavaMethodDeclaratorsBuilder overridingMethodsSetBuilder = newJavaMethodDeclaratorsBuilder();
 
         addSelectedAndOverridingMethods(
                 javaAnalysisProject, methodSelector, classesToCheckForMethods,
                 selectedMethodsSetBuilder, overridingMethodsSetBuilder, progress);
 
-        JavaMethodDeclaratorSet selectedMethods = selectedMethodsSetBuilder.build();
-        JavaMethodDeclaratorSet overridingMethods = overridingMethodsSetBuilder.build();
+        JavaMethodDeclarators selectedMethods = selectedMethodsSetBuilder.build();
+        JavaMethodDeclarators overridingMethods = overridingMethodsSetBuilder.build();
 
         return new SelectedAndOverridingMethods() {
 
             @Override
-            public JavaMethodDeclaratorSet selectedMethods() {
+            public JavaMethodDeclarators selectedMethods() {
                 return selectedMethods;
             }
 
             @Override
-            public JavaMethodDeclaratorSet overridingMethods() {
+            public JavaMethodDeclarators overridingMethods() {
                 return overridingMethods;
             }
         };
@@ -56,8 +55,8 @@ public class SelectedAndOverridingMethodsOperation {
             JavaAnalysisProject javaAnalysisProject,
             JavaMethodSelector methodSelector,
             String[] classnames,
-            JavaMethodDeclaratorSetBuilder selectedMethods,
-            JavaMethodDeclaratorSetBuilder overridingMethods,
+            JavaMethodDeclaratorsBuilder selectedMethods,
+            JavaMethodDeclaratorsBuilder overridingMethods,
             Consumer<String> progress) {
 
         progress.accept("Finding selected methods and affected overrides...");
@@ -78,8 +77,8 @@ public class SelectedAndOverridingMethodsOperation {
             JavaAnalysisProject project,
             JavaMethodSelector methodSelector,
             String className,
-            JavaMethodDeclaratorSetBuilder selectedMethods,
-            JavaMethodDeclaratorSetBuilder overridingMethods) {
+            JavaMethodDeclaratorsBuilder selectedMethods,
+            JavaMethodDeclaratorsBuilder overridingMethods) {
 
         Set<String> selectedMethodsOfClass =
                 idsOfSelectedMethodsOfClass(project, className, methodSelector);

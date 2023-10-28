@@ -7,7 +7,7 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter;
-import org.abego.jareento.base.JavaMethodDeclaratorSet;
+import org.abego.jareento.javaanalysis.JavaMethodDeclarators;
 import org.abego.jareento.javarefactoring.JavaRefactoringProject;
 import org.abego.jareento.javarefactoring.MethodAnnotationDescriptor;
 import org.abego.jareento.shared.commons.javaparser.JavaParserUtil;
@@ -68,7 +68,7 @@ class RemoveMethodAnnotationsOperation {
         progress.accept("Method annotations removed.");
     }
 
-    public static void removeMethodAnnotations(JavaRefactoringProject project, String annotationType, JavaMethodDeclaratorSet methodSet, Consumer<String> progress) {
+    public static void removeMethodAnnotations(JavaRefactoringProject project, String annotationType, JavaMethodDeclarators methodSet, Consumer<String> progress) {
         progress.accept("Removing method annotations...");
         Consumer<String> innerProgress = indent(progress);
         Consumer<String> innerInnerProgress = indent(innerProgress);
@@ -76,11 +76,11 @@ class RemoveMethodAnnotationsOperation {
         innerProgress.accept(String.format("%d method annotations to remove.", methodSet.getSize()));
 
         AtomicInteger removeCount = new AtomicInteger();
-        Set<String> remainingMethods = methodSet.stream()
+        Set<String> remainingMethods = methodSet.textStream()
                 .collect(Collectors.toSet());
         RemoveMethodAnnotationsOperation operation = newRemoveMethodAnnotationOperation(
                 m -> m.annotationType().equals(annotationType)
-                        && methodSet.containsMethodOfTypeWithSignature(m.typeDeclaringMethod(), m.methodSignatureWithRawTypes()),
+                        && methodSet.containsMethodOfClassAndSignature(m.typeDeclaringMethod(), m.methodSignatureWithRawTypes()),
                 m -> {
                     innerInnerProgress.accept(
                             String.format("Removing annotation '%s' from method %s#%s",

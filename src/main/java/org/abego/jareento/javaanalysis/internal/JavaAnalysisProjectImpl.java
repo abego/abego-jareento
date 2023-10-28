@@ -25,7 +25,7 @@ import static org.abego.jareento.javaanalysis.internal.JavaClassImpl.newJavaClas
 import static org.abego.jareento.javaanalysis.internal.JavaMethodCallsImpl.newJavaMethodCalls;
 import static org.abego.jareento.javaanalysis.internal.JavaMethodSignaturesImpl.newJavaMethodSignatures;
 import static org.abego.jareento.javaanalysis.internal.JavaTypesImpl.newJavaTypes;
-import static org.abego.jareento.shared.JavaMethodDeclarator.newJavaMethodDeclarator;
+import static org.abego.jareento.shared.JavaMethodDeclaratorUtil.newJavaMethodDeclarator;
 
 public class JavaAnalysisProjectImpl implements JavaAnalysisProject {
     private static final Map<String, String> OBJECT_METHOD_SIGNATURES_TO_RETURN_TYPE = newObjectMethodSignatures();

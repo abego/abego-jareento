@@ -1,6 +1,6 @@
 package org.abego.jareento.javarefactoring;
 
-import org.abego.jareento.base.JavaMethodDeclaratorSet;
+import org.abego.jareento.javaanalysis.JavaMethodDeclarators;
 
 import java.io.File;
 import java.util.function.Consumer;
@@ -13,7 +13,7 @@ public interface JavaRefactoringAPI {
     //endregion
     //region removeMethods
     void removeMethods(JavaRefactoringProject project,
-                       JavaMethodDeclaratorSet methodSet,
+                       JavaMethodDeclarators methodSet,
                        Consumer<String> progress);
 
     void removeMethods(JavaRefactoringProject project,
@@ -26,7 +26,7 @@ public interface JavaRefactoringAPI {
     //region removeMethodAnnotations
     void removeMethodAnnotations(JavaRefactoringProject project,
                                  String annotationType,
-                                 JavaMethodDeclaratorSet methodSet,
+                                 JavaMethodDeclarators methodSet,
                                  Consumer<String> progress);
 
     void removeMethodAnnotations(JavaRefactoringProject project,
