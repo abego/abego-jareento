@@ -1,8 +1,11 @@
 package org.abego.jareento.javaanalysis.internal;
 
 import org.abego.jareento.javaanalysis.JavaAnalysisProject;
+import org.abego.jareento.javaanalysis.JavaClass;
 import org.abego.jareento.javaanalysis.JavaMethod;
 import org.abego.jareento.javaanalysis.JavaMethodCalls;
+import org.abego.jareento.javaanalysis.JavaMethodSignature;
+import org.abego.jareento.javaanalysis.JavaMethods;
 
 class JavaMethodImpl implements JavaMethod {
     private final String id;
@@ -23,8 +26,14 @@ class JavaMethodImpl implements JavaMethod {
     }
 
     @Override
-    public String getSignature() {
+    public String getMethodSignatureText() {
         return project.signatureOfMethod(id);
+    }
+
+    @Override
+    public JavaMethodSignature getMethodSignature() {
+        return JavaMethodSignatureImpl.newJavaMethodSignature(
+                getMethodSignatureText(), project);
     }
 
     @Override
@@ -35,6 +44,11 @@ class JavaMethodImpl implements JavaMethod {
     @Override
     public String getClassName() {
         return project.classOfMethod(id);
+    }
+
+    @Override
+    public JavaClass getJavaClass() {
+        return project.getClassWithName(getClassName());
     }
 
     @Override
@@ -65,6 +79,16 @@ class JavaMethodImpl implements JavaMethod {
     @Override
     public boolean isObjectInitializationMethod() {
         return project.isObjectInitializationMethod(id);
+    }
+
+    @Override
+    public boolean isAnnotatedWithOverride() {
+        return project.hasMethodOverrideAnnotation(id);
+    }
+
+    @Override
+    public JavaMethods getMethodsDirectlyOverridingMe() {
+        return project.methodsDirectlyOverridingMethod(id);
     }
 
     @Override
