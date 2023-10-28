@@ -12,10 +12,10 @@ import java.util.stream.Stream;
 
 import static org.abego.jareento.javaanalysis.internal.IDsImpl.newIDs;
 
-abstract class ManyImpl<T extends WithId, M extends ManyWithId<T, M>> implements ManyWithId<T, M> {
+abstract class ManyWithIdDefault<T extends WithId, M extends ManyWithId<T, M>> implements ManyWithId<T, M> {
     private final IDs ids;
 
-    protected ManyImpl(IDs ids) {
+    protected ManyWithIdDefault(IDs ids) {
         this.ids = ids;
     }
 
@@ -85,7 +85,7 @@ abstract class ManyImpl<T extends WithId, M extends ManyWithId<T, M>> implements
         if (this == o) {
             return true;
         } else if (o != null && this.getClass() == o.getClass()) {
-            ManyImpl<?, ?> other = (ManyImpl<?, ?>) o;
+            ManyWithIdDefault<?, ?> other = (ManyWithIdDefault<?, ?>) o;
             return this.ids.equals(other.ids);
         } else {
             return false;

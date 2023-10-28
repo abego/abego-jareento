@@ -11,7 +11,7 @@ import java.util.Set;
 import static org.abego.jareento.javaanalysis.internal.IDsImpl.newIDs;
 import static org.abego.jareento.javaanalysis.internal.JavaMethodSignaturesImpl.newJavaMethodSignatures;
 
-class JavaClassesImpl extends ManyImpl<JavaClass, JavaClasses> implements JavaClasses {
+class JavaClassesImpl extends ManyWithIdDefault<JavaClass, JavaClasses> implements JavaClasses {
     private final JavaAnalysisProject project;
 
     private JavaClassesImpl(IDs ids, JavaAnalysisProject project) {

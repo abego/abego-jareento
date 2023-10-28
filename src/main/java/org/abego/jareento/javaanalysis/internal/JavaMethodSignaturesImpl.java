@@ -10,7 +10,7 @@ import java.util.Set;
 import static org.abego.jareento.javaanalysis.internal.IDsImpl.newIDs;
 import static org.abego.jareento.javaanalysis.internal.JavaMethodSignatureImpl.newJavaMethodSignature;
 
-class JavaMethodSignaturesImpl extends ManyImpl<JavaMethodSignature, JavaMethodSignatures> implements JavaMethodSignatures {
+class JavaMethodSignaturesImpl extends ManyWithIdDefault<JavaMethodSignature, JavaMethodSignatures> implements JavaMethodSignatures {
     private final JavaAnalysisProject project;
 
     private JavaMethodSignaturesImpl(IDs ids, JavaAnalysisProject project) {

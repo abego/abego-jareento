@@ -12,7 +12,7 @@ import java.util.Map;
 import static org.abego.jareento.javaanalysis.internal.JavaMethodImpl.newJavaMethod;
 
 
-class JavaMethodsImpl extends ManyImpl<JavaMethod, JavaMethods> implements JavaMethods {
+class JavaMethodsImpl extends ManyWithIdDefault<JavaMethod, JavaMethods> implements JavaMethods {
     private final JavaAnalysisProject project;
 
     private JavaMethodsImpl(IDs ids, JavaAnalysisProject project) {

@@ -6,7 +6,7 @@ import org.abego.jareento.javaanalysis.JavaMethodCalls;
 
 import java.util.stream.Collectors;
 
-class JavaMethodCallsImpl extends ManyImpl<JavaMethodCall, JavaMethodCalls> implements JavaMethodCalls {
+class JavaMethodCallsImpl extends ManyWithIdDefault<JavaMethodCall, JavaMethodCalls> implements JavaMethodCalls {
     private final JavaAnalysisProject project;
 
     private JavaMethodCallsImpl(IDs ids, JavaAnalysisProject project) {

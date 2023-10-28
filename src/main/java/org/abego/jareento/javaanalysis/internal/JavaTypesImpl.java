@@ -5,7 +5,7 @@ import org.abego.jareento.javaanalysis.JavaTypes;
 
 import static org.abego.jareento.javaanalysis.internal.JavaTypeImpl.newJavaType;
 
-class JavaTypesImpl extends ManyImpl<JavaType, JavaTypes> implements JavaTypes {
+class JavaTypesImpl extends ManyWithIdDefault<JavaType, JavaTypes> implements JavaTypes {
 
     private JavaTypesImpl(IDs ids) {
         super(ids);
