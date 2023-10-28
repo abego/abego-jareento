@@ -4,7 +4,6 @@ import org.abego.commons.io.FileUtil;
 import org.abego.commons.io.PrintStreamToBuffer;
 import org.abego.jareento.javaanalysis.JavaAnalysisAPI;
 import org.abego.jareento.javaanalysis.JavaAnalysisProject;
-import org.abego.jareento.javaanalysis.JavaAnalysisProjectUtil;
 import org.abego.jareento.javaanalysis.JavaMethodCalls;
 import org.abego.jareento.javaanalysis.internal.JavaAnalysisInternalFactories;
 import org.abego.jareento.javaanalysis.internal.JavaAnalysisProjectStateBuilder;
@@ -16,6 +15,7 @@ import java.util.Comparator;
 import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import static java.util.logging.Logger.getLogger;
 import static org.abego.commons.lang.StringUtil.sortedUnixLines;
@@ -141,8 +141,7 @@ class InputFromJavapTest {
         project.methodsOfClass("calls.CallsSample$Main")
                 .idStream()
                 .forEach(methodId -> {
-                    String calledMethods = JavaAnalysisProjectUtil.
-                            calledMethodsSummary(project, methodId);
+                    String calledMethods = calledMethodsSummary(project, methodId);
                     result.append(calledMethods);
                     result.append("\n");
                 });
@@ -179,6 +178,13 @@ class InputFromJavapTest {
             }
         });
         return result.toString();
+    }
+
+    private static String calledMethodsSummary(JavaAnalysisProject project, String methodId) {
+        return project.methodCallsInMethod(methodId)
+                .idStream()
+                .map(project::signatureOfMethodCall)
+                .collect(Collectors.joining(";"));
     }
 
 }
