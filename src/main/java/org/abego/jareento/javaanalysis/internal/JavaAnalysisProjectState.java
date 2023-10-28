@@ -67,10 +67,6 @@ public interface JavaAnalysisProjectState {
     IDs classesContainingMethodWithSignature(
             @Syntax(JareentoSyntax.QUALIFIED_METHOD_SIGNATURE_SYNTAX) String methodSignature);
 
-    @Syntax(JAVA_FILE_PATH_SYNTAX)
-    Optional<String> javaFileOfClass(
-            @Syntax(QUALIFIED_TYPE_NAME_SYNTAX) String classname);
-
     @Syntax(CLASS_FILE_PATH_SYNTAX)
     Optional<String> classFileOfClass(
             @Syntax(QUALIFIED_TYPE_NAME_SYNTAX) String classname);

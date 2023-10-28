@@ -424,12 +424,6 @@ public class JavaAnalysisProjectStateUsingStringGraph implements JavaAnalysisPro
     }
     
     @Override
-    public Optional<String> javaFileOfClass(String classname) {
-        Nodes nodes = graph.nodesViaEdgeLabeledToNode(CONTAINS, classname);
-        return optionalSingleId(nodes);
-    }
-
-    @Override
     public Optional<String> classFileOfClass(String classname) {
         Nodes nodes = graph.nodesFromNodeViaEdgeLabeled(classname, IN_CLASSFILE);
         return optionalSingleId(nodes);

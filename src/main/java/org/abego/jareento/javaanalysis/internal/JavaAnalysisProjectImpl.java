@@ -394,12 +394,7 @@ public class JavaAnalysisProjectImpl implements JavaAnalysisProject {
     public JavaClass getClassWithName(String classname) {
         return newJavaClass(classname, this);
     }
-
-    @Override
-    public Optional<String> javaFileOfClass(String classname) {
-        return state.javaFileOfClass(classname);
-    }
-
+    
     @Override
     public Optional<String> classFileOfClass(String classname) {
         return state.classFileOfClass(classname);
