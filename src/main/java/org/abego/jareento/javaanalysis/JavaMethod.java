@@ -22,4 +22,8 @@ public interface JavaMethod extends WithId {
     boolean isClassInitializationMethod();
 
     boolean isObjectInitializationMethod();
+
+    JavaMethodCalls getMethodCallsToMe();
+
+    JavaMethodCalls getMethodCallsFromMe();
 }

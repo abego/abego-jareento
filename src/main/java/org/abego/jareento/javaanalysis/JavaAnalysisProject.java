@@ -114,10 +114,12 @@ public interface JavaAnalysisProject {
 
     //endregion
     //region MethodCall-related
-    JavaMethodCalls methodCalls();
+    JavaMethodCalls getMethodCalls();
 
+    //TODO: hide from API
     JavaMethodCalls methodCallsInMethod(String methodId);
 
+    //TODO: hide from API
     JavaMethodCalls methodCallsToMethod(String methodId);
 
     JavaMethodCalls methodCallsWithSignature(String methodSignature);

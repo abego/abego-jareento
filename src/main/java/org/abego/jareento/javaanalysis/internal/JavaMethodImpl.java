@@ -2,6 +2,7 @@ package org.abego.jareento.javaanalysis.internal;
 
 import org.abego.jareento.javaanalysis.JavaAnalysisProject;
 import org.abego.jareento.javaanalysis.JavaMethod;
+import org.abego.jareento.javaanalysis.JavaMethodCalls;
 
 class JavaMethodImpl implements JavaMethod {
     private final String id;
@@ -64,6 +65,16 @@ class JavaMethodImpl implements JavaMethod {
     @Override
     public boolean isObjectInitializationMethod() {
         return project.isObjectInitializationMethod(id);
+    }
+
+    @Override
+    public JavaMethodCalls getMethodCallsToMe() {
+        return project.methodCallsToMethod(id);
+    }
+
+    @Override
+    public JavaMethodCalls getMethodCallsFromMe() {
+        return project.methodCallsInMethod(id);
     }
 
     @Override

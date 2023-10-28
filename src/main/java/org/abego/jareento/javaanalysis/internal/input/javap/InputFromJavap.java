@@ -213,7 +213,7 @@ public class InputFromJavap implements JavaAnalysisProjectInput {
         private void setMethodCallBaseScope(JavaAnalysisProject project) {
             MethodResolver methodResolver = new MethodResolver(project);
 
-            JavaMethodCalls javaMethodCalls = project.methodCalls();
+            JavaMethodCalls javaMethodCalls = project.getMethodCalls();
             int n = javaMethodCalls.getSize();
             ProgressWithRange progress = Progresses.createProgressWithRange(
                     "Setting method call base scopes", n, progressListener);

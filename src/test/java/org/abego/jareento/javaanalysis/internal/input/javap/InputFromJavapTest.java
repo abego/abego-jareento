@@ -82,7 +82,7 @@ class InputFromJavapTest {
         JavaAnalysisProject project = createProjectUsingJavapData(tempDir, resourceName);
 
         PrintStreamToBuffer out = PrintStreamToBuffer.newPrintStreamToBuffer();
-        project.methodCalls().idStream()
+        project.getMethodCalls().idStream()
                 .sorted(Comparator.comparing(id -> project.scopeOfMethodCall(id) + "." + project.signatureOfMethodCall(id) + " - " + id))
                 .forEach(id -> out.println(project.scopeOfMethodCall(id) + "." + project.signatureOfMethodCall(id) + " - " + id));
         out.close();

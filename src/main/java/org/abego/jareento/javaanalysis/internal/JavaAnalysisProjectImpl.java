@@ -157,7 +157,7 @@ public class JavaAnalysisProjectImpl implements JavaAnalysisProject {
     }
 
     @Override
-    public JavaMethodCalls methodCalls() {
+    public JavaMethodCalls getMethodCalls() {
         return newJavaMethodCalls(state.methodCalls(), this);
     }
 
