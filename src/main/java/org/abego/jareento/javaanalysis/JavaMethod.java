@@ -13,7 +13,7 @@ public interface JavaMethod extends WithId {
 
     String getPackage();
 
-    String getFullDeclarator();
+    String getMethodDeclaratorText();
 
     boolean isConstructor();
 

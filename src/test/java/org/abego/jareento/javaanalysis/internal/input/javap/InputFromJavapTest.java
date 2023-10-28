@@ -13,6 +13,7 @@ import org.junit.jupiter.api.io.TempDir;
 
 import java.io.File;
 import java.util.Comparator;
+import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
 
@@ -152,9 +153,21 @@ class InputFromJavapTest {
                 """, result.toString());
     }
 
+    private static void withMethodCallsToMethodsOfClassDo(
+            JavaAnalysisProject project, String className, BiConsumer<String, JavaMethodCalls> calledMethodAndMethodCalls) {
+        project.methodsOfClass(className)
+                .idStream().sorted().forEach(calledMethodId -> {
+                    JavaMethodCalls methodCalls = 
+                            project.methodCallsWithSignatureOnClass(
+                                    project.signatureOfMethod(calledMethodId), className);
+                    calledMethodAndMethodCalls.accept(calledMethodId, methodCalls);
+                });
+    }
+
+
     private static String reportMethodCalls(JavaAnalysisProject project, String className, Predicate<JavaMethodCalls> reportPredicate) {
         StringBuilder result = new StringBuilder();
-        project.withMethodCallsToMethodsOfClassDo(className, (calledMethodId, methodCalls) -> {
+        withMethodCallsToMethodsOfClassDo(project, className, (calledMethodId, methodCalls) -> {
             if (reportPredicate.test(methodCalls)) {
                 result.append(calledMethodId);
                 result.append(":\n");

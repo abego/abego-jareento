@@ -4,6 +4,7 @@ import org.abego.jareento.base.JareentoException;
 import org.abego.jareento.javaanalysis.JavaAnalysisProject;
 import org.abego.jareento.javaanalysis.JavaClass;
 import org.abego.jareento.javaanalysis.JavaClasses;
+import org.abego.jareento.javaanalysis.JavaMethod;
 import org.abego.jareento.javaanalysis.JavaMethodCalls;
 import org.abego.jareento.javaanalysis.JavaMethodSignatures;
 import org.abego.jareento.javaanalysis.JavaMethods;
@@ -198,11 +199,6 @@ public class JavaAnalysisProjectImpl implements JavaAnalysisProject {
     }
 
     @Override
-    public String fileOfMethodCall(String methodCallId) {
-        return state.fileOfMethodCall(methodCallId);
-    }
-
-    @Override
     public String idOfMethodContainingMethodCall(String methodCallId) {
         return state.idOfMethodContainingMethodCall(methodCallId);
     }
@@ -297,9 +293,11 @@ public class JavaAnalysisProjectImpl implements JavaAnalysisProject {
     }
 
     @Override
-    public String idOfMethodDeclaredAs(String methodDeclaratorText) {
-        return state.idOfMethodDeclaredAs(methodDeclaratorText);
+    public JavaMethod getMethodWithMethodDeclarator(String methodDeclaratorText) {
+        return JavaMethodImpl.newJavaMethod(
+                idOfMethodDeclaredAs(methodDeclaratorText), this);
     }
+
 
     @Override
     public String methodDeclaratorTextOfMethodWithId(String methodId) {
@@ -411,5 +409,15 @@ public class JavaAnalysisProjectImpl implements JavaAnalysisProject {
                 target.add(c);
             });
         }
+    }
+
+    /**
+     * Returns the id of the method with the given {@code methodDeclaratorText},
+     * or throws an exception when the project does not contain such a method.
+     * <p>
+     * See also {@link #methodDeclaratorTextOfMethodWithId(String)}
+     **/
+    private String idOfMethodDeclaredAs(String methodDeclaratorText) {
+        return state.idOfMethodDeclaredAs(methodDeclaratorText);
     }
 }

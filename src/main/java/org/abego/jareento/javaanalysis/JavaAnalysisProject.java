@@ -2,7 +2,6 @@ package org.abego.jareento.javaanalysis;
 
 import javax.annotation.Syntax;
 import java.io.File;
-import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 import static org.abego.jareento.base.JareentoSyntax.QUALIFIED_TYPE_NAME_SYNTAX;
@@ -66,50 +65,59 @@ public interface JavaAnalysisProject {
      * Returns all methods contained in this project.
      */
     JavaMethods getMethods();
+    
+    JavaMethod getMethodWithMethodDeclarator(String methodDeclaratorText);
 
+    //TODO: hide from API
     JavaClasses classesContainingMethodWithSignature(String methodSignature);
 
+    //TODO: hide from API
     boolean isClassInitializationMethod(String methodId);
 
+    //TODO: hide from API
     boolean isObjectInitializationMethod(String methodId);
 
+    //TODO: hide from API
     /**
      * Returns the text of the MethodDeclarator of the method with the given
      * {@code methodId}.
      */
     String methodDeclaratorTextOfMethodWithId(String methodId);
 
-    /**
-     * Returns the id of the method with the given {@code methodDeclaratorText},
-     * or throws an exception when the project does not contain such a method.
-     * <p>
-     * See also {@link #methodDeclaratorTextOfMethodWithId(String)}
-     **/
-    String idOfMethodDeclaredAs(String methodDeclaratorText);
-
+    //TODO: hide from API
     String signatureOfMethod(String methodId);
 
+    //TODO: hide from API
     String nameOfMethod(String methodId);
 
+    //TODO: hide from API
     JavaMethodSignatures methodSignaturesOfClass(String className);
 
+    //TODO: hide from API
     JavaMethodSignatures inheritedMethodSignaturesOfClass(String className);
 
+    //TODO: hide from API
     String returnTypeOfMethod(String methodId);
 
+    //TODO: hide from API
     String classOfMethod(String methodId);
 
+    //TODO: hide from API
     String packageOfMethod(String methodId);
 
     //TODO: hide from API
     JavaMethods methodsOfClass(String className);
 
+    //TODO: hide from API
     boolean hasMethodOverrideAnnotation(String methodId);
 
+    //TODO: hide from API
     boolean isConstructor(String methodId);
 
+    //TODO: hide from API
     boolean isMethodSynthetic(String methodId);
 
+    //TODO: hide from API
     JavaMethods methodsDirectlyOverridingMethod(String methodId);
 
     //endregion
@@ -122,16 +130,20 @@ public interface JavaAnalysisProject {
     //TODO: hide from API
     JavaMethodCalls methodCallsToMethod(String methodId);
 
+    //TODO: hide from API
     JavaMethodCalls methodCallsWithSignature(String methodSignature);
 
+    //TODO: hide from API
     JavaMethodCalls methodCallsWithSignatureOnClass(String methodSignature, String className);
 
+    //TODO: hide from API
     /**
      * Returns the scope of the method call with the given {@code methodCallId}
      * or an empty string when no scope is defined for that method call.
      */
     String scopeOfMethodCall(String methodCallId);
 
+    //TODO: hide from API
     /**
      * Returns the base scope of the method call with the given
      * {@code methodCallId} or an empty string when no base scope is defined
@@ -145,28 +157,21 @@ public interface JavaAnalysisProject {
      */
     String baseScopeOfMethodCall(String methodCallId);
 
+    //TODO: hide from API
     String signatureOfMethodCall(String methodCallId);
 
-    String fileOfMethodCall(String methodCallId);
-
+    //TODO: hide from API
     String idOfMethodContainingMethodCall(String methodCallId);
 
+    //TODO: hide from API
     String classContainingMethodCall(String methodCallId);
 
-    default void withMethodCallsToMethodsOfClassDo(String className, BiConsumer<String, JavaMethodCalls> calledMethodAndMethodCalls) {
-        methodsOfClass(className)
-                .idStream().sorted().forEach(calledMethodId -> {
-                    JavaMethodCalls methodCalls = methodCallsWithSignatureOnClass(signatureOfMethod(calledMethodId), className);
-                    calledMethodAndMethodCalls.accept(calledMethodId, methodCalls);
-                });
-    }
-
+    //TODO: hide from API
     default String methodCallsSummary(JavaMethodCalls methodCalls) {
         return methodCalls.idStream()
                 .map(this::signatureOfMethodCall)
                 .sorted()
                 .collect(Collectors.joining(";"));
     }
-
     //endregion
 }

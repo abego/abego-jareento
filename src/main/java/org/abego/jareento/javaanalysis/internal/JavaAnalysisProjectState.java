@@ -38,9 +38,7 @@ public interface JavaAnalysisProjectState {
     String baseScopeOfMethodCall(String methodCallId);
 
     String signatureOfMethodCall(String methodCallId);
-
-    String fileOfMethodCall(String methodCallId);
-
+    
     String extendedType(String className);
 
     IDs classesExtending(String className);

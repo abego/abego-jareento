@@ -339,12 +339,7 @@ public class JavaAnalysisProjectStateUsingStringGraph implements JavaAnalysisPro
     public String signatureOfMethodCall(String methodCallId) {
         return graph.nodes(methodCallId, SIGNATURE, "?").singleNodeId();
     }
-
-    @Override
-    public String fileOfMethodCall(String methodCallId) {
-        return graph.nodes("?", CONTAINS, methodCallId).singleNodeId();
-    }
-
+    
     @Override
     public String extendedType(String className) {
         //TODO add Nodes.optionalNodeIdOrElse(String) (next to "singleNodeId()")
