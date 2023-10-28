@@ -6,16 +6,6 @@ public interface JavaMethodCall extends WithId {
     JavaMethodSignature getMethodSignature();
 
     /**
-     * Returns the {@link JavaMethod} containing this method call.
-     */
-    JavaMethod getCallingMethod();
-
-    /**
-     * Returns the {@link JavaClass} containing this method call.
-     */
-    JavaClass getCallingClass();
-
-    /**
      * Returns the scope of this method call
      * or an empty string when no scope is defined for this method call.
      */
@@ -33,4 +23,15 @@ public interface JavaMethodCall extends WithId {
      * overrides of the method by a subclass of the scope.
      */
     String getBaseScope();
+
+    /**
+     * Returns the {@link JavaMethod} containing this method call.
+     */
+    JavaMethod getCallingMethod();
+
+    /**
+     * Returns the {@link JavaClass} containing this method call.
+     */
+    JavaClass getCallingClass();
+
 }
