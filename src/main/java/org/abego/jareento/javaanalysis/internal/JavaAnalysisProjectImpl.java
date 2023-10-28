@@ -371,12 +371,12 @@ public class JavaAnalysisProjectImpl implements JavaAnalysisProject {
     }
 
     @Override
-    public File[] sourceRoots() {
+    public File[] getSourceRoots() {
         return state.sourceRoots();
     }
 
     @Override
-    public File[] dependencies() {
+    public File[] getDependencies() {
         return state.dependencies();
     }
 

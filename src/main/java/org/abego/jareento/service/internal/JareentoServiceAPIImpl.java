@@ -43,8 +43,8 @@ public class JareentoServiceAPIImpl implements JareentoServiceAPI {
                 javaAnalysisProject, methodSelector, classesToCheckForMethods, progress);
 
         File[] sourceRootsAndDependencies = ArrayUtil.concatenate(
-                javaAnalysisProject.sourceRoots(),
-                javaAnalysisProject.dependencies());
+                javaAnalysisProject.getSourceRoots(),
+                javaAnalysisProject.getDependencies());
         JavaRefactoringProject javaRefactoringProject =
                 javaRefactoringAPI.newJavaRefactoringProject(sourceRootsAndDependencies);
 

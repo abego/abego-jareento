@@ -22,9 +22,9 @@ import static org.abego.jareento.base.JareentoSyntax.QUALIFIED_TYPE_NAME_SYNTAX;
 public interface JavaAnalysisProject {
 
     //region Project-related
-    File[] sourceRoots();
+    File[] getSourceRoots();
 
-    File[] dependencies();
+    File[] getDependencies();
 
     //endregion
     //region JavaFile-related
