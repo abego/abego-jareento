@@ -379,13 +379,7 @@ public class JavaAnalysisProjectImpl implements JavaAnalysisProject {
     public File[] getDependencies() {
         return state.dependencies();
     }
-
-    @Override
-    //TODO: also introduce JavaFiles interface?!
-    public String[] javaFiles() {
-        return state.javaFiles();
-    }
-
+    
     @Override
     public JavaClasses classes() {
         return newJavaClasses(state.classes());
@@ -399,11 +393,6 @@ public class JavaAnalysisProjectImpl implements JavaAnalysisProject {
     @Override
     public JavaClasses classesReferencingClass(String classname) {
         return newJavaClasses(state.classesReferencingClass(classname));
-    }
-
-    @Override
-    public boolean isJavaFile(String name) {
-        return state.isJavaFile(name);
     }
 
     @Override

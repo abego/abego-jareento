@@ -12,8 +12,6 @@ public interface JavaAnalysisProjectStateBuilder {
 
     void addReference(String from, String to);
 
-    void addJavaFileContainsNode(String filename, String nodeId);
-
     void setMD5OfClass(String classname, String md5);
 
     void setBytecodeSizeOfClass(String classname, int bytecodeSize);

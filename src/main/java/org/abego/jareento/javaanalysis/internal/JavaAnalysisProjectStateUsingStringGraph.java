@@ -47,7 +47,6 @@ public class JavaAnalysisProjectStateUsingStringGraph implements JavaAnalysisPro
     private static final String METHOD = "Method";
     private static final String METHOD_SIGNATURE = "MethodSignature";
     private static final String METHOD_CALL = "MethodCall";
-    private static final String JAVA_FILE = "JavaFile";
 
     private static final String REFS = "refs";
     private static final String CONTAINS = "contains";
@@ -125,13 +124,7 @@ public class JavaAnalysisProjectStateUsingStringGraph implements JavaAnalysisPro
         public void addReference(String from, String to) {
             graphBuilder.addEdge(from, REFS, to);
         }
-
-        @Override
-        public void addJavaFileContainsNode(String filename, String nodeId) {
-            addJavaFile(filename);
-            graphBuilder.addEdge(filename, CONTAINS, nodeId);
-        }
-
+        
         @Override
         public void setMD5OfClass(String classname, String md5) {
             graphBuilder.setNodeProperty(classname, MD5, md5);
@@ -290,9 +283,6 @@ public class JavaAnalysisProjectStateUsingStringGraph implements JavaAnalysisPro
             builder.addEdge(name, RDF_TYPE, classNode);
         }
 
-        private void addJavaFile(String filename) {
-            addInstance(graphBuilder, JAVA_FILE, filename);
-        }
     }
 
     @Override
@@ -416,13 +406,6 @@ public class JavaAnalysisProjectStateUsingStringGraph implements JavaAnalysisPro
         return ids(methodsWithSignature(signature));
     }
 
-    //TODO: also introduce JavaFiles interface?!
-    @Override
-    public String[] javaFiles() {
-        Nodes nodes = graph.nodes("?", RDF_TYPE, JAVA_FILE);
-        return toStringArray(nodes);
-    }
-
     @Override
     public IDs classes() {
         return ids(graph.nodes("?", RDF_TYPE, CLASS));
@@ -444,12 +427,7 @@ public class JavaAnalysisProjectStateUsingStringGraph implements JavaAnalysisPro
                 .map(m -> classOfMethod(m.id()))
                 .collect(Collectors.toSet()));
     }
-
-    @Override
-    public boolean isJavaFile(String name) {
-        return graph.hasEdge(name, RDF_TYPE, JAVA_FILE);
-    }
-
+    
     @Override
     public Optional<String> javaFileOfClass(String classname) {
         Nodes nodes = graph.nodesViaEdgeLabeledToNode(CONTAINS, classname);

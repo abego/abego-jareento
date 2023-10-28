@@ -27,12 +27,6 @@ public interface JavaAnalysisProject {
     File[] getDependencies();
 
     //endregion
-    //region JavaFile-related
-    String[] javaFiles();
-
-    boolean isJavaFile(@Syntax(FILE_PATH_SYNTAX) String name);
-
-    //endregion
     //region Class-related
 
     JavaClass classWithName(@Syntax(QUALIFIED_TYPE_NAME_SYNTAX) String className);

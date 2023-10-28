@@ -58,10 +58,7 @@ public interface JavaAnalysisProjectState {
     String returnTypeOfMethod(String methodId);
 
     IDs idsOfMethodsWithSignature(String signature);
-
-    //TODO: also introduce JavaFiles interface?!
-    String[] javaFiles();
-
+    
     IDs classes();
 
     IDs classesOfJavaFile(@Syntax(FILE_PATH_SYNTAX) String file);
@@ -71,8 +68,6 @@ public interface JavaAnalysisProjectState {
 
     IDs classesContainingMethodWithSignature(
             @Syntax(JareentoSyntax.QUALIFIED_METHOD_SIGNATURE_SYNTAX) String methodSignature);
-
-    boolean isJavaFile(@Syntax(FILE_PATH_SYNTAX) String name);
 
     @Syntax(JAVA_FILE_PATH_SYNTAX)
     Optional<String> javaFileOfClass(
