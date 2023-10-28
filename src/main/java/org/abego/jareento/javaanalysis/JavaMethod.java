@@ -10,14 +10,14 @@ public interface JavaMethod extends WithId {
     JavaClass getJavaClass();
 
     String getPackage();
+    
+    String getReturnTypeName();
 
     String getMethodDeclaratorText();
 
     JavaMethodSignature getMethodSignature();
 
     String getMethodSignatureText();
-
-    String getReturnTypeName();
 
     boolean isConstructor();
 
