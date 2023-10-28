@@ -92,7 +92,4 @@ public interface JavaAnalysisProjectState {
     File[] sourceRoots();
 
     File[] dependencies();
-
-    void dump(PrintWriter writer);
-
 }

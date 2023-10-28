@@ -19,5 +19,23 @@ public interface JavaClass extends WithId {
      */
     JavaClass getSuperclass();
 
+    JavaClasses getSubClasses();
+
+    JavaClasses getSubClassesAndClass();
+
+    JavaClasses getAllSubClasses();
+
+    JavaClasses getAllSubClassesAndClass();
+
+    JavaTypes getImplementedInterfaces();
+
+    JavaTypes getExtendedTypes();
+
+    JavaClasses getReferencingClasses();
+
+    JavaMethods getMethods();
+
     JavaMethodSignatures getMethodSignatures();
+
+
 }

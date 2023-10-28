@@ -1,18 +1,10 @@
 package org.abego.jareento.javaanalysis;
 
-import org.abego.jareento.base.JareentoSyntax;
-
 import javax.annotation.Syntax;
 import java.io.File;
-import java.io.PrintWriter;
-import java.util.Optional;
-import java.util.OptionalInt;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
-import static org.abego.jareento.base.JareentoSyntax.CLASS_FILE_PATH_SYNTAX;
-import static org.abego.jareento.base.JareentoSyntax.FILE_PATH_SYNTAX;
-import static org.abego.jareento.base.JareentoSyntax.JAVA_FILE_PATH_SYNTAX;
 import static org.abego.jareento.base.JareentoSyntax.QUALIFIED_TYPE_NAME_SYNTAX;
 
 /**
@@ -31,49 +23,58 @@ public interface JavaAnalysisProject {
 
     JavaClasses getClasses();
 
-    JavaClass getClassWithName(@Syntax(QUALIFIED_TYPE_NAME_SYNTAX) String classname);
+    boolean hasClassWithName(@Syntax(QUALIFIED_TYPE_NAME_SYNTAX) String classname);
 
+    JavaClass getClassWithName(@Syntax(QUALIFIED_TYPE_NAME_SYNTAX) String classname);
+    
+    JavaClasses getAllSubClasses(JavaClasses classes);
+
+    JavaClasses getAllSubClassesAndClasses(JavaClasses classes);
+
+    //TODO: hide from API
     JavaClasses classesReferencingClass(
             @Syntax(QUALIFIED_TYPE_NAME_SYNTAX) String classname);
 
-    
+    //TODO: hide from API
     boolean isInterface(@Syntax(QUALIFIED_TYPE_NAME_SYNTAX) String classname);
 
-    boolean isClassDeclared(@Syntax(QUALIFIED_TYPE_NAME_SYNTAX) String classname);
+    //TODO: hide from API
+    JavaClass superClass(@Syntax(QUALIFIED_TYPE_NAME_SYNTAX) String className);
 
-    /**
-     * Returns the super class for the Class with the given className and
-     * "java.lang.Object" for interfaces.
-     */
-
-    @Syntax(QUALIFIED_TYPE_NAME_SYNTAX)
-    String superClass(@Syntax(QUALIFIED_TYPE_NAME_SYNTAX) String className);
-
+    //TODO: hide from API
     JavaClasses subClasses(@Syntax(QUALIFIED_TYPE_NAME_SYNTAX) String className);
 
+    //TODO: hide from API
     JavaClasses subClassesAndClass(String className);
 
+    //TODO: hide from API
     JavaClasses allSubClasses(String className);
 
+    //TODO: hide from API
     JavaClasses allSubClassesAndClass(String className);
 
-    JavaClasses allSubClasses(JavaClasses classes);
-
-    JavaClasses allSubClassesAndClasses(JavaClasses classes);
-
+    //TODO: hide from API
     JavaTypes implementedInterfaces(String className);
 
+    //TODO: hide from API
     JavaTypes extendedTypes(String typeName);
 
     //endregion
     //region Method-related
+
+    /**
+     * Returns all methods contained in this project.
+     */
+    JavaMethods getMethods();
+
+    JavaClasses classesContainingMethodWithSignature(String methodSignature);
 
     boolean isClassInitializationMethod(String methodId);
 
     boolean isObjectInitializationMethod(String methodId);
 
     /**
-     * Returns the text of the MethodDeclarator of the method with the given 
+     * Returns the text of the MethodDeclarator of the method with the given
      * {@code methodId}.
      */
     String methodDeclaratorTextOfMethodWithId(String methodId);
@@ -86,12 +87,6 @@ public interface JavaAnalysisProject {
      **/
     String idOfMethodDeclaredAs(String methodDeclaratorText);
 
-    /**
-     * Returns all methods contained in this project.
-     */
-    JavaMethods methods();
-
-
     String signatureOfMethod(String methodId);
 
     String nameOfMethod(String methodId);
@@ -100,14 +95,13 @@ public interface JavaAnalysisProject {
 
     JavaMethodSignatures inheritedMethodSignaturesOfClass(String className);
 
-    JavaClasses classesContainingMethodWithSignature(String methodSignature);
-
     String returnTypeOfMethod(String methodId);
 
     String classOfMethod(String methodId);
 
     String packageOfMethod(String methodId);
 
+    //TODO: hide from API
     JavaMethods methodsOfClass(String className);
 
     boolean hasMethodOverrideAnnotation(String methodId);
@@ -172,8 +166,5 @@ public interface JavaAnalysisProject {
                 .collect(Collectors.joining(";"));
     }
 
-    //endregion
-    //region Debugging support
-    void dump(PrintWriter writer);
     //endregion
 }

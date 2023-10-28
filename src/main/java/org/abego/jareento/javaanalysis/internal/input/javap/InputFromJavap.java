@@ -383,7 +383,7 @@ public class InputFromJavap implements JavaAnalysisProjectInput {
     //TODO: to project API?
     private static boolean isUndeclared(JavaClass javaClass, JavaAnalysisProject project) {
         String fullName = javaClass.getId();
-        return !project.isClassDeclared(fullName) && !isPrimitiveType(fullName);
+        return !project.hasClassWithName(fullName) && !isPrimitiveType(fullName);
     }
 
     private static List<String> getUndeclaredClasses(JavaAnalysisProject project) {

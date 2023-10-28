@@ -429,19 +429,6 @@ public class JavaAnalysisProjectStateUsingStringGraph implements JavaAnalysisPro
         return graph.getBooleanNodePropertyValue(classname, IS_DECLARED);
     }
 
-    //TODO: is this the correct place for this method
-    @Override
-    public void dump(PrintWriter writer) {
-        Map<String, String> translation = new HashMap<>();
-        translation.put(RDF_TYPE, "a");
-        translation.put(RDFS_SUB_CLASS_OF, "rdfs:subClassOf");
-        translation.put(RDFS_RESOURCE, "rdfs:Resource");
-
-        StringGraphDump dump = StringGraphs.getInstance()
-                .createStringGraphDump(graph, key -> translation.getOrDefault(key, key));
-        dump.write(writer);
-    }
-
     @Override
     public IDs methodSignatureSpecificationsOfClass(String className) {
         return newIDs(() -> {

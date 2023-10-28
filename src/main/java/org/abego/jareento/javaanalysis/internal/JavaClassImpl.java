@@ -2,7 +2,10 @@ package org.abego.jareento.javaanalysis.internal;
 
 import org.abego.jareento.javaanalysis.JavaAnalysisProject;
 import org.abego.jareento.javaanalysis.JavaClass;
+import org.abego.jareento.javaanalysis.JavaClasses;
 import org.abego.jareento.javaanalysis.JavaMethodSignatures;
+import org.abego.jareento.javaanalysis.JavaMethods;
+import org.abego.jareento.javaanalysis.JavaTypes;
 import org.abego.jareento.shared.SyntaxUtil;
 import org.eclipse.jdt.annotation.Nullable;
 
@@ -43,7 +46,47 @@ class JavaClassImpl implements JavaClass {
 
     @Override
     public JavaClass getSuperclass() {
-        return newJavaClass(project.superClass(id), project);
+        return project.superClass(id);
+    }
+
+    @Override
+    public JavaClasses getSubClasses() {
+        return project.subClasses(id);
+    }
+
+    @Override
+    public JavaClasses getSubClassesAndClass() {
+        return project.subClassesAndClass(id);
+    }
+
+    @Override
+    public JavaClasses getAllSubClasses() {
+        return project.allSubClasses(id);
+    }
+
+    @Override
+    public JavaClasses getAllSubClassesAndClass() {
+        return project.allSubClassesAndClass(id);
+    }
+
+    @Override
+    public JavaTypes getImplementedInterfaces() {
+        return project.implementedInterfaces(id);
+    }
+
+    @Override
+    public JavaTypes getExtendedTypes() {
+        return project.extendedTypes(id);
+    }
+
+    @Override
+    public JavaClasses getReferencingClasses() {
+        return project.classesReferencingClass(id);
+    }
+
+    @Override
+    public JavaMethods getMethods() {
+        return project.methodsOfClass(id);
     }
 
     @Override

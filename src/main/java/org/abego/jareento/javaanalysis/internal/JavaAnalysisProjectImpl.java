@@ -11,12 +11,9 @@ import org.abego.jareento.javaanalysis.JavaTypes;
 import org.eclipse.jdt.annotation.Nullable;
 
 import java.io.File;
-import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Optional;
-import java.util.OptionalInt;
 import java.util.Set;
 
 import static org.abego.jareento.javaanalysis.internal.EmptyIDs.emptyIDs;
@@ -226,11 +223,11 @@ public class JavaAnalysisProjectImpl implements JavaAnalysisProject {
     }
 
     @Override
-    public String superClass(String className) {
-        if (isInterface(className)) {
-            return "java.lang.Object";
-        }
-        return state.extendedType(className);
+    public JavaClass superClass(String className) {
+        return newJavaClass(
+                isInterface(className)
+                        ? "java.lang.Object" : state.extendedType(className),
+                this);
     }
 
     @Override
@@ -271,7 +268,7 @@ public class JavaAnalysisProjectImpl implements JavaAnalysisProject {
     }
 
     @Override
-    public JavaClasses allSubClasses(JavaClasses classes) {
+    public JavaClasses getAllSubClasses(JavaClasses classes) {
         return JavaClassesImpl.newJavaClasses(newIDs(() -> {
             Set<String> result = new HashSet<>();
             classes.idStream().forEach(c -> addAllSubClasses(c, result));
@@ -280,8 +277,8 @@ public class JavaAnalysisProjectImpl implements JavaAnalysisProject {
     }
 
     @Override
-    public JavaClasses allSubClassesAndClasses(JavaClasses classes) {
-        return allSubClasses(classes).unitedWith(classes);
+    public JavaClasses getAllSubClassesAndClasses(JavaClasses classes) {
+        return getAllSubClasses(classes).unitedWith(classes);
     }
 
     @Override
@@ -295,7 +292,7 @@ public class JavaAnalysisProjectImpl implements JavaAnalysisProject {
     }
 
     @Override
-    public JavaMethods methods() {
+    public JavaMethods getMethods() {
         return JavaMethodsImpl.newJavaMethods(state.methods(), this);
     }
 
@@ -379,12 +376,12 @@ public class JavaAnalysisProjectImpl implements JavaAnalysisProject {
     public File[] getDependencies() {
         return state.dependencies();
     }
-    
+
     @Override
     public JavaClasses getClasses() {
         return newJavaClasses(state.classes());
     }
-    
+
     @Override
     public JavaClasses classesReferencingClass(String classname) {
         return newJavaClasses(state.classesReferencingClass(classname));
@@ -394,20 +391,15 @@ public class JavaAnalysisProjectImpl implements JavaAnalysisProject {
     public JavaClass getClassWithName(String classname) {
         return newJavaClass(classname, this);
     }
-    
+
     @Override
     public boolean isInterface(String classname) {
         return state.isInterface(classname);
     }
 
     @Override
-    public boolean isClassDeclared(String classname) {
+    public boolean hasClassWithName(String classname) {
         return state.isClassDeclared(classname);
-    }
-
-    @Override
-    public void dump(PrintWriter writer) {
-        state.dump(writer);
     }
 
     private void addAllSubClasses(String className, Set<String> target) {
