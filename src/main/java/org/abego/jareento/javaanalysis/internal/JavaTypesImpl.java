@@ -26,7 +26,7 @@ class JavaTypesImpl extends ManyWithIdDefault<JavaType, JavaTypes> implements Ja
     }
 
     @Override
-    public Iterable<String> names() {
+    public Iterable<String> getNames() {
         return idSet();
     }
 }

@@ -129,7 +129,7 @@ public class JavaAnalysisProjectImpl implements JavaAnalysisProject {
                     : null;
 
         } else {
-            for (String classname : types.names()) {
+            for (String classname : types.getNames()) {
                 if (methodSignaturesOfClass(classname).contains(methodSignature)) {
                     return idOfMethodOfClassWithSignature(classname, methodSignature);
                 } else {

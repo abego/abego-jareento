@@ -1,13 +1,11 @@
 package org.abego.jareento.cli;
 
-import org.abego.commons.lang.IterableUtil;
 import org.abego.jareento.javaanalysis.JavaAnalysisAPI;
 import org.abego.jareento.javaanalysis.ProblemChecker;
 import org.abego.jareento.javaanalysis.ProblemCheckers;
 import org.abego.jareento.javaanalysis.ProblemReporters;
 import org.abego.jareento.javaanalysis.ProblemType;
 import org.abego.jareento.javaanalysis.Problems;
-import org.abego.jareento.javaanalysis.ProblemReporter;
 
 import java.io.File;
 import java.io.PrintStream;
@@ -185,7 +183,7 @@ public class CheckForProblemsApp {
 
     private void printAvailableProblemCheckers(
             PrintStream out, ProblemCheckers problemCheckers) {
-        if (IterableUtil.isEmpty(problemCheckers)) {
+        if (problemCheckers.isEmpty()) {
             out.println("No Problem Checkers available.");
             return;
         }

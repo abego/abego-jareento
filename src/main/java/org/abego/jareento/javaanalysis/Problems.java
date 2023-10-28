@@ -1,17 +1,11 @@
 package org.abego.jareento.javaanalysis;
 
+import org.abego.jareento.base.Many;
+
 import java.util.Comparator;
 import java.util.stream.Stream;
 
-public interface Problems extends Iterable<Problem> {
-
-    int getSize();
-
-    default boolean isEmpty() {
-        return getSize() == 0;
-    }
-
-    Stream<Problem> stream();
+public interface Problems extends Many<Problem> {
 
     /**
      * Returns a new {@link Problems} instance with the same {@link Problem}s as
