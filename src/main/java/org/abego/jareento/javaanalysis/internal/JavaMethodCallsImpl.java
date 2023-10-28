@@ -18,7 +18,7 @@ class JavaMethodCallsImpl extends ManyImpl<JavaMethodCall, JavaMethodCalls> impl
 
     @Override
     protected JavaMethodCall elementWithId(String id) {
-        return JavaMethodCallImpl.newJavaMethodCall(id);
+        return JavaMethodCallImpl.newJavaMethodCall(id, project);
     }
 
     @Override
