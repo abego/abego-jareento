@@ -58,7 +58,7 @@ abstract class ManyImpl<T extends WithId, M extends ManyWithId<T, M>> implements
 
     @Override
     public M unitedWith(T element) {
-        return unitedWithElementWithId(element.id());
+        return unitedWithElementWithId(element.getId());
     }
 
     @Override

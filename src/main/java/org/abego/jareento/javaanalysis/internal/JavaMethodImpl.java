@@ -67,7 +67,7 @@ class JavaMethodImpl implements JavaMethod {
     }
 
     @Override
-    public String id() {
+    public String getId() {
         return id;
     }
 }

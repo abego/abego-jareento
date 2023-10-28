@@ -14,7 +14,7 @@ class JavaMethodCallImpl implements JavaMethodCall {
     }
 
     @Override
-    public String id() {
+    public String getId() {
         return id;
     }
 

@@ -14,7 +14,7 @@ class JavaTypeImpl implements JavaType {
     }
 
     @Override
-    public String id() {
+    public String getId() {
         return id;
     }
 

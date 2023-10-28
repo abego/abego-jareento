@@ -16,6 +16,6 @@ public class WithenumTest {
 
         JavaClass myEnum = project.classWithName("withenum.MyEnum");
         
-        assertEquals("withenum.MyEnum", myEnum.id());
+        assertEquals("withenum.MyEnum", myEnum.getId());
     }
 }

@@ -36,11 +36,11 @@ public class Issue1Test {
                 .append("# info of methodCalls in method ")
                 .append(methodId).append('\n');
         for (var c : project.methodCallsInMethod(methodId)) {
-            output.append(c.id()).append('\n');
+            output.append(c.getId()).append('\n');
             output.append("- signature: ")
-                    .append(project.signatureOfMethodCall(c.id())).append('\n');
+                    .append(project.signatureOfMethodCall(c.getId())).append('\n');
             output.append("- scope: ")
-                    .append(project.scopeOfMethodCall(c.id())).append('\n');
+                    .append(project.scopeOfMethodCall(c.getId())).append('\n');
         }
         return output;
     }
