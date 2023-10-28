@@ -36,16 +36,7 @@ public interface JavaAnalysisProject {
     JavaClasses classesReferencingClass(
             @Syntax(QUALIFIED_TYPE_NAME_SYNTAX) String classname);
 
-    @Syntax(CLASS_FILE_PATH_SYNTAX)
-    Optional<String> classFileOfClass(
-            @Syntax(QUALIFIED_TYPE_NAME_SYNTAX) String classname);
-
-    OptionalInt bytecodeSizeOfClass(
-            @Syntax(QUALIFIED_TYPE_NAME_SYNTAX) String classname);
-
-    @Syntax(JareentoSyntax.MD5_SYNTAX)
-    Optional<String> md5OfClass(@Syntax(QUALIFIED_TYPE_NAME_SYNTAX) String classname);
-
+    
     boolean isInterface(@Syntax(QUALIFIED_TYPE_NAME_SYNTAX) String classname);
 
     boolean isClassDeclared(@Syntax(QUALIFIED_TYPE_NAME_SYNTAX) String classname);

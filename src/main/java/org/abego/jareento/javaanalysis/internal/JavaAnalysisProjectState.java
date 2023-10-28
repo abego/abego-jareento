@@ -7,12 +7,8 @@ import javax.annotation.Syntax;
 import java.io.File;
 import java.io.PrintWriter;
 import java.util.Optional;
-import java.util.OptionalInt;
 
 import static org.abego.jareento.base.JareentoSyntax.CLASS_FILE_PATH_SYNTAX;
-import static org.abego.jareento.base.JareentoSyntax.FILE_PATH_SYNTAX;
-import static org.abego.jareento.base.JareentoSyntax.JAVA_FILE_PATH_SYNTAX;
-import static org.abego.jareento.base.JareentoSyntax.MD5_SYNTAX;
 import static org.abego.jareento.base.JareentoSyntax.QUALIFIED_TYPE_NAME_SYNTAX;
 
 public interface JavaAnalysisProjectState {
@@ -70,14 +66,7 @@ public interface JavaAnalysisProjectState {
     @Syntax(CLASS_FILE_PATH_SYNTAX)
     Optional<String> classFileOfClass(
             @Syntax(QUALIFIED_TYPE_NAME_SYNTAX) String classname);
-
-    OptionalInt bytecodeSizeOfClass(
-            @Syntax(QUALIFIED_TYPE_NAME_SYNTAX) String classname);
-
-    @Syntax(MD5_SYNTAX)
-    Optional<String> md5OfClass(
-            @Syntax(QUALIFIED_TYPE_NAME_SYNTAX) String classname);
-
+    
     boolean isInterface(@Syntax(QUALIFIED_TYPE_NAME_SYNTAX) String classname);
 
     boolean isClassDeclared(@Syntax(QUALIFIED_TYPE_NAME_SYNTAX) String classname);

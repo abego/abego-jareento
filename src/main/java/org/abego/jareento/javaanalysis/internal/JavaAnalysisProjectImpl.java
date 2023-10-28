@@ -396,21 +396,6 @@ public class JavaAnalysisProjectImpl implements JavaAnalysisProject {
     }
     
     @Override
-    public Optional<String> classFileOfClass(String classname) {
-        return state.classFileOfClass(classname);
-    }
-
-    @Override
-    public OptionalInt bytecodeSizeOfClass(String classname) {
-        return state.bytecodeSizeOfClass(classname);
-    }
-
-    @Override
-    public Optional<String> md5OfClass(String classname) {
-        return state.md5OfClass(classname);
-    }
-
-    @Override
     public boolean isInterface(String classname) {
         return state.isInterface(classname);
     }

@@ -64,10 +64,8 @@ public class JavaAnalysisProjectStateUsingStringGraph implements JavaAnalysisPro
     private static final String CALLS = "calls";
     private static final String IN_CLASSFILE = "inClassfile";
 
-    private static final String BYTECODE_SIZE = "bytecodeSize";
     private static final String IS_DECLARED = "isDeclared";
     private static final String IS_INTERFACE = "isInterface";
-    private static final String MD5 = "md5";
     private static final String HAS_OVERRIDE = "hasOverride";
     private static final String IS_SYNTHETIC = "isSynthetic";
     private static final String SOURCE_ROOTS = "sourceRoots";
@@ -125,20 +123,6 @@ public class JavaAnalysisProjectStateUsingStringGraph implements JavaAnalysisPro
             graphBuilder.addEdge(from, REFS, to);
         }
         
-        @Override
-        public void setMD5OfClass(String classname, String md5) {
-            graphBuilder.setNodeProperty(classname, MD5, md5);
-        }
-
-        @Override
-        public void setBytecodeSizeOfClass(String classname, int bytecodeSize) {
-            if (bytecodeSize < 0) {
-                throw new JareentoException(String.format(
-                        "Bytecode size must not be negative. Got %d", bytecodeSize));
-            }
-            graphBuilder.setNodeProperty(classname, BYTECODE_SIZE, String.valueOf(bytecodeSize));
-        }
-
         @Override
         public void setIsInterfaceOfClass(String classname, boolean value) {
             graphBuilder.setNodeProperty(classname, IS_INTERFACE, String.valueOf(value));
@@ -434,28 +418,7 @@ public class JavaAnalysisProjectStateUsingStringGraph implements JavaAnalysisPro
         return ids.length == 1
                 ? Optional.of(ids[0]) : Optional.empty();
     }
-
-    @Override
-    public OptionalInt bytecodeSizeOfClass(String classname) {
-        if (graph.hasNodeProperty(classname, BYTECODE_SIZE)) {
-            String s = graph.getNodePropertyValue(classname, BYTECODE_SIZE);
-            OptionalInt result = IntUtil.parseInt(s);
-            if (result.isEmpty() || result.getAsInt() < 0) {
-                LOGGER.warning(() -> String.format(
-                        "Invalid value stored for bytecode size of class %s: %s",
-                        classname, StringUtil.quoted2(s)));
-            }
-            return result;
-        } else {
-            return OptionalInt.empty();
-        }
-    }
-
-    @Override
-    public Optional<String> md5OfClass(String classname) {
-        return graph.getOptionalNodePropertyValue(classname, MD5);
-    }
-
+    
     @Override
     public boolean isInterface(String classname) {
         return graph.getBooleanNodePropertyValue(classname, IS_INTERFACE);

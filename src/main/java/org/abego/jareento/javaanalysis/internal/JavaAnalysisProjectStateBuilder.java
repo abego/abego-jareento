@@ -11,11 +11,7 @@ public interface JavaAnalysisProjectStateBuilder {
     void addClass(@Syntax(QUALIFIED_TYPE_OR_ARRAY_NAME_SYNTAX) String name);
 
     void addReference(String from, String to);
-
-    void setMD5OfClass(String classname, String md5);
-
-    void setBytecodeSizeOfClass(String classname, int bytecodeSize);
-
+    
     void setIsInterfaceOfClass(String classname, boolean value);
 
     void addTypeExtends(String typename, String otherTypename);
