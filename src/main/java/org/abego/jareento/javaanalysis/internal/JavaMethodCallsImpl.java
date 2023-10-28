@@ -4,6 +4,8 @@ import org.abego.jareento.javaanalysis.JavaAnalysisProject;
 import org.abego.jareento.javaanalysis.JavaMethodCall;
 import org.abego.jareento.javaanalysis.JavaMethodCalls;
 
+import java.util.stream.Collectors;
+
 class JavaMethodCallsImpl extends ManyImpl<JavaMethodCall, JavaMethodCalls> implements JavaMethodCalls {
     private final JavaAnalysisProject project;
 
@@ -11,7 +13,7 @@ class JavaMethodCallsImpl extends ManyImpl<JavaMethodCall, JavaMethodCalls> impl
         super(ids);
         this.project = project;
     }
-    
+
     static JavaMethodCalls newJavaMethodCalls(IDs ids, JavaAnalysisProject project) {
         return new JavaMethodCallsImpl(ids, project);
     }
@@ -24,6 +26,14 @@ class JavaMethodCallsImpl extends ManyImpl<JavaMethodCall, JavaMethodCalls> impl
     @Override
     protected JavaMethodCalls newInstance(IDs ids) {
         return newJavaMethodCalls(ids, project);
+    }
+
+    @Override
+    public String getBriefSummary() {
+        return idStream()
+                .map(project::signatureOfMethodCall)
+                .sorted()
+                .collect(Collectors.joining(";"));
     }
 
 }
