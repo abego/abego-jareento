@@ -1,8 +1,8 @@
 package org.abego.jareento.javaanalysis;
 
-import org.abego.jareento.base.Many;
+import org.abego.jareento.base.ManyWithId;
 
 //TODO explain difference between JavaClasses and JavaTypes
-public interface JavaTypes extends Many<JavaType, JavaTypes> {
+public interface JavaTypes extends ManyWithId<JavaType, JavaTypes> {
     Iterable<String> names();
 }

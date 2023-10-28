@@ -1,6 +1,6 @@
 package org.abego.jareento.javaanalysis;
 
-import org.abego.jareento.base.Many;
+import org.abego.jareento.base.ManyWithId;
 
-public interface JavaMethodCalls extends Many<JavaMethodCall, JavaMethodCalls> {
+public interface JavaMethodCalls extends ManyWithId<JavaMethodCall, JavaMethodCalls> {
 }

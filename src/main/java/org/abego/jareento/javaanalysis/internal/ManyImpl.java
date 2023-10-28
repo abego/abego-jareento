@@ -1,6 +1,6 @@
 package org.abego.jareento.javaanalysis.internal;
 
-import org.abego.jareento.base.Many;
+import org.abego.jareento.base.ManyWithId;
 import org.abego.jareento.base.WithId;
 import org.eclipse.jdt.annotation.Nullable;
 
@@ -12,7 +12,7 @@ import java.util.stream.Stream;
 
 import static org.abego.jareento.javaanalysis.internal.IDsImpl.newIDs;
 
-abstract class ManyImpl<T extends WithId, M extends Many<T, M>> implements Many<T, M> {
+abstract class ManyImpl<T extends WithId, M extends ManyWithId<T, M>> implements ManyWithId<T, M> {
     private final IDs ids;
 
     protected ManyImpl(IDs ids) {

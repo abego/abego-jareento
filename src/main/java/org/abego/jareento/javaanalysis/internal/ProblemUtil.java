@@ -2,8 +2,10 @@ package org.abego.jareento.javaanalysis.internal;
 
 import org.abego.jareento.javaanalysis.Problem;
 import org.abego.jareento.javaanalysis.ProblemChecker;
+import org.abego.jareento.javaanalysis.ProblemCheckers;
 import org.abego.jareento.javaanalysis.Problems;
-import org.abego.jareento.javaanalysis.ProblemsReporter;
+import org.abego.jareento.javaanalysis.ProblemReporter;
+import org.abego.jareento.javaanalysis.ProblemReporters;
 import org.abego.jareento.shared.commons.javaparser.JavaParserUtil;
 import org.eclipse.jdt.annotation.Nullable;
 
@@ -83,9 +85,9 @@ class ProblemUtil {
 
     public static void reportProblems(
             Problems problems,
-            Iterable<ProblemsReporter> problemsReporters,
+            Iterable<ProblemReporter> problemReporters,
             Consumer<String> progress) {
-        for (var reporter : problemsReporters) {
+        for (var reporter : problemReporters) {
             reporter.report(problems, progress);
         }
     }
@@ -93,7 +95,7 @@ class ProblemUtil {
     public static Problems checkForProblemsAndWriteReports(
             File[] sourceRootsAndDependencies,
             Iterable<ProblemChecker> problemCheckers,
-            Iterable<ProblemsReporter> problemsReporters,
+            Iterable<ProblemReporter> problemReporters,
             boolean processedFileToProgress,
             Consumer<String> progress) {
 
@@ -110,7 +112,7 @@ class ProblemUtil {
 
         problems = problems.sortedByDescription();
 
-        reportProblems(problems, problemsReporters, progress);
+        reportProblems(problems, problemReporters, progress);
 
         return problems;
     }
@@ -143,18 +145,18 @@ class ProblemUtil {
         return newProblemsImpl(uniqueProblems);
     }
 
-    public static Iterable<ProblemsReporter> getAllProblemsReporters() {
-        List<ProblemsReporter> result =
-                toList(loadServices(ProblemsReporter.class));
-        result.sort(Comparator.comparing(ProblemsReporter::getID));
-        return result;
+    public static ProblemReporters getAllProblemReporters() {
+        List<ProblemReporter> list =
+                toList(loadServices(ProblemReporter.class));
+        list.sort(Comparator.comparing(ProblemReporter::getID));
+        return ProblemReportersImpl.newProblemReportersImpl(list);
     }
 
-    public static Iterable<ProblemChecker> getAllProblemCheckers() {
+    public static ProblemCheckers getAllProblemCheckers() {
         List<ProblemChecker> result =
                 toList(loadServices(ProblemChecker.class));
         result.sort(Comparator.comparing(
                 o -> o.getProblemType().getID()));
-        return result;
+        return ProblemCheckersImpl.newProblemCheckersImpl(result);
     }
 }

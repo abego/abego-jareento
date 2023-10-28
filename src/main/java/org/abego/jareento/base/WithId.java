@@ -1,7 +1,7 @@
 package org.abego.jareento.base;
 
 /**
- * Used on types those instances can be identified by a String value (the ID).
+ * The instance can be identified by a String value, its {@link #id()}.
  */
 public interface WithId {
 

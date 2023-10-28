@@ -3,9 +3,10 @@ package org.abego.jareento.cli;
 import org.abego.commons.lang.IterableUtil;
 import org.abego.jareento.javaanalysis.JavaAnalysisAPI;
 import org.abego.jareento.javaanalysis.ProblemChecker;
+import org.abego.jareento.javaanalysis.ProblemCheckers;
 import org.abego.jareento.javaanalysis.ProblemType;
 import org.abego.jareento.javaanalysis.Problems;
-import org.abego.jareento.javaanalysis.ProblemsReporter;
+import org.abego.jareento.javaanalysis.ProblemReporter;
 
 import java.io.File;
 import java.io.PrintStream;
@@ -108,8 +109,8 @@ public class CheckForProblemsApp {
         if (IterableUtil.isEmpty(problemCheckers)) {
             throw new IllegalArgumentException("No problem checkers specified.");
         }
-        var problemsReporters = javaAnalysisAPI.getAllProblemsReporters();
-        if (IterableUtil.isEmpty(problemsReporters)) {
+        var problemReporters = javaAnalysisAPI.getAllProblemReporters();
+        if (IterableUtil.isEmpty(problemReporters)) {
             throw new IllegalArgumentException("No problem reporters found.");
         }
         File[] sourceRootsAndDependencies = parseFiles(
@@ -124,7 +125,7 @@ public class CheckForProblemsApp {
         return javaAnalysisAPI.checkForProblemsAndWriteReports(
                 sourceRootsAndDependencies,
                 problemCheckers,
-                problemsReporters,
+                problemReporters,
                 processedFileToProgress,
                 progress);
     }
@@ -156,7 +157,7 @@ public class CheckForProblemsApp {
     private void printAvailableProblemCheckersAndReporters(PrintStream out) {
         printAvailableProblemCheckers(out, javaAnalysisAPI.getAllProblemCheckers());
         out.println();
-        printAvailableProblemReporters(out, javaAnalysisAPI.getAllProblemsReporters());
+        printAvailableProblemReporters(out, javaAnalysisAPI.getAllProblemReporters());
     }
 
     private static void printUsage(PrintStream out) {
@@ -197,20 +198,20 @@ public class CheckForProblemsApp {
     }
 
     private void printAvailableProblemReporters(
-            PrintStream out, Iterable<ProblemsReporter> problemsReporters) {
-        if (IterableUtil.isEmpty(problemsReporters)) {
+            PrintStream out, Iterable<ProblemReporter> problemReporters) {
+        if (IterableUtil.isEmpty(problemReporters)) {
             out.println("No Problem Reporters available.");
             return;
         }
 
         out.println("Available Problem Reporters:");
         out.println("\t[ID]\t[Title]");
-        for (var pr : problemsReporters) {
+        for (var pr : problemReporters) {
             out.printf("\t%s\t%s%n", pr.getID(), pr.getTitle());
         }
     }
 
-    private Iterable<ProblemChecker> problemCheckersWithIds(
+    private ProblemCheckers problemCheckersWithIds(
             Set<String> checkerIds) {
 
         Map<String, ProblemChecker> map = new HashMap<>();
@@ -232,7 +233,7 @@ public class CheckForProblemsApp {
                     "ProblemChecker not found: %s".formatted(
                             String.join(", ", missingCheckers)));
         }
-        return result;
+        return javaAnalysisAPI.newProblemCheckers(result);
     }
 
 }

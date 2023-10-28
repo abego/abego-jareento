@@ -98,10 +98,21 @@ public interface JavaAnalysisAPI {
     Problems newProblems(Iterable<Problem> problems);
     //endregion
 
-    //region Problem Checking & Reporting    
-    Iterable<ProblemChecker> getAllProblemCheckers();
+    //region Problem Checking & Reporting
+    
+    ProblemCheckers newProblemCheckers(Iterable<ProblemChecker> items);
 
-    Iterable<ProblemsReporter> getAllProblemsReporters();
+    ProblemReporters newProblemReporters(Iterable<ProblemReporter> items);
+
+    /**
+     * Returns all {@link ProblemChecker}s currently available.
+     */
+    ProblemCheckers getAllProblemCheckers();
+
+    /**
+     * Returns all {@link ProblemReporter}s currently available.
+     */
+    ProblemReporters getAllProblemReporters();
 
     /**
      * Checks for problems in the Java files under the source roots given in
@@ -129,38 +140,38 @@ public interface JavaAnalysisAPI {
      */
     Problems checkForProblems(
             File[] sourceRootsAndDependencies,
-            Iterable<ProblemChecker> problemCheckers,
+            ProblemCheckers problemCheckers,
             Consumer<Problem> problemConsumer,
             Predicate<File> aboutToCheckFile);
 
     /**
-     * See {@link #checkForProblems(File[], Iterable, Consumer, Predicate)}.
+     * See {@link #checkForProblems(File[], ProblemCheckers, Consumer, Predicate)}.
      */
     default Problems checkForProblems(
             File[] sourceRoots,
-            Iterable<ProblemChecker> problemCheckers,
+            ProblemCheckers problemCheckers,
             Consumer<Problem> problemConsumer) {
         return checkForProblems(
                 sourceRoots, problemCheckers, problemConsumer, f -> true);
     }
 
     /**
-     * See {@link #checkForProblems(File[], Iterable, Consumer, Predicate)}.
+     * See {@link #checkForProblems(File[], ProblemCheckers, Consumer, Predicate)}.
      */
     default Problems checkForProblems(
-            File[] sourceRoots, Iterable<ProblemChecker> problemCheckers) {
+            File[] sourceRoots, ProblemCheckers problemCheckers) {
         return checkForProblems(
                 sourceRoots, problemCheckers, p -> {}, f -> true);
     }
 
     void reportProblems(
             Problems problems,
-            Iterable<ProblemsReporter> problemsReporters,
+            ProblemReporters problemReporters,
             Consumer<String> progress);
 
     /**
-     * See {@link #checkForProblems(File[], Iterable, Consumer, Predicate)} and
-     * {@link #reportProblems(Problems, Iterable, Consumer)}; returns the
+     * See {@link #checkForProblems(File[], ProblemCheckers, Consumer, Predicate)} and
+     * {@link #reportProblems(Problems, ProblemReporters, Consumer)}; returns the
      * detected {@link Problems}.
      *
      * @param processedFileToProgress when {@code true} {@code progress}
@@ -170,8 +181,8 @@ public interface JavaAnalysisAPI {
      */
     Problems checkForProblemsAndWriteReports(
             File[] sourceRootsAndDependencies,
-            Iterable<ProblemChecker> problemCheckers,
-            Iterable<ProblemsReporter> problemsReporters,
+            ProblemCheckers problemCheckers,
+            ProblemReporters problemReporters,
             boolean processedFileToProgress,
             Consumer<String> progress);
 

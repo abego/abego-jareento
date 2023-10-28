@@ -6,7 +6,7 @@ import java.util.function.Consumer;
 
 import static org.abego.commons.io.PrintStreamUtil.newPrintStreamToBufferedFile;
 
-public final class StandardProblemsReporter implements ProblemsReporter {
+public final class StandardProblemsReporter implements ProblemReporter {
 
     @Override
     public String getID() {
