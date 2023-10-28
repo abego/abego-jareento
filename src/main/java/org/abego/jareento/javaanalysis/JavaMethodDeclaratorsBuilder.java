@@ -122,7 +122,7 @@ public final class JavaMethodDeclaratorsBuilder {
 
     private class JavaMethodDeclaratorsImpl implements JavaMethodDeclarators {
         private @Nullable List<JavaMethodDeclarator> methods;
-        
+
         @Override
         public int getSize() {
             return methodDeclarators.size();
@@ -134,13 +134,13 @@ public final class JavaMethodDeclaratorsBuilder {
         }
 
         @Override
-        public boolean containsMethodOfClassAndSignature(String classname, String signature) {
-            return methodDeclaratorTextOfMethodOfTypeWithSignatureOrNull(classname, signature) != null;
+        public boolean containsMethodOfClassWithSignature(String classname, String signature) {
+            return getMethodDeclaratorTextOfMethodOfClassWithSignatureOrNull(classname, signature) != null;
         }
 
         @Override
-        public @Nullable String methodDeclaratorTextOfMethodOfTypeWithSignatureOrNull(String type, String signature) {
-            return simpleMethodDeclaratorToMethodDeclarator.get(JavaMethodDeclaratorUtil.simpleMethodDeclaratorText(type, signature));
+        public @Nullable String getMethodDeclaratorTextOfMethodOfClassWithSignatureOrNull(String classname, String signature) {
+            return simpleMethodDeclaratorToMethodDeclarator.get(JavaMethodDeclaratorUtil.simpleMethodDeclaratorText(classname, signature));
         }
 
         @Override

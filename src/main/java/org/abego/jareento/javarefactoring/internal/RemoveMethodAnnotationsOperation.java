@@ -80,14 +80,14 @@ class RemoveMethodAnnotationsOperation {
                 .collect(Collectors.toSet());
         RemoveMethodAnnotationsOperation operation = newRemoveMethodAnnotationOperation(
                 m -> m.annotationType().equals(annotationType)
-                        && methodSet.containsMethodOfClassAndSignature(m.typeDeclaringMethod(), m.methodSignatureWithRawTypes()),
+                        && methodSet.containsMethodOfClassWithSignature(m.typeDeclaringMethod(), m.methodSignatureWithRawTypes()),
                 m -> {
                     innerInnerProgress.accept(
                             String.format("Removing annotation '%s' from method %s#%s",
                                     annotationType,
                                     m.typeDeclaringMethod(), m.methodSignature()));
                     remainingMethods.remove(
-                            methodSet.methodDeclaratorTextOfMethodOfTypeWithSignatureOrNull(
+                            methodSet.getMethodDeclaratorTextOfMethodOfClassWithSignatureOrNull(
                                     m.typeDeclaringMethod(), m.methodSignatureWithRawTypes()));
                     removeCount.getAndIncrement();
                 }

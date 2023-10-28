@@ -4,6 +4,7 @@ import org.abego.commons.lang.IterableUtil;
 import org.abego.jareento.javaanalysis.JavaAnalysisAPI;
 import org.abego.jareento.javaanalysis.ProblemChecker;
 import org.abego.jareento.javaanalysis.ProblemCheckers;
+import org.abego.jareento.javaanalysis.ProblemReporters;
 import org.abego.jareento.javaanalysis.ProblemType;
 import org.abego.jareento.javaanalysis.Problems;
 import org.abego.jareento.javaanalysis.ProblemReporter;
@@ -106,11 +107,11 @@ public class CheckForProblemsApp {
         checkArgs(args);
 
         var problemCheckers = problemCheckersWithIds(args.checkerIds);
-        if (IterableUtil.isEmpty(problemCheckers)) {
+        if (problemCheckers.isEmpty()) {
             throw new IllegalArgumentException("No problem checkers specified.");
         }
         var problemReporters = javaAnalysisAPI.getAllProblemReporters();
-        if (IterableUtil.isEmpty(problemReporters)) {
+        if (problemReporters.isEmpty()) {
             throw new IllegalArgumentException("No problem reporters found.");
         }
         File[] sourceRootsAndDependencies = parseFiles(
@@ -147,7 +148,7 @@ public class CheckForProblemsApp {
                         progress.accept("\t%s".formatted(f.getAbsolutePath())));
     }
 
-    private static void printProblemsToCheck(Iterable<ProblemChecker> problemCheckers, Consumer<String> progress) {
+    private static void printProblemsToCheck(ProblemCheckers problemCheckers, Consumer<String> progress) {
         progress.accept("Checking for problem(s): %s".formatted(
                 toList(problemCheckers).stream()
                         .map(pc -> pc.getProblemType().getID())
@@ -183,7 +184,7 @@ public class CheckForProblemsApp {
     }
 
     private void printAvailableProblemCheckers(
-            PrintStream out, Iterable<ProblemChecker> problemCheckers) {
+            PrintStream out, ProblemCheckers problemCheckers) {
         if (IterableUtil.isEmpty(problemCheckers)) {
             out.println("No Problem Checkers available.");
             return;
@@ -198,8 +199,8 @@ public class CheckForProblemsApp {
     }
 
     private void printAvailableProblemReporters(
-            PrintStream out, Iterable<ProblemReporter> problemReporters) {
-        if (IterableUtil.isEmpty(problemReporters)) {
+            PrintStream out, ProblemReporters problemReporters) {
+        if (problemReporters.isEmpty()) {
             out.println("No Problem Reporters available.");
             return;
         }
