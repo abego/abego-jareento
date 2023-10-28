@@ -1,6 +1,7 @@
 package org.abego.jareento.javaanalysis.internal;
 
 import org.abego.jareento.javaanalysis.JavaAnalysisProject;
+import org.abego.jareento.javaanalysis.JavaClasses;
 import org.abego.jareento.javaanalysis.JavaMethodCalls;
 import org.abego.jareento.javaanalysis.JavaMethodSignature;
 
@@ -18,13 +19,24 @@ class JavaMethodSignatureImpl implements JavaMethodSignature {
     }
 
     @Override
-    public String getId() {
-        return id;
+    public JavaClasses getClassesWithMethod() {
+        return project.classesContainingMethodWithSignature(id);
     }
 
     @Override
-    public JavaMethodCalls methodCallsOnClass(String className) {
-        return project.methodCallsWithSignatureOnClass(id, className);
+    public JavaMethodCalls getMethodCalls() {
+        return project.methodCallsWithSignature(id);
+    }
+
+    @Override
+    public JavaMethodCalls getMethodCallsToClass(String classname) {
+        return project.methodCallsWithSignatureOnClass(id, classname);
+    }
+
+
+    @Override
+    public String getId() {
+        return id;
     }
 
 }

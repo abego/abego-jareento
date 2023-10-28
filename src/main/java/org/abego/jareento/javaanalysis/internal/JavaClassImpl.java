@@ -3,6 +3,8 @@ package org.abego.jareento.javaanalysis.internal;
 import org.abego.jareento.javaanalysis.JavaAnalysisProject;
 import org.abego.jareento.javaanalysis.JavaClass;
 import org.abego.jareento.javaanalysis.JavaClasses;
+import org.abego.jareento.javaanalysis.JavaMethodCalls;
+import org.abego.jareento.javaanalysis.JavaMethodSignature;
 import org.abego.jareento.javaanalysis.JavaMethodSignatures;
 import org.abego.jareento.javaanalysis.JavaMethods;
 import org.abego.jareento.javaanalysis.JavaTypes;
@@ -94,7 +96,7 @@ class JavaClassImpl implements JavaClass {
         return project.methodSignaturesOfClass(id);
     }
 
-    @Override
+   @Override
     public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
