@@ -34,26 +34,4 @@ class JavaMethodsImpl extends ManyWithIdDefault<JavaMethod, JavaMethods> impleme
     protected JavaMethods newInstance(IDs ids) {
         return newJavaMethods(ids, project);
     }
-
-    @Override
-    public Map<String, List<String>> methodCandidatesForSignature(String methodSignature) {
-        String signatureName = JavaLangUtil.nameOfSignature(methodSignature);
-        List<String> signatureParameters = JavaLangUtil.parametersOfSignature(methodSignature);
-        Map<String, List<String>> result = new HashMap<>();
-        idStream().forEach(methodId -> {
-            String mySignature = project.signatureOfMethod(methodId);
-            if (!JavaLangUtil.nameOfSignature(mySignature)
-                    .equals(signatureName)) {
-                return;
-            }
-            List<String> myParameters = JavaLangUtil.parametersOfSignature(mySignature);
-            if (myParameters.size() != signatureParameters.size()) {
-                return;
-            }
-            result.put(methodId, myParameters);
-        });
-
-        return result;
-    }
-
 }

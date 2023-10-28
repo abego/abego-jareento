@@ -5,6 +5,7 @@ import org.abego.jareento.base.JareentoException;
 import org.abego.jareento.javaanalysis.JavaAnalysisProject;
 import org.abego.jareento.javaanalysis.JavaMethods;
 import org.abego.jareento.javaanalysis.JavaTypes;
+import org.abego.jareento.util.JavaLangUtil;
 import org.eclipse.jdt.annotation.Nullable;
 
 import java.util.HashMap;
@@ -283,7 +284,7 @@ class MethodResolver {
         // in the signature and the same number of parameters as the signature.
         JavaMethods methods = project.methodsOfClass(classname);
         Map<String, List<String>> candidates =
-                methods.methodCandidatesForSignature(signature);
+                getMethodCandidatesForSignatureIgnoringTypes(methods, signature);
 
         // For these method candidates we check if the parameter types of the
         // method match the types used in the signature. We want the method 
@@ -350,5 +351,35 @@ class MethodResolver {
             }
         }
         return idOfBestMethod;
+    }
+
+    /**
+     * Returns all methods that have the same name as the name of the
+     * {@code methodSignature} and the same number of parameters, as a map with
+     * the method's id as key and the method's parameter types as value.
+     * <p>
+     * Note: the result may also include methods that don't have parameter type
+     * compatible with the types of the methodSignature. Finding the "proper"
+     * method out of these candidates must be done in a separate step.
+     */
+    private Map<String, List<String>> getMethodCandidatesForSignatureIgnoringTypes(
+            JavaMethods methods, String methodSignature) {
+        String signatureName = JavaLangUtil.nameOfSignature(methodSignature);
+        List<String> signatureParameters = JavaLangUtil.parametersOfSignature(methodSignature);
+        Map<String, List<String>> result = new HashMap<>();
+        methods.idStream().forEach(methodId -> {
+            String mySignature = project.signatureOfMethod(methodId);
+            if (!JavaLangUtil.nameOfSignature(mySignature)
+                    .equals(signatureName)) {
+                return;
+            }
+            List<String> myParameters = JavaLangUtil.parametersOfSignature(mySignature);
+            if (myParameters.size() != signatureParameters.size()) {
+                return;
+            }
+            result.put(methodId, myParameters);
+        });
+
+        return result;
     }
 }
