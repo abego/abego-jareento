@@ -64,26 +64,26 @@ class JavaAnalysisProjectStorageUsingStringGraph implements JavaAnalysisProjectS
             Consumer<String> progress) {
 
         File projectDirectory =
-                new File(storageDirectory, projectConfiguration.name());
+                new File(storageDirectory, projectConfiguration.getName());
         FileUtil.ensureDirectoryExists(projectDirectory);
 
         File disassemblyFile = new File(projectDirectory, "disassembly.txt");
         File projectFile = new File(projectDirectory, "main-project.jas");
         URI projectURI = projectFile.toURI();
-        File[] sourceRoots = projectConfiguration.sourceRoots();
+        File[] sourceRoots = projectConfiguration.getSourceRoots();
 
         // Write disassembly (if missing or out-dated)
-        File[] jarFiles = projectConfiguration.projectJars();
+        File[] jarFiles = projectConfiguration.getProjectJars();
         if (jarFiles.length == 0) {
             throw new JareentoException("No jar files found for project " +
-                    projectConfiguration.mavenProjectDirectory()
+                    projectConfiguration.getMavenProjectDirectory()
                             .getAbsolutePath());
         }
         writeFileIfOutdated(disassemblyFile, jarFiles,
                 f -> writeDisassemblyFile(f, jarFiles, progress));
 
         // Create a (new) JavaAnalysisProject and save it (if missing or out-dated)
-        File[] dependencies = projectConfiguration.dependencies();
+        File[] dependencies = projectConfiguration.getDependencies();
         File[] projectJarsAndDependencies = ArrayUtil.concatenate(jarFiles, dependencies);
         writeFileIfOutdated(projectFile, concatenate(disassemblyFile, projectJarsAndDependencies),
                 f -> newJavaAnalysisProjectFromDisassemblyFile(

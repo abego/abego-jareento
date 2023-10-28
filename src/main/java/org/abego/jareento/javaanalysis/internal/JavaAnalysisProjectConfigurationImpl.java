@@ -52,27 +52,27 @@ class JavaAnalysisProjectConfigurationImpl implements JavaAnalysisProjectConfigu
     }
 
     @Override
-    public String name() {
+    public String getName() {
         return name;
     }
 
     @Override
-    public File mavenProjectDirectory() {
+    public File getMavenProjectDirectory() {
         return mavenProjectDirectory;
     }
 
     @Override
-    public File[] projectJars() {
+    public File[] getProjectJars() {
         return projectJars;
     }
 
     @Override
-    public File[] dependencies() {
+    public File[] getDependencies() {
         return dependencies;
     }
 
     @Override
-    public File[] sourceRoots() {
+    public File[] getSourceRoots() {
         return sourceRoots;
     }
 
