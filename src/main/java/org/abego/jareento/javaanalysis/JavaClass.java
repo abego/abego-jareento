@@ -36,4 +36,9 @@ public interface JavaClass extends WithId {
     JavaMethods getMethods();
 
     JavaMethodSignatures getMethodSignatures();
+
+    JavaMethodSignatures getInheritedMethodSignatures();
+
+    JavaMethodCalls getMethodCallsToClassWithSignature(String methodSignature);
+    
 }

@@ -96,7 +96,17 @@ class JavaClassImpl implements JavaClass {
         return project.methodSignaturesOfClass(id);
     }
 
-   @Override
+    @Override
+    public JavaMethodSignatures getInheritedMethodSignatures() {
+        return project.inheritedMethodSignaturesOfClass(id);
+    }
+
+    @Override
+    public JavaMethodCalls getMethodCallsToClassWithSignature(String methodSignature) {
+        return project.methodCallsWithSignatureOnClass(methodSignature,id);
+    }
+
+    @Override
     public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
