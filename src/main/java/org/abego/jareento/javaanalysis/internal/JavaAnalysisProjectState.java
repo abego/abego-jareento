@@ -61,8 +61,6 @@ public interface JavaAnalysisProjectState {
     
     IDs classes();
 
-    IDs classesOfJavaFile(@Syntax(FILE_PATH_SYNTAX) String file);
-
     IDs classesReferencingClass(
             @Syntax(QUALIFIED_TYPE_NAME_SYNTAX) String classname);
 

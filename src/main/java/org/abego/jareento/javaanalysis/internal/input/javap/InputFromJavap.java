@@ -387,7 +387,7 @@ public class InputFromJavap implements JavaAnalysisProjectInput {
     }
 
     private static List<String> getUndeclaredClasses(JavaAnalysisProject project) {
-        return project.classes().stream()
+        return project.getClasses().stream()
                 .filter(c -> isUndeclared(c, project))
                 .map(WithId::getId)
                 .collect(Collectors.toList());

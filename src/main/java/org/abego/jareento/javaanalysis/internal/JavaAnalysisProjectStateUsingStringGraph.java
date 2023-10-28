@@ -410,12 +410,7 @@ public class JavaAnalysisProjectStateUsingStringGraph implements JavaAnalysisPro
     public IDs classes() {
         return ids(graph.nodes("?", RDF_TYPE, CLASS));
     }
-
-    @Override
-    public IDs classesOfJavaFile(String file) {
-        return ids(graph.nodes(file, CONTAINS, "?"));
-    }
-
+    
     @Override
     public IDs classesReferencingClass(String classname) {
         return ids(graph.nodes("?", REFS, classname));

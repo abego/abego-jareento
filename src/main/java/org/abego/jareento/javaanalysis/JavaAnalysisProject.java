@@ -29,11 +29,9 @@ public interface JavaAnalysisProject {
     //endregion
     //region Class-related
 
-    JavaClass classWithName(@Syntax(QUALIFIED_TYPE_NAME_SYNTAX) String className);
+    JavaClass getClassWithName(@Syntax(QUALIFIED_TYPE_NAME_SYNTAX) String classname);
 
-    JavaClasses classes();
-
-    JavaClasses classesOfJavaFile(@Syntax(FILE_PATH_SYNTAX) String file);
+    JavaClasses getClasses();
 
     JavaClasses classesReferencingClass(
             @Syntax(QUALIFIED_TYPE_NAME_SYNTAX) String classname);

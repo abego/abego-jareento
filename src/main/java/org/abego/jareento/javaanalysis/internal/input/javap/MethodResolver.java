@@ -232,7 +232,7 @@ class MethodResolver {
     }
 
     private void initDirectInheritance(JavaAnalysisProject project) {
-        project.classes().idStream().forEach(classname -> {
+        project.getClasses().idStream().forEach(classname -> {
             JavaTypes types = project.extendedTypes(classname)
                     .unitedWith(project.implementedInterfaces(classname));
             for (String supertype : types.names()) {

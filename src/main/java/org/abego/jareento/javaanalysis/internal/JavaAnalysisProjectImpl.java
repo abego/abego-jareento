@@ -381,23 +381,18 @@ public class JavaAnalysisProjectImpl implements JavaAnalysisProject {
     }
     
     @Override
-    public JavaClasses classes() {
+    public JavaClasses getClasses() {
         return newJavaClasses(state.classes());
     }
-
-    @Override
-    public JavaClasses classesOfJavaFile(String file) {
-        return newJavaClasses(state.classesOfJavaFile(file));
-    }
-
+    
     @Override
     public JavaClasses classesReferencingClass(String classname) {
         return newJavaClasses(state.classesReferencingClass(classname));
     }
 
     @Override
-    public JavaClass classWithName(String className) {
-        return newJavaClass(className, this);
+    public JavaClass getClassWithName(String classname) {
+        return newJavaClass(classname, this);
     }
 
     @Override
