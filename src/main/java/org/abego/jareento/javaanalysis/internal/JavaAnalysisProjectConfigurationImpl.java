@@ -11,6 +11,7 @@ import java.util.Objects;
 
 class JavaAnalysisProjectConfigurationImpl implements JavaAnalysisProjectConfiguration {
     private final String name;
+    @Nullable
     private final File mavenProjectDirectory;
     private final File[] projectJars;
     private final File[] dependencies;
@@ -18,6 +19,7 @@ class JavaAnalysisProjectConfigurationImpl implements JavaAnalysisProjectConfigu
 
     private JavaAnalysisProjectConfigurationImpl(
             String name,
+            @Nullable
             File mavenProjectDirectory,
             File[] projectJars,
             File[] dependencies,
@@ -32,6 +34,7 @@ class JavaAnalysisProjectConfigurationImpl implements JavaAnalysisProjectConfigu
 
     public static JavaAnalysisProjectConfiguration newJavaAnalysisProjectConfiguration(
             String name,
+            @Nullable
             File mavenProjectDirectory,
             File[] sourceRoots,
             File @Nullable [] projectJars,
@@ -57,6 +60,7 @@ class JavaAnalysisProjectConfigurationImpl implements JavaAnalysisProjectConfigu
     }
 
     @Override
+    @Nullable
     public File getMavenProjectDirectory() {
         return mavenProjectDirectory;
     }
@@ -81,7 +85,10 @@ class JavaAnalysisProjectConfigurationImpl implements JavaAnalysisProjectConfigu
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         JavaAnalysisProjectConfigurationImpl that = (JavaAnalysisProjectConfigurationImpl) o;
-        return mavenProjectDirectory.equals(that.mavenProjectDirectory) && Arrays.equals(projectJars, that.projectJars) && Arrays.equals(dependencies, that.dependencies) && Arrays.equals(sourceRoots, that.sourceRoots);
+        return Objects.equals(mavenProjectDirectory, that.mavenProjectDirectory) 
+                && Arrays.equals(projectJars, that.projectJars) 
+                && Arrays.equals(dependencies, that.dependencies) 
+                && Arrays.equals(sourceRoots, that.sourceRoots);
     }
 
     @Override

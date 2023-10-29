@@ -79,7 +79,11 @@ public class MavenUtil {
         return result.toString();
     }
 
-    public static File[] classpathJarsFromMavenProject(File mavenProjectDirectory) {
+    public static File[] classpathJarsFromMavenProject(
+            @Nullable File mavenProjectDirectory) {
+        if (mavenProjectDirectory == null) {
+            return new File[0];
+        }
         File[] files = classpathOfMavenProject(mavenProjectDirectory);
         return Arrays.stream(files)
                 .filter(f -> f.getName().endsWith(".jar"))
@@ -119,7 +123,10 @@ public class MavenUtil {
     }
 
     public static File[] jarFilesInTargetOfMavenProject(
-            File mavenProjectDirectory, JarFileType... jarFileTypes) {
+            @Nullable File mavenProjectDirectory, JarFileType... jarFileTypes) {
+        if (mavenProjectDirectory == null) {
+            return new File[0];
+        }
         checkIsMavenProjectDirectory(mavenProjectDirectory);
 
         boolean includeMainJars = jarFileTypes.length == 0 ||

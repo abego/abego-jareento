@@ -1,5 +1,7 @@
 package org.abego.jareento.javaanalysis;
 
+import org.eclipse.jdt.annotation.Nullable;
+
 import java.io.File;
 
 /**
@@ -13,8 +15,10 @@ public interface JavaAnalysisProjectConfiguration {
 
     /**
      * Returns the Maven project directory, i.e. the directory
-     * containing the {@code pom.xml} file of the project to be analysed.
+     * containing the {@code pom.xml} file of the project to be analysed, or 
+     * {@code null} when no Maven project directory is defined.
      */
+    @Nullable
     File getMavenProjectDirectory();
 
     /**
