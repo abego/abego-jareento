@@ -33,8 +33,8 @@ class JavaMethodSignaturesImpl extends ManyWithIdDefault<JavaMethodSignature, Ja
     }
 
     @Override
-    public boolean contains(String methodSignature) {
-        return idSet().contains(methodSignature);
+    public boolean contains(String methodSignatureText) {
+        return idSet().contains(methodSignatureText);
     }
 
     @Override

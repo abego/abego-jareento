@@ -22,12 +22,6 @@ public interface JareentoSyntax {
      */
     String CLASS_FILE_PATH_SYNTAX = "FilePath:extension=class";
     //endregion
-    //region MD5
-    /**
-     * Identifies the hex notation of an MD5 value.
-     */
-    String MD5_SYNTAX = "MD5";
-    //endregion
     //region Jareento-related
     /**
      * Identifies the syntax of a <em>qualified name</em>, i.e. a non-empty
@@ -70,9 +64,9 @@ public interface JareentoSyntax {
     String QUALIFIED_TYPE_OR_ARRAY_NAME_SYNTAX = "QualifiedTypeOrArrayName";
 
     /**
-     * Identifies the syntax of <em>qualified signature of a method</em>.
+     * Identifies the syntax of <em>signature of a method</em>.
      * <p>
-     * The qualified signature of a (Java) method is the concatenation of
+     * The signature of a (Java) method is the concatenation of
      * <ul>
      *     <li>its method identifier</li>
      *     <li>a '('</li>
@@ -80,9 +74,11 @@ public interface JareentoSyntax {
      *     of its parameters, separated by ", "</li>
      *     <li>a ')'</li>
      * </ul>
+     * It does not include the return type.
+     * <p>
      * Example: <code>myMethod(java.lang.Object, java.lang.String)</code>
      */
-    String QUALIFIED_METHOD_SIGNATURE_SYNTAX = "QualifiedMethodSignature";
+    String METHOD_SIGNATURE_SYNTAX = "MethodSignature";
 
     /**
      * Identifies the syntax of a <em>simple method declarator</em>.
@@ -91,8 +87,9 @@ public interface JareentoSyntax {
      * <ul>
      *     <li>its qualified classname ({@linkplain JareentoSyntax#QUALIFIED_TYPE_NAME_SYNTAX})</li>
      *     <li>a '#'</li>
-     *     <li>its qualified signature ({@linkplain JareentoSyntax#QUALIFIED_METHOD_SIGNATURE_SYNTAX})</li>
+     *     <li>its signature ({@linkplain JareentoSyntax#METHOD_SIGNATURE_SYNTAX})</li>
      * </ul>
+     * It does not include the return type.
      * <p>
      * Example: <code>org.example.SampleClass#myMethod(java.lang.Object, java.lang.String)</code>
      */

@@ -5,7 +5,6 @@ import org.abego.jareento.base.JareentoSyntax;
 
 import javax.annotation.Syntax;
 import java.io.File;
-import java.io.PrintWriter;
 import java.util.Optional;
 
 import static org.abego.jareento.base.JareentoSyntax.CLASS_FILE_PATH_SYNTAX;
@@ -59,7 +58,7 @@ public interface JavaAnalysisProjectState {
             @Syntax(QUALIFIED_TYPE_NAME_SYNTAX) String classname);
 
     IDs classesContainingMethodWithSignature(
-            @Syntax(JareentoSyntax.QUALIFIED_METHOD_SIGNATURE_SYNTAX) String methodSignature);
+            @Syntax(JareentoSyntax.METHOD_SIGNATURE_SYNTAX) String methodSignature);
 
     @Syntax(CLASS_FILE_PATH_SYNTAX)
     Optional<String> classFileOfClass(

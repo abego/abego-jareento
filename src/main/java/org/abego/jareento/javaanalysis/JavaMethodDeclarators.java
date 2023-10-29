@@ -7,7 +7,7 @@ import javax.annotation.Syntax;
 import java.util.stream.Stream;
 
 import static org.abego.jareento.base.JareentoSyntax.METHOD_DECLARATOR_SYNTAX;
-import static org.abego.jareento.base.JareentoSyntax.QUALIFIED_METHOD_SIGNATURE_SYNTAX;
+import static org.abego.jareento.base.JareentoSyntax.METHOD_SIGNATURE_SYNTAX;
 import static org.abego.jareento.base.JareentoSyntax.QUALIFIED_TYPE_NAME_SYNTAX;
 
 /**
@@ -34,7 +34,7 @@ public interface JavaMethodDeclarators extends Many<JavaMethodDeclarator> {
      */
     boolean containsMethodOfClassWithSignature(
             @Syntax(QUALIFIED_TYPE_NAME_SYNTAX) String classname,
-            @Syntax(QUALIFIED_METHOD_SIGNATURE_SYNTAX) String signature);
+            @Syntax(METHOD_SIGNATURE_SYNTAX) String signature);
 
     /**
      * Returns the text of the MethodDeclarator of the method in the given {@code classname}
@@ -45,6 +45,6 @@ public interface JavaMethodDeclarators extends Many<JavaMethodDeclarator> {
     @Syntax(METHOD_DECLARATOR_SYNTAX)
     String getMethodDeclaratorTextOfMethodOfClassWithSignatureOrNull(
             @Syntax(QUALIFIED_TYPE_NAME_SYNTAX) String classname,
-            @Syntax(QUALIFIED_METHOD_SIGNATURE_SYNTAX) String signature);
+            @Syntax(METHOD_SIGNATURE_SYNTAX) String signature);
 
 }
