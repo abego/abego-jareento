@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 import static org.abego.commons.lang.SeparatedItemScanner.newSeparatedItemScanner;
 
-public class JavaLangUtil {
+public final class JavaLangUtil {
     JavaLangUtil() {
         throw new MustNotInstantiateException();
     }
