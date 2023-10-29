@@ -4,10 +4,8 @@ import org.abego.jareento.javaanalysis.JavaAnalysisProject;
 import org.abego.jareento.javaanalysis.JavaClass;
 import org.abego.jareento.javaanalysis.JavaClasses;
 import org.abego.jareento.javaanalysis.JavaMethodCalls;
-import org.abego.jareento.javaanalysis.JavaMethodSignature;
 import org.abego.jareento.javaanalysis.JavaMethodSignatures;
 import org.abego.jareento.javaanalysis.JavaMethods;
-import org.abego.jareento.javaanalysis.JavaTypes;
 import org.abego.jareento.shared.SyntaxUtil;
 import org.eclipse.jdt.annotation.Nullable;
 
@@ -72,12 +70,12 @@ class JavaClassImpl implements JavaClass {
     }
 
     @Override
-    public JavaTypes getImplementedInterfaces() {
+    public JavaClasses getImplementedInterfaces() {
         return project.implementedInterfaces(id);
     }
 
     @Override
-    public JavaTypes getExtendedTypes() {
+    public JavaClasses getExtendedTypes() {
         return project.extendedTypes(id);
     }
 

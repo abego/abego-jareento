@@ -8,7 +8,6 @@ import org.abego.jareento.javaanalysis.JavaMethod;
 import org.abego.jareento.javaanalysis.JavaMethodCalls;
 import org.abego.jareento.javaanalysis.JavaMethodSignatures;
 import org.abego.jareento.javaanalysis.JavaMethods;
-import org.abego.jareento.javaanalysis.JavaTypes;
 import org.eclipse.jdt.annotation.Nullable;
 
 import java.io.File;
@@ -22,7 +21,6 @@ import static org.abego.jareento.javaanalysis.internal.IDsImpl.newIDs;
 import static org.abego.jareento.javaanalysis.internal.JavaClassImpl.newJavaClass;
 import static org.abego.jareento.javaanalysis.internal.JavaMethodCallsImpl.newJavaMethodCalls;
 import static org.abego.jareento.javaanalysis.internal.JavaMethodSignaturesImpl.newJavaMethodSignatures;
-import static org.abego.jareento.javaanalysis.internal.JavaTypesImpl.newJavaTypes;
 import static org.abego.jareento.shared.JavaMethodDeclaratorUtil.newJavaMethodDeclarator;
 
 public class JavaAnalysisProjectImpl implements JavaAnalysisProject {
@@ -114,10 +112,10 @@ public class JavaAnalysisProjectImpl implements JavaAnalysisProject {
     @Nullable
     private String idOfMethodWithSignatureInheritedByClassOrNull(
             String methodSignature, String className) {
-        JavaTypes extendedTypes = extendedTypes(className);
-        JavaTypes interfaces = implementedInterfaces(className);
+        JavaClasses extendedTypes = extendedTypes(className);
+        JavaClasses interfaces = implementedInterfaces(className);
 
-        JavaTypes types = extendedTypes.unitedWith(interfaces);
+        JavaClasses types = extendedTypes.unitedWith(interfaces);
 
         if (types.getSize() == 0) {
             @Nullable
@@ -278,13 +276,13 @@ public class JavaAnalysisProjectImpl implements JavaAnalysisProject {
     }
 
     @Override
-    public JavaTypes implementedInterfaces(String className) {
-        return newJavaTypes(state.implementedInterfaces(className));
+    public JavaClasses implementedInterfaces(String className) {
+        return newJavaClasses(state.implementedInterfaces(className));
     }
 
     @Override
-    public JavaTypes extendedTypes(String typeName) {
-        return newJavaTypes(state.extendedTypes(typeName));
+    public JavaClasses extendedTypes(String typeName) {
+        return newJavaClasses(state.extendedTypes(typeName));
     }
 
     @Override
@@ -325,10 +323,10 @@ public class JavaAnalysisProjectImpl implements JavaAnalysisProject {
 
     private void addInheritedMethodSignatureSpecificationsOfClass(
             Set<String> collection, String className) {
-        JavaTypes extendedTypes = extendedTypes(className);
-        JavaTypes interfaces = implementedInterfaces(className);
+        JavaClasses extendedTypes = extendedTypes(className);
+        JavaClasses interfaces = implementedInterfaces(className);
 
-        JavaTypes types = extendedTypes.unitedWith(interfaces);
+        JavaClasses types = extendedTypes.unitedWith(interfaces);
         if (types.getSize() == 0) {
             collection.addAll(OBJECT_METHOD_SIGNATURES_TO_RETURN_TYPE.keySet());
         } else {

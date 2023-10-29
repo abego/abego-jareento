@@ -32,9 +32,9 @@ public interface JavaClass extends WithId {
 
     JavaClasses getAllSubClassesAndClass();
 
-    JavaTypes getImplementedInterfaces();
+    JavaClasses getImplementedInterfaces();
 
-    JavaTypes getExtendedTypes();
+    JavaClasses getExtendedTypes();
 
     JavaClasses getReferencingClasses();
 

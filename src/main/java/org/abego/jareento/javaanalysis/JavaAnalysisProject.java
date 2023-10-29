@@ -53,10 +53,10 @@ public interface JavaAnalysisProject {
     JavaClasses allSubClassesAndClass(String className);
 
     //TODO: hide from API
-    JavaTypes implementedInterfaces(String className);
+    JavaClasses implementedInterfaces(String className);
 
     //TODO: hide from API
-    JavaTypes extendedTypes(String typeName);
+    JavaClasses extendedTypes(String typeName);
 
     //endregion
     //region Method-related
