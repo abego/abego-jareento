@@ -27,12 +27,12 @@ class RemoveMethodAnnotationsTest {
         // remove all @Override annotations, 
         javaRefactoring.removeMethodAnnotations(
                 project,
-                mad -> mad.annotationText().equals("@Override"),
+                mad -> mad.getAnnotationText().equals("@Override"),
                 f -> true, mad -> listenerLog.append(
                         String.format("removing %s of %s.%s\n",
-                                mad.annotationText(),
-                                mad.typeDeclaringMethod(),
-                                mad.methodSignature())),
+                                mad.getAnnotationText(),
+                                mad.getTypeDeclaringMethod(),
+                                mad.getMethodSignature())),
                 s -> {});
 
         assertEquals("""

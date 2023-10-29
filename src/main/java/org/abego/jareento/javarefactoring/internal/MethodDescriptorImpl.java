@@ -23,43 +23,43 @@ class MethodDescriptorImpl implements MethodDescriptor {
     }
 
     @Override
-    public String typeDeclaringMethod() {
+    public String getTypeDeclaringMethod() {
         return resolvedMethodDeclaration.declaringType().getQualifiedName();
     }
 
     @Override
-    public String methodName() {
+    public String getMethodName() {
         return resolvedMethodDeclaration.getName();
     }
 
     @Override
-    public String qualifiedMethodName() {
+    public String getQualifiedMethodName() {
         return resolvedMethodDeclaration.getQualifiedName();
     }
 
     @Override
-    public String methodPackageName() {
+    public String getMethodPackageName() {
         return resolvedMethodDeclaration.getPackageName();
     }
 
     @Override
-    public String[] methodParameterTypes() {
+    public String[] getMethodParameterTypeNames() {
         return parameterTypes(resolvedMethodDeclaration);
     }
 
     @Override
-    public String methodSignature() {
+    public String getMethodSignature() {
         return resolvedMethodDeclaration.getSignature();
     }
 
     @Override
-    public String methodSignatureWithRawTypes() {
+    public String getMethodSignatureWithRawTypes() {
         return JavaParserUtil.methodSignatureWithRawTypes(resolvedMethodDeclaration);
     }
 
     @Override
     public String toString() {
-        return typeDeclaringMethod() + "." + methodSignature();
+        return getTypeDeclaringMethod() + "." + getMethodSignature();
     }
 
     Optional<Node> getNode() {

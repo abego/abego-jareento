@@ -133,12 +133,12 @@ class RemoveMethodsOperation {
         Set<String> remainingMethods = methodSet.textStream()
                 .collect(Collectors.toSet());
         RemoveMethodsOperation operation = newRemoveMethodsOperation(
-                m -> methodSet.containsMethodOfClassWithSignature(m.typeDeclaringMethod(), m.methodSignatureWithRawTypes()),
+                m -> methodSet.containsMethodOfClassWithSignature(m.getTypeDeclaringMethod(), m.getMethodSignatureWithRawTypes()),
                 m -> {
                     innerInnerProgress.accept(String.format("Removing method %s", m));
                     remainingMethods.remove(
                             methodSet.getMethodDeclaratorTextOfMethodOfClassWithSignatureOrNull(
-                                    m.typeDeclaringMethod(), m.methodSignatureWithRawTypes()));
+                                    m.getTypeDeclaringMethod(), m.getMethodSignatureWithRawTypes()));
                     removeCount.getAndIncrement();
                 });
 

@@ -36,47 +36,47 @@ public class MethodAnnotationDescriptorImpl implements MethodAnnotationDescripto
     }
 
     @Override
-    public String annotationText() {
+    public String getAnnotationText() {
         return annotationExpr.toString();
     }
 
     @Override
-    public String annotationType() {
+    public String getAnnotationTypeName() {
         return annotationExpr.resolve().getQualifiedName();
     }
 
     @Override
-    public String typeDeclaringMethod() {
+    public String getTypeDeclaringMethod() {
         return resolvedMethodDeclaration.declaringType().getQualifiedName();
     }
 
     @Override
-    public String methodName() {
+    public String getMethodName() {
         return resolvedMethodDeclaration.getName();
     }
 
     @Override
-    public String qualifiedMethodName() {
+    public String getQualifiedMethodName() {
         return resolvedMethodDeclaration.getQualifiedName();
     }
 
     @Override
-    public String methodPackageName() {
+    public String getMethodPackageName() {
         return resolvedMethodDeclaration.getPackageName();
     }
 
     @Override
-    public String methodSignatureWithRawTypes() {
+    public String getMethodSignatureWithRawTypes() {
         return JavaParserUtil.methodSignatureWithRawTypes(resolvedMethodDeclaration);
     }
 
     @Override
-    public String[] methodParameterTypes() {
+    public String[] getMethodParameterTypeNames() {
         return parameterTypes(resolvedMethodDeclaration);
     }
 
     @Override
-    public String methodSignature() {
+    public String getMethodSignature() {
         return resolvedMethodDeclaration.getSignature();
     }
 
@@ -87,7 +87,7 @@ public class MethodAnnotationDescriptorImpl implements MethodAnnotationDescripto
     @Override
     public String toString() {
         return "MyMethodAnnotationDescriptor{" +
-                annotationText() + " " +
-                this.typeDeclaringMethod() + "." + this.methodSignature() + "}";
+                getAnnotationText() + " " +
+                this.getTypeDeclaringMethod() + "." + this.getMethodSignature() + "}";
     }
 }
