@@ -21,15 +21,15 @@ public interface JavaAnalysisProject {
     //endregion
     //region Class-related
 
-    JavaClasses getClasses();
+    JavaTypes getClasses();
 
     boolean hasClassWithName(@Syntax(QUALIFIED_TYPE_NAME_SYNTAX) String classname);
 
-    JavaClass getClassWithName(@Syntax(QUALIFIED_TYPE_NAME_SYNTAX) String classname);
+    JavaType getClassWithName(@Syntax(QUALIFIED_TYPE_NAME_SYNTAX) String classname);
     
-    JavaClasses getAllSubClasses(JavaClasses classes);
+    JavaTypes getAllSubClasses(JavaTypes classes);
 
-    JavaClasses getAllSubClassesAndClasses(JavaClasses classes);
+    JavaTypes getAllSubClassesAndClasses(JavaTypes classes);
 
 
     //endregion

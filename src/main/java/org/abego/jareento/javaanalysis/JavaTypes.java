@@ -2,7 +2,7 @@ package org.abego.jareento.javaanalysis;
 
 import org.abego.jareento.base.ManyWithId;
 
-public interface JavaClasses extends ManyWithId<JavaClass, JavaClasses> {
+public interface JavaTypes extends ManyWithId<JavaType, JavaTypes> {
 
     /**
      * Returns the names of all classes in this instance.
@@ -11,5 +11,5 @@ public interface JavaClasses extends ManyWithId<JavaClass, JavaClasses> {
 
     JavaMethodSignatures getMethodSignatures();
 
-    JavaClasses unitedWithClassNamed(String classname);
+    JavaTypes unitedWithClassNamed(String classname);
 }

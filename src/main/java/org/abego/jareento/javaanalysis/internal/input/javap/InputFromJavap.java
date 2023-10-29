@@ -8,7 +8,7 @@ import org.abego.commons.progress.Progresses;
 import org.abego.jareento.base.WithId;
 import org.abego.jareento.javaanalysis.JavaAnalysisAPI;
 import org.abego.jareento.javaanalysis.JavaAnalysisProject;
-import org.abego.jareento.javaanalysis.JavaClass;
+import org.abego.jareento.javaanalysis.JavaType;
 import org.abego.jareento.javaanalysis.JavaMethodCalls;
 import org.abego.jareento.javaanalysis.internal.JavaAnalysisInternalFactories;
 import org.abego.jareento.javaanalysis.internal.JavaAnalysisProjectInput;
@@ -158,10 +158,10 @@ public class InputFromJavap implements JavaAnalysisProjectInput {
                 returnType = bindTypeParameter(typeParameters, returnType);
             }
             //TODO pass typeParametersOfMethod to builder
-            String typename = rawName(classname);
+            String typeName = rawName(classname);
             String methodSignature = signatureFromMethodNameAndParameters(methodName, parameters);
             String rawReturnType = rawName(returnType);
-            return new QualifiedMethodSpecifier(typename, methodSignature, rawReturnType);
+            return new QualifiedMethodSpecifier(typeName, methodSignature, rawReturnType);
         }
 
         @Override
@@ -422,8 +422,8 @@ public class InputFromJavap implements JavaAnalysisProjectInput {
     }
 
     //TODO: to project API?
-    private static boolean isUndeclared(JavaClass javaClass, JavaAnalysisProject project) {
-        String fullName = javaClass.getId();
+    private static boolean isUndeclared(JavaType javaType, JavaAnalysisProject project) {
+        String fullName = javaType.getId();
         return !project.hasClassWithName(fullName) && !isPrimitiveType(fullName);
     }
 

@@ -4,7 +4,6 @@ import org.abego.jareento.base.WithId;
 import org.abego.jareento.javaanalysis.JavaMethod;
 import org.abego.jareento.javaanalysis.JavaMethodDeclarators;
 import org.abego.jareento.javaanalysis.JavaMethodDeclaratorsBuilder;
-import org.abego.jareento.javaanalysis.JavaAnalysisProject;
 import org.abego.jareento.javaanalysis.JavaMethods;
 import org.abego.jareento.javaanalysis.internal.JavaAnalysisProjectInternal;
 import org.abego.jareento.service.SelectedAndOverridingMethods;
@@ -27,7 +26,7 @@ public class SelectedAndOverridingMethodsOperation {
     public SelectedAndOverridingMethods getSelectedAndOverridingMethods(
             JavaAnalysisProjectInternal javaAnalysisProject,
             Predicate<JavaMethod> methodSelector,
-            String[] classesToCheckForMethods,
+            String[] typesToCheckForMethods,
             Consumer<String> progress) {
 
 
@@ -35,7 +34,7 @@ public class SelectedAndOverridingMethodsOperation {
         JavaMethodDeclaratorsBuilder overridingMethodsSetBuilder = newJavaMethodDeclaratorsBuilder();
 
         addSelectedAndOverridingMethods(
-                javaAnalysisProject, methodSelector, classesToCheckForMethods,
+                javaAnalysisProject, methodSelector, typesToCheckForMethods,
                 selectedMethodsSetBuilder, overridingMethodsSetBuilder, progress);
 
         JavaMethodDeclarators selectedMethods = selectedMethodsSetBuilder.build();
@@ -58,7 +57,7 @@ public class SelectedAndOverridingMethodsOperation {
     private void addSelectedAndOverridingMethods(
             JavaAnalysisProjectInternal javaAnalysisProject,
             Predicate<JavaMethod> methodSelector,
-            String[] classnames,
+            String[] typeNames,
             JavaMethodDeclaratorsBuilder selectedMethods,
             JavaMethodDeclaratorsBuilder overridingMethods,
             Consumer<String> progress) {
@@ -66,10 +65,10 @@ public class SelectedAndOverridingMethodsOperation {
         progress.accept("Finding selected methods and affected overrides...");
         Consumer<String> innerProgress = indent(progress);
         long afterLoad = System.currentTimeMillis();
-        for (String classname : classnames) {
-            innerProgress.accept(String.format("Checking '%s'...", classname));
-            addSelectedAndOverridingMethodsOfClass(
-                    javaAnalysisProject, methodSelector, classname, selectedMethods, overridingMethods);
+        for (String typeName : typeNames) {
+            innerProgress.accept(String.format("Checking '%s'...", typeName));
+            addSelectedAndOverridingMethodsOfType(
+                    javaAnalysisProject, methodSelector, typeName, selectedMethods, overridingMethods);
         }
         long afterCalc = System.currentTimeMillis();
         progress.accept(String.format("%d selected methods and %d affected overrides found. [%d ms]",
@@ -77,7 +76,7 @@ public class SelectedAndOverridingMethodsOperation {
                 afterCalc - afterLoad));
     }
 
-    private void addSelectedAndOverridingMethodsOfClass(
+    private void addSelectedAndOverridingMethodsOfType(
             JavaAnalysisProjectInternal project,
             Predicate<JavaMethod> methodSelector,
             String className,

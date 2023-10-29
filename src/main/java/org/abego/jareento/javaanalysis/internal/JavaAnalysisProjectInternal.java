@@ -1,8 +1,8 @@
 package org.abego.jareento.javaanalysis.internal;
 
 import org.abego.jareento.javaanalysis.JavaAnalysisProject;
-import org.abego.jareento.javaanalysis.JavaClass;
-import org.abego.jareento.javaanalysis.JavaClasses;
+import org.abego.jareento.javaanalysis.JavaType;
+import org.abego.jareento.javaanalysis.JavaTypes;
 import org.abego.jareento.javaanalysis.JavaMethodCalls;
 import org.abego.jareento.javaanalysis.JavaMethodSignatures;
 import org.abego.jareento.javaanalysis.JavaMethods;
@@ -15,36 +15,36 @@ import static org.abego.jareento.base.JareentoSyntax.QUALIFIED_TYPE_NAME_SYNTAX;
 
 public interface JavaAnalysisProjectInternal extends JavaAnalysisProject {
     //TODO: hide from API
-    JavaClasses classesReferencingClass(
+    JavaTypes classesReferencingClass(
             @Syntax(QUALIFIED_TYPE_NAME_SYNTAX) String classname);
 
     //TODO: hide from API
     boolean isInterface(@Syntax(QUALIFIED_TYPE_NAME_SYNTAX) String classname);
 
     //TODO: hide from API
-    JavaClass superClass(@Syntax(QUALIFIED_TYPE_NAME_SYNTAX) String className);
+    JavaType superClass(@Syntax(QUALIFIED_TYPE_NAME_SYNTAX) String className);
 
     //TODO: hide from API
-    JavaClasses subClasses(@Syntax(QUALIFIED_TYPE_NAME_SYNTAX) String className);
+    JavaTypes subClasses(@Syntax(QUALIFIED_TYPE_NAME_SYNTAX) String className);
 
     //TODO: hide from API
-    JavaClasses subClassesAndClass(String className);
+    JavaTypes subClassesAndClass(String className);
 
     //TODO: hide from API
-    JavaClasses allSubClasses(String className);
+    JavaTypes allSubClasses(String className);
 
     //TODO: hide from API
-    JavaClasses allSubClassesAndClass(String className);
+    JavaTypes allSubClassesAndClass(String className);
 
     //TODO: hide from API
-    JavaClasses implementedInterfaces(String className);
+    JavaTypes implementedInterfaces(String className);
 
     //TODO: hide from API
-    JavaClasses extendedTypes(String typeName);
+    JavaTypes extendedTypes(String typeName);
 
 
     //TODO: hide from API
-    JavaClasses classesContainingMethodWithSignature(String methodSignature);
+    JavaTypes classesContainingMethodWithSignature(String methodSignature);
 
     //TODO: hide from API
     boolean isClassInitializationMethod(String methodId);

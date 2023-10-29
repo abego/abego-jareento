@@ -134,32 +134,32 @@ public class JavaAnalysisProjectStateUsingStringGraph implements JavaAnalysisPro
         }
 
         @Override
-        public void addTypeExtends(String typename, String otherTypename) {
-            addClass(typename);
+        public void addTypeExtends(String typeName, String otherTypename) {
+            addClass(typeName);
             addClass(otherTypename);
-            graphBuilder.addEdge(typename, EXTENDS, otherTypename);
+            graphBuilder.addEdge(typeName, EXTENDS, otherTypename);
         }
 
         @Override
-        public void addTypeImplements(String typename, String otherTypename) {
-            addClass(typename);
+        public void addTypeImplements(String typeName, String otherTypename) {
+            addClass(typeName);
             addClass(otherTypename);
-            graphBuilder.addEdge(typename, IMPLEMENTS, otherTypename);
+            graphBuilder.addEdge(typeName, IMPLEMENTS, otherTypename);
 
         }
 
         @Override
         public String addMethod(
-                String typename, String methodSignature, String returnType) {
-            addClass(typename);
+                String typeName, String methodSignature, String returnType) {
+            addClass(typeName);
             addMethodSignature(methodSignature);
             if (!returnType.isEmpty()) {
                 addClass(rawNameNoArray(returnType));
             }
 
-            String methodId = getMethodId(typename, methodSignature, returnType);
+            String methodId = getMethodId(typeName, methodSignature, returnType);
             addMethod(methodId);
-            graphBuilder.addEdge(typename, CONTAINS, methodId);
+            graphBuilder.addEdge(typeName, CONTAINS, methodId);
             addMethodSignature(methodSignature);
             graphBuilder.addEdge(methodId, HAS_SIGNATURE, methodSignature);
             if (!returnType.isEmpty()) {
@@ -169,8 +169,8 @@ public class JavaAnalysisProjectStateUsingStringGraph implements JavaAnalysisPro
         }
 
         @Override
-        public String getMethodId(String typename, String methodSignature, String returnType) {
-            return methodDeclaratorText(typename, methodSignature, returnType);
+        public String getMethodId(String typeName, String methodSignature, String returnType) {
+            return methodDeclaratorText(typeName, methodSignature, returnType);
         }
 
         @Override

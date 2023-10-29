@@ -8,9 +8,9 @@ public interface JavaMethodSignature extends WithId {
     }
 
     /**
-     * Returns the {@link JavaClasses} containing a method with this signature.
+     * Returns the {@link JavaTypes} containing a method with this signature.
      */
-    JavaClasses getClassesWithMethod();
+    JavaTypes getClassesWithMethod();
 
     /**
      * Returns the {@link JavaMethodCalls} to methods with this signature.

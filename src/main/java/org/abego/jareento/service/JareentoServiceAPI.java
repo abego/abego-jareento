@@ -11,12 +11,12 @@ public interface JareentoServiceAPI {
     SelectedAndOverridingMethods selectedAndOverridingMethods(
             JavaAnalysisProject javaAnalysisProject,
             Predicate<JavaMethod> methodSelector,
-            String[] classesToCheckForMethods,
+            String[] typesToCheckForMethods,
             Consumer<String> progress);
 
     void removeSelectedMethodsAndFixOverrides(
             JavaAnalysisProject javaAnalysisProject,
             Predicate<JavaMethod> methodSelector,
-            String[] classesToCheckForMethods,
+            String[] typesToCheckForMethods,
             Consumer<String> progress);
 }

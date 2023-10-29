@@ -30,8 +30,8 @@ public interface JavaMethodCall extends WithId {
     JavaMethod getCallingMethod();
 
     /**
-     * Returns the {@link JavaClass} containing this method call.
+     * Returns the {@link JavaType} containing this method call.
      */
-    JavaClass getCallingClass();
+    JavaType getCallingClass();
 
 }

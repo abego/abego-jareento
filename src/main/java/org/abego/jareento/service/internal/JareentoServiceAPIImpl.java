@@ -26,14 +26,14 @@ public class JareentoServiceAPIImpl implements JareentoServiceAPI {
     public SelectedAndOverridingMethods selectedAndOverridingMethods(
             JavaAnalysisProject javaAnalysisProject,
             Predicate<JavaMethod> methodSelector,
-            String[] classesToCheckForMethods,
+            String[] typesToCheckForMethods,
             Consumer<String> progress) {
         
         return new SelectedAndOverridingMethodsOperation()
                 .getSelectedAndOverridingMethods(
                         toInternal(javaAnalysisProject), 
-                        methodSelector, 
-                        classesToCheckForMethods, 
+                        methodSelector,
+                        typesToCheckForMethods, 
                         progress);
     }
 
@@ -41,11 +41,11 @@ public class JareentoServiceAPIImpl implements JareentoServiceAPI {
     public void removeSelectedMethodsAndFixOverrides(
             JavaAnalysisProject javaAnalysisProject,
             Predicate<JavaMethod> methodSelector,
-            String[] classesToCheckForMethods,
+            String[] typesToCheckForMethods,
             Consumer<String> progress) {
 
         SelectedAndOverridingMethods result = selectedAndOverridingMethods(
-                javaAnalysisProject, methodSelector, classesToCheckForMethods, progress);
+                javaAnalysisProject, methodSelector, typesToCheckForMethods, progress);
 
         File[] sourceRootsAndDependencies = ArrayUtil.concatenate(
                 javaAnalysisProject.getSourceRoots(),

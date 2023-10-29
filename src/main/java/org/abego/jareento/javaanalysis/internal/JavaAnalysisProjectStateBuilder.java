@@ -14,13 +14,13 @@ public interface JavaAnalysisProjectStateBuilder {
     
     void setIsInterfaceOfClass(String classname, boolean value);
 
-    void addTypeExtends(String typename, String otherTypename);
+    void addTypeExtends(String typeName, String otherTypename);
 
-    void addTypeImplements(String typename, String otherTypename);
+    void addTypeImplements(String typeName, String otherTypename);
 
-    String addMethod(String typename, String methodSignature, String returnType);
+    String addMethod(String typeName, String methodSignature, String returnType);
 
-    String getMethodId(String typename, String methodSignature, String returnType);
+    String getMethodId(String typeName, String methodSignature, String returnType);
 
     void setMethodHasOverride(String methodId, boolean hasOverride);
 

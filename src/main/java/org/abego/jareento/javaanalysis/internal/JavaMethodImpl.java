@@ -1,7 +1,6 @@
 package org.abego.jareento.javaanalysis.internal;
 
-import org.abego.jareento.javaanalysis.JavaAnalysisProject;
-import org.abego.jareento.javaanalysis.JavaClass;
+import org.abego.jareento.javaanalysis.JavaType;
 import org.abego.jareento.javaanalysis.JavaMethod;
 import org.abego.jareento.javaanalysis.JavaMethodCalls;
 import org.abego.jareento.javaanalysis.JavaMethodSignature;
@@ -47,7 +46,7 @@ class JavaMethodImpl implements JavaMethod {
     }
 
     @Override
-    public JavaClass getJavaClass() {
+    public JavaType getJavaType() {
         return project.getClassWithName(getClassName());
     }
 

@@ -1,7 +1,7 @@
 package org.abego.jareento.javaanalysis.internal;
 
-import org.abego.jareento.javaanalysis.JavaClass;
-import org.abego.jareento.javaanalysis.JavaClasses;
+import org.abego.jareento.javaanalysis.JavaType;
+import org.abego.jareento.javaanalysis.JavaTypes;
 import org.abego.jareento.javaanalysis.JavaMethodCalls;
 import org.abego.jareento.javaanalysis.JavaMethodSignatures;
 import org.abego.jareento.javaanalysis.JavaMethods;
@@ -10,15 +10,15 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import java.util.Objects;
 
-class JavaClassImpl implements JavaClass {
+class JavaTypeImpl implements JavaType {
     private final String id;
     private final JavaAnalysisProjectInternal project;
 
-    static JavaClassImpl newJavaClass(String id, JavaAnalysisProjectInternal project) {
-        return new JavaClassImpl(id, project);
+    static JavaTypeImpl newJavaType(String id, JavaAnalysisProjectInternal project) {
+        return new JavaTypeImpl(id, project);
     }
 
-    private JavaClassImpl(String id, JavaAnalysisProjectInternal project) {
+    private JavaTypeImpl(String id, JavaAnalysisProjectInternal project) {
         this.id = id;
         this.project = project;
     }
@@ -44,42 +44,42 @@ class JavaClassImpl implements JavaClass {
     }
 
     @Override
-    public JavaClass getSuperclass() {
+    public JavaType getSuperclass() {
         return project.superClass(id);
     }
 
     @Override
-    public JavaClasses getSubClasses() {
+    public JavaTypes getSubClasses() {
         return project.subClasses(id);
     }
 
     @Override
-    public JavaClasses getSubClassesAndClass() {
+    public JavaTypes getSubClassesAndClass() {
         return project.subClassesAndClass(id);
     }
 
     @Override
-    public JavaClasses getAllSubClasses() {
+    public JavaTypes getAllSubClasses() {
         return project.allSubClasses(id);
     }
 
     @Override
-    public JavaClasses getAllSubClassesAndClass() {
+    public JavaTypes getAllSubClassesAndClass() {
         return project.allSubClassesAndClass(id);
     }
 
     @Override
-    public JavaClasses getImplementedInterfaces() {
+    public JavaTypes getImplementedInterfaces() {
         return project.implementedInterfaces(id);
     }
 
     @Override
-    public JavaClasses getExtendedTypes() {
+    public JavaTypes getExtendedTypes() {
         return project.extendedTypes(id);
     }
 
     @Override
-    public JavaClasses getReferencingClasses() {
+    public JavaTypes getReferencingClasses() {
         return project.classesReferencingClass(id);
     }
 
@@ -107,8 +107,8 @@ class JavaClassImpl implements JavaClass {
     public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        JavaClassImpl javaClass = (JavaClassImpl) o;
-        return id.equals(javaClass.id) && project.equals(javaClass.project);
+        JavaTypeImpl type = (JavaTypeImpl) o;
+        return id.equals(type.id) && project.equals(type.project);
     }
 
     @Override

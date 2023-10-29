@@ -3,11 +3,11 @@ package org.abego.jareento.javaanalysis;
 import org.abego.jareento.base.WithId;
 
 /**
- * A Java class, in all its variants ({@code class}, {@code interface}, 
+ * A Java type, in all its variants ({@code class}, {@code interface}, 
  * {@code enum},etc), including primitive types and {@code void}.
  * 
  */
-public interface JavaClass extends WithId {
+public interface JavaType extends WithId {
 
     boolean isInterface();
 
@@ -22,21 +22,21 @@ public interface JavaClass extends WithId {
      * return the Object class. (Notice: this is different from the way
      * {@code Class.getSuperclass()} is defined.)
      */
-    JavaClass getSuperclass();
+    JavaType getSuperclass();
 
-    JavaClasses getSubClasses();
+    JavaTypes getSubClasses();
 
-    JavaClasses getSubClassesAndClass();
+    JavaTypes getSubClassesAndClass();
 
-    JavaClasses getAllSubClasses();
+    JavaTypes getAllSubClasses();
 
-    JavaClasses getAllSubClassesAndClass();
+    JavaTypes getAllSubClassesAndClass();
 
-    JavaClasses getImplementedInterfaces();
+    JavaTypes getImplementedInterfaces();
 
-    JavaClasses getExtendedTypes();
+    JavaTypes getExtendedTypes();
 
-    JavaClasses getReferencingClasses();
+    JavaTypes getReferencingClasses();
 
     JavaMethods getMethods();
 

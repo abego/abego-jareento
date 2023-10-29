@@ -7,7 +7,7 @@ public interface JavaMethod extends WithId {
 
     String getClassName();
 
-    JavaClass getJavaClass();
+    JavaType getJavaType();
 
     String getPackage();
     

@@ -2,8 +2,7 @@ package org.abego.jareento.javaanalysis.internal.input.javap;
 
 import org.abego.commons.lang.StringUtil;
 import org.abego.jareento.base.JareentoException;
-import org.abego.jareento.javaanalysis.JavaAnalysisProject;
-import org.abego.jareento.javaanalysis.JavaClasses;
+import org.abego.jareento.javaanalysis.JavaTypes;
 import org.abego.jareento.javaanalysis.JavaMethods;
 import org.abego.jareento.javaanalysis.internal.JavaAnalysisProjectInternal;
 import org.abego.jareento.util.JavaLangUtil;
@@ -235,7 +234,7 @@ class MethodResolver {
 
     private void initDirectInheritance(JavaAnalysisProjectInternal project) {
         project.getClasses().idStream().forEach(classname -> {
-            JavaClasses types = project.extendedTypes(classname)
+            JavaTypes types = project.extendedTypes(classname)
                     .unitedWith(project.implementedInterfaces(classname));
             for (String supertype : types.getNames()) {
                 directlyInheritsFrom
@@ -254,18 +253,18 @@ class MethodResolver {
         }
 
         // search in the inherited types for a matching method
-        JavaClasses extendedTypes = project.extendedTypes(classname);
-        JavaClasses interfaces = project.implementedInterfaces(classname);
+        JavaTypes extendedTypes = project.extendedTypes(classname);
+        JavaTypes interfaces = project.implementedInterfaces(classname);
 
-        JavaClasses types = extendedTypes.unitedWith(interfaces);
+        JavaTypes types = extendedTypes.unitedWith(interfaces);
 
         if (types.getSize() == 0) {
             // Reached the end of the hierarchy (e.g. Object or some interface) 
             return null;
 
         } else {
-            for (String typename : types.getNames()) {
-                @Nullable String id = resolveSignatureToMethodIdOrNull(signature, typename);
+            for (String typeName : types.getNames()) {
+                @Nullable String id = resolveSignatureToMethodIdOrNull(signature, typeName);
                 if (id != null) {
                     return id;
                 }
