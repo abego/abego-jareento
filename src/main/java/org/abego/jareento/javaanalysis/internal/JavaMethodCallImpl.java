@@ -1,6 +1,5 @@
 package org.abego.jareento.javaanalysis.internal;
 
-import org.abego.jareento.javaanalysis.JavaAnalysisProject;
 import org.abego.jareento.javaanalysis.JavaClass;
 import org.abego.jareento.javaanalysis.JavaMethod;
 import org.abego.jareento.javaanalysis.JavaMethodCall;
@@ -12,13 +11,13 @@ import static org.abego.jareento.javaanalysis.internal.JavaMethodSignatureImpl.n
 
 class JavaMethodCallImpl implements JavaMethodCall {
     private final String id;
-    private final JavaAnalysisProject project;
+    private final JavaAnalysisProjectInternal project;
 
-    static JavaMethodCallImpl newJavaMethodCall(String id, JavaAnalysisProject project) {
+    static JavaMethodCallImpl newJavaMethodCall(String id, JavaAnalysisProjectInternal project) {
         return new JavaMethodCallImpl(id, project);
     }
 
-    private JavaMethodCallImpl(String id, JavaAnalysisProject project) {
+    private JavaMethodCallImpl(String id, JavaAnalysisProjectInternal project) {
         this.id = id;
         this.project = project;
     }

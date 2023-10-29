@@ -12,6 +12,7 @@ import org.abego.jareento.javaanalysis.JavaClass;
 import org.abego.jareento.javaanalysis.JavaMethodCalls;
 import org.abego.jareento.javaanalysis.internal.JavaAnalysisInternalFactories;
 import org.abego.jareento.javaanalysis.internal.JavaAnalysisProjectInput;
+import org.abego.jareento.javaanalysis.internal.JavaAnalysisProjectInternal;
 import org.abego.jareento.javaanalysis.internal.JavaAnalysisProjectStateBuilder;
 import org.abego.jareento.shared.commons.progress.ProgressWithRangeListenerWithStringConsumer;
 import org.abego.jareento.util.JavaLangUtil;
@@ -210,7 +211,7 @@ public class InputFromJavap implements JavaAnalysisProjectInput {
             setMethodCallBaseScope(buildJavaAnalysisProject(builder));
         }
 
-        private void setMethodCallBaseScope(JavaAnalysisProject project) {
+        private void setMethodCallBaseScope(JavaAnalysisProjectInternal project) {
             MethodResolver methodResolver = new MethodResolver(project);
 
             JavaMethodCalls javaMethodCalls = project.getMethodCalls();
@@ -237,7 +238,7 @@ public class InputFromJavap implements JavaAnalysisProjectInput {
             progress.close();
         }
 
-        private void updateMethodCallsWithUndefinedScope(JavaAnalysisProject project) {
+        private void updateMethodCallsWithUndefinedScope(JavaAnalysisProjectInternal project) {
 
             MethodResolver methodResolver = new MethodResolver(project);
             int n = callsWithUndefinedScope.size();
@@ -305,7 +306,7 @@ public class InputFromJavap implements JavaAnalysisProjectInput {
         }
     }
 
-    private JavaAnalysisProject buildJavaAnalysisProject(JavaAnalysisProjectStateBuilder builder) {
+    private JavaAnalysisProjectInternal buildJavaAnalysisProject(JavaAnalysisProjectStateBuilder builder) {
         return JavaAnalysisInternalFactories.newJavaAnalysisProject(builder.build());
     }
 

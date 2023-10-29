@@ -6,6 +6,7 @@ import org.abego.jareento.javaanalysis.JavaMethodDeclarators;
 import org.abego.jareento.javaanalysis.JavaMethodDeclaratorsBuilder;
 import org.abego.jareento.javaanalysis.JavaAnalysisProject;
 import org.abego.jareento.javaanalysis.JavaMethods;
+import org.abego.jareento.javaanalysis.internal.JavaAnalysisProjectInternal;
 import org.abego.jareento.service.SelectedAndOverridingMethods;
 
 import java.util.HashSet;
@@ -24,7 +25,7 @@ public class SelectedAndOverridingMethodsOperation {
     }
 
     public SelectedAndOverridingMethods getSelectedAndOverridingMethods(
-            JavaAnalysisProject javaAnalysisProject,
+            JavaAnalysisProjectInternal javaAnalysisProject,
             Predicate<JavaMethod> methodSelector,
             String[] classesToCheckForMethods,
             Consumer<String> progress) {
@@ -55,7 +56,7 @@ public class SelectedAndOverridingMethodsOperation {
     }
 
     private void addSelectedAndOverridingMethods(
-            JavaAnalysisProject javaAnalysisProject,
+            JavaAnalysisProjectInternal javaAnalysisProject,
             Predicate<JavaMethod> methodSelector,
             String[] classnames,
             JavaMethodDeclaratorsBuilder selectedMethods,
@@ -77,7 +78,7 @@ public class SelectedAndOverridingMethodsOperation {
     }
 
     private void addSelectedAndOverridingMethodsOfClass(
-            JavaAnalysisProject project,
+            JavaAnalysisProjectInternal project,
             Predicate<JavaMethod> methodSelector,
             String className,
             JavaMethodDeclaratorsBuilder selectedMethods,
@@ -92,7 +93,7 @@ public class SelectedAndOverridingMethodsOperation {
     }
 
     private Set<String> idsOfDirectlyOverridingMethods(
-            JavaAnalysisProject project, Iterable<String> idsOfDeadMethods) {
+            JavaAnalysisProjectInternal project, Iterable<String> idsOfDeadMethods) {
         Set<String> allOverridingMethods = new HashSet<>();
         for (String methodId : idsOfDeadMethods) {
             JavaMethods overridingMethods = project.methodsDirectlyOverridingMethod(methodId);
@@ -103,7 +104,7 @@ public class SelectedAndOverridingMethodsOperation {
     }
 
     private List<String> idsOfSelectedMethodsOfClass(
-            JavaAnalysisProject project, String className, Predicate<JavaMethod> methodSelector) {
+            JavaAnalysisProjectInternal project, String className, Predicate<JavaMethod> methodSelector) {
 
         return project.methodsOfClass(className)
                 .stream()

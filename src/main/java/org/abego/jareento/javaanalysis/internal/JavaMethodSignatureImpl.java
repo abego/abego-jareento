@@ -1,19 +1,18 @@
 package org.abego.jareento.javaanalysis.internal;
 
-import org.abego.jareento.javaanalysis.JavaAnalysisProject;
 import org.abego.jareento.javaanalysis.JavaClasses;
 import org.abego.jareento.javaanalysis.JavaMethodCalls;
 import org.abego.jareento.javaanalysis.JavaMethodSignature;
 
 class JavaMethodSignatureImpl implements JavaMethodSignature {
-    private final JavaAnalysisProject project;
+    private final JavaAnalysisProjectInternal project;
     private final String id;
 
-    static JavaMethodSignature newJavaMethodSignature(String id, JavaAnalysisProject project) {
+    static JavaMethodSignature newJavaMethodSignature(String id, JavaAnalysisProjectInternal project) {
         return new JavaMethodSignatureImpl(id, project);
     }
 
-    private JavaMethodSignatureImpl(String id, JavaAnalysisProject project) {
+    private JavaMethodSignatureImpl(String id, JavaAnalysisProjectInternal project) {
         this.id = id;
         this.project = project;
     }

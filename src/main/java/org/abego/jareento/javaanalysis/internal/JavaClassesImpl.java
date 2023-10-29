@@ -1,6 +1,5 @@
 package org.abego.jareento.javaanalysis.internal;
 
-import org.abego.jareento.javaanalysis.JavaAnalysisProject;
 import org.abego.jareento.javaanalysis.JavaClass;
 import org.abego.jareento.javaanalysis.JavaClasses;
 import org.abego.jareento.javaanalysis.JavaMethodSignatures;
@@ -12,14 +11,14 @@ import static org.abego.jareento.javaanalysis.internal.IDsImpl.newIDs;
 import static org.abego.jareento.javaanalysis.internal.JavaMethodSignaturesImpl.newJavaMethodSignatures;
 
 class JavaClassesImpl extends ManyWithIdDefault<JavaClass, JavaClasses> implements JavaClasses {
-    private final JavaAnalysisProject project;
+    private final JavaAnalysisProjectInternal project;
 
-    private JavaClassesImpl(IDs ids, JavaAnalysisProject project) {
+    private JavaClassesImpl(IDs ids, JavaAnalysisProjectInternal project) {
         super(ids);
         this.project = project;
     }
 
-    public static JavaClasses newJavaClasses(IDs ids, JavaAnalysisProject project) {
+    public static JavaClasses newJavaClasses(IDs ids, JavaAnalysisProjectInternal project) {
         return new JavaClassesImpl(ids, project);
     }
 

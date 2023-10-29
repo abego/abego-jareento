@@ -6,7 +6,7 @@ import java.net.URI;
 
 public class JavaAnalysisInternalFactories {
 
-    public static JavaAnalysisProject newJavaAnalysisProject(JavaAnalysisProjectState state) {
+    public static JavaAnalysisProjectInternal newJavaAnalysisProject(JavaAnalysisProjectState state) {
         return JavaAnalysisProjectImpl.newJavaAnalysisProject(state);
     }
 

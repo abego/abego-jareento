@@ -5,6 +5,7 @@ import org.abego.jareento.base.JareentoException;
 import org.abego.jareento.javaanalysis.JavaAnalysisProject;
 import org.abego.jareento.javaanalysis.JavaClasses;
 import org.abego.jareento.javaanalysis.JavaMethods;
+import org.abego.jareento.javaanalysis.internal.JavaAnalysisProjectInternal;
 import org.abego.jareento.util.JavaLangUtil;
 import org.eclipse.jdt.annotation.Nullable;
 
@@ -18,12 +19,12 @@ import static org.abego.jareento.util.JavaLangUtil.parametersOfSignature;
 
 class MethodResolver {
     private static final String OBJECT_CLASS_NAME = Object.class.getName();
-    private final JavaAnalysisProject project;
+    private final JavaAnalysisProjectInternal project;
 
     private final Map<String, Set<String>> directlyInheritsFrom = new HashMap<>();
     private final Map<String, Set<String>> inheritsFrom = new HashMap<>();
 
-    MethodResolver(JavaAnalysisProject project) {
+    MethodResolver(JavaAnalysisProjectInternal project) {
         this.project = project;
 
         initDirectInheritance(project);
@@ -232,7 +233,7 @@ class MethodResolver {
         return result;
     }
 
-    private void initDirectInheritance(JavaAnalysisProject project) {
+    private void initDirectInheritance(JavaAnalysisProjectInternal project) {
         project.getClasses().idStream().forEach(classname -> {
             JavaClasses types = project.extendedTypes(classname)
                     .unitedWith(project.implementedInterfaces(classname));

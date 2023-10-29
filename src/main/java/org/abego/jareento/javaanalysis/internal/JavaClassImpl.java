@@ -1,6 +1,5 @@
 package org.abego.jareento.javaanalysis.internal;
 
-import org.abego.jareento.javaanalysis.JavaAnalysisProject;
 import org.abego.jareento.javaanalysis.JavaClass;
 import org.abego.jareento.javaanalysis.JavaClasses;
 import org.abego.jareento.javaanalysis.JavaMethodCalls;
@@ -13,13 +12,13 @@ import java.util.Objects;
 
 class JavaClassImpl implements JavaClass {
     private final String id;
-    private final JavaAnalysisProject project;
+    private final JavaAnalysisProjectInternal project;
 
-    static JavaClassImpl newJavaClass(String id, JavaAnalysisProject project) {
+    static JavaClassImpl newJavaClass(String id, JavaAnalysisProjectInternal project) {
         return new JavaClassImpl(id, project);
     }
 
-    private JavaClassImpl(String id, JavaAnalysisProject project) {
+    private JavaClassImpl(String id, JavaAnalysisProjectInternal project) {
         this.id = id;
         this.project = project;
     }

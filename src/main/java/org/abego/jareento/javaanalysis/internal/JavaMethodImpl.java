@@ -9,14 +9,14 @@ import org.abego.jareento.javaanalysis.JavaMethods;
 
 class JavaMethodImpl implements JavaMethod {
     private final String id;
-    private final JavaAnalysisProject project;
+    private final JavaAnalysisProjectInternal project;
 
-    private JavaMethodImpl(String id, JavaAnalysisProject project) {
+    private JavaMethodImpl(String id, JavaAnalysisProjectInternal project) {
         this.id = id;
         this.project = project;
     }
 
-    static JavaMethod newJavaMethod(String id, JavaAnalysisProject project) {
+    static JavaMethod newJavaMethod(String id, JavaAnalysisProjectInternal project) {
         return new JavaMethodImpl(id, project);
     }
 

@@ -23,7 +23,7 @@ import static org.abego.jareento.javaanalysis.internal.JavaMethodCallsImpl.newJa
 import static org.abego.jareento.javaanalysis.internal.JavaMethodSignaturesImpl.newJavaMethodSignatures;
 import static org.abego.jareento.shared.JavaMethodDeclaratorUtil.newJavaMethodDeclarator;
 
-public class JavaAnalysisProjectImpl implements JavaAnalysisProject {
+public class JavaAnalysisProjectImpl implements JavaAnalysisProjectInternal {
     private static final Map<String, String> OBJECT_METHOD_SIGNATURES_TO_RETURN_TYPE = newObjectMethodSignatures();
 
     private static Map<String, String> newObjectMethodSignatures() {
@@ -48,10 +48,18 @@ public class JavaAnalysisProjectImpl implements JavaAnalysisProject {
         this.state = state;
     }
 
-    static JavaAnalysisProject newJavaAnalysisProject(JavaAnalysisProjectState state) {
+    static JavaAnalysisProjectInternal newJavaAnalysisProject(JavaAnalysisProjectState state) {
         return new JavaAnalysisProjectImpl(state);
     }
 
+    public static JavaAnalysisProjectInternal toInternal(JavaAnalysisProject project) {
+        if (project instanceof JavaAnalysisProjectInternal internalProject) {
+            return internalProject;
+        }
+        throw new JareentoException(
+                "Invalid JavaAnalysisProject %s".formatted(project));
+    }
+    
     @Override
     public JavaMethods methodsOfClass(String className) {
         return JavaMethodsImpl.newJavaMethods(state.methodsOfClass(className), this);

@@ -13,6 +13,8 @@ import java.io.File;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
+import static org.abego.jareento.javaanalysis.internal.JavaAnalysisProjectImpl.toInternal;
+
 public class JareentoServiceAPIImpl implements JareentoServiceAPI {
     private final JavaRefactoringAPI javaRefactoringAPI = ServiceLoaderUtil.loadService(JavaRefactoringAPI.class);
 
@@ -26,9 +28,13 @@ public class JareentoServiceAPIImpl implements JareentoServiceAPI {
             Predicate<JavaMethod> methodSelector,
             String[] classesToCheckForMethods,
             Consumer<String> progress) {
+        
         return new SelectedAndOverridingMethodsOperation()
                 .getSelectedAndOverridingMethods(
-                        javaAnalysisProject, methodSelector, classesToCheckForMethods, progress);
+                        toInternal(javaAnalysisProject), 
+                        methodSelector, 
+                        classesToCheckForMethods, 
+                        progress);
     }
 
     @Override

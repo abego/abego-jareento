@@ -1,6 +1,5 @@
 package org.abego.jareento.javaanalysis.internal;
 
-import org.abego.jareento.javaanalysis.JavaAnalysisProject;
 import org.abego.jareento.javaanalysis.JavaMethodSignature;
 import org.abego.jareento.javaanalysis.JavaMethodSignatures;
 
@@ -11,14 +10,14 @@ import static org.abego.jareento.javaanalysis.internal.IDsImpl.newIDs;
 import static org.abego.jareento.javaanalysis.internal.JavaMethodSignatureImpl.newJavaMethodSignature;
 
 class JavaMethodSignaturesImpl extends ManyWithIdDefault<JavaMethodSignature, JavaMethodSignatures> implements JavaMethodSignatures {
-    private final JavaAnalysisProject project;
+    private final JavaAnalysisProjectInternal project;
 
-    private JavaMethodSignaturesImpl(IDs ids, JavaAnalysisProject project) {
+    private JavaMethodSignaturesImpl(IDs ids, JavaAnalysisProjectInternal project) {
         super(ids);
         this.project = project;
     }
 
-    public static JavaMethodSignaturesImpl newJavaMethodSignatures(IDs ids, JavaAnalysisProject project) {
+    public static JavaMethodSignaturesImpl newJavaMethodSignatures(IDs ids, JavaAnalysisProjectInternal project) {
         return new JavaMethodSignaturesImpl(ids, project);
     }
 

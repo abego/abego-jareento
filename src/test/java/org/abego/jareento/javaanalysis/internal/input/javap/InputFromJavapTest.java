@@ -3,9 +3,9 @@ package org.abego.jareento.javaanalysis.internal.input.javap;
 import org.abego.commons.io.FileUtil;
 import org.abego.commons.io.PrintStreamToBuffer;
 import org.abego.jareento.javaanalysis.JavaAnalysisAPI;
-import org.abego.jareento.javaanalysis.JavaAnalysisProject;
 import org.abego.jareento.javaanalysis.JavaMethodCalls;
 import org.abego.jareento.javaanalysis.internal.JavaAnalysisInternalFactories;
+import org.abego.jareento.javaanalysis.internal.JavaAnalysisProjectInternal;
 import org.abego.jareento.javaanalysis.internal.JavaAnalysisProjectStateBuilder;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -80,7 +80,7 @@ class InputFromJavapTest {
     }
 
     private String methodCallsTestHelper(File tempDir, String resourceName) {
-        JavaAnalysisProject project = createProjectUsingJavapData(tempDir, resourceName);
+        JavaAnalysisProjectInternal project = createProjectUsingJavapData(tempDir, resourceName);
 
         PrintStreamToBuffer out = PrintStreamToBuffer.newPrintStreamToBuffer();
         project.getMethodCalls().idStream()
@@ -91,7 +91,7 @@ class InputFromJavapTest {
         return out.text();
     }
 
-    private JavaAnalysisProject createProjectUsingJavapData(File tempDir, String resourceName) {
+    private JavaAnalysisProjectInternal createProjectUsingJavapData(File tempDir, String resourceName) {
         File file = new File(tempDir, "sample.txt");
         FileUtil.copyResourceToFile(getClass(), resourceName, file);
 
@@ -106,7 +106,7 @@ class InputFromJavapTest {
 
     @Test
     void withMethodCallsToMethodsOfClassDoTest(@TempDir File tempDir) {
-        JavaAnalysisProject project = createProjectUsingJavapData(tempDir, "javap-CallsSample.txt");
+        JavaAnalysisProjectInternal project = createProjectUsingJavapData(tempDir, "javap-CallsSample.txt");
 
         String rootCalls = reportMethodCalls(project, "calls.CallsSample$Root", m -> true);
         assertEquals("""
@@ -135,7 +135,7 @@ class InputFromJavapTest {
 
     @Test
     void calledMethods(@TempDir File tempDir) {
-        JavaAnalysisProject project = createProjectUsingJavapData(tempDir, "javap-CallsSample.txt");
+        JavaAnalysisProjectInternal project = createProjectUsingJavapData(tempDir, "javap-CallsSample.txt");
 
         StringBuilder result = new StringBuilder();
         project.methodsOfClass("calls.CallsSample$Main")
@@ -153,7 +153,7 @@ class InputFromJavapTest {
     }
 
     private static void withMethodCallsToMethodsOfClassDo(
-            JavaAnalysisProject project, String className, BiConsumer<String, JavaMethodCalls> calledMethodAndMethodCalls) {
+            JavaAnalysisProjectInternal project, String className, BiConsumer<String, JavaMethodCalls> calledMethodAndMethodCalls) {
         project.methodsOfClass(className)
                 .idStream().sorted().forEach(calledMethodId -> {
                     JavaMethodCalls methodCalls = 
@@ -164,7 +164,7 @@ class InputFromJavapTest {
     }
 
 
-    private static String reportMethodCalls(JavaAnalysisProject project, String className, Predicate<JavaMethodCalls> reportPredicate) {
+    private static String reportMethodCalls(JavaAnalysisProjectInternal project, String className, Predicate<JavaMethodCalls> reportPredicate) {
         StringBuilder result = new StringBuilder();
         withMethodCallsToMethodsOfClassDo(project, className, (calledMethodId, methodCalls) -> {
             if (reportPredicate.test(methodCalls)) {
@@ -180,7 +180,7 @@ class InputFromJavapTest {
         return result.toString();
     }
 
-    private static String calledMethodsSummary(JavaAnalysisProject project, String methodId) {
+    private static String calledMethodsSummary(JavaAnalysisProjectInternal project, String methodId) {
         return project.methodCallsInMethod(methodId)
                 .idStream()
                 .map(project::signatureOfMethodCall)
