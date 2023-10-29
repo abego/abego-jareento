@@ -8,6 +8,8 @@ import static org.abego.commons.io.PrintStreamUtil.newPrintStreamToBufferedFile;
 
 public final class StandardProblemsReporter implements ProblemReporter {
 
+    private static final String OUTPUT_FILE_NAME = "problems.txt";
+
     @Override
     public String getID() {
         return "Standard";
@@ -15,12 +17,13 @@ public final class StandardProblemsReporter implements ProblemReporter {
 
     @Override
     public String getTitle() {
-        return "Writes problems as tab-separated lines to a file 'problem.txt'.";
+        return "Writes problems as tab-separated lines to a file '%s'."
+                .formatted(OUTPUT_FILE_NAME);
     }
 
     @Override
     public void report(Problems problems, Consumer<String> progress) {
-        File reportFile = new File("problems.txt");
+        File reportFile = new File(OUTPUT_FILE_NAME);
         try (PrintStream out = newPrintStreamToBufferedFile(reportFile)) {
             int count = problems.getSize();
             out.println(count + (count == 1 ? " problem." : " problems."));

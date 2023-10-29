@@ -37,7 +37,7 @@ class CheckForProblemsAppTest {
 
                 Available Problem Reporters:
                 \t[ID]\t[Title]
-                \tStandard\tWrites problems as tab-separated lines to a file 'problem.txt'.
+                \tStandard\tWrites problems as tab-separated lines to a file 'problems.txt'.
                 """, StringUtil.unixString(actual));
     }
 
