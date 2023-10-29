@@ -7,7 +7,7 @@ public interface JavaMethodDeclarator {
 
     String getMethodName();
 
-    String getClassname();
+    String getTypeName();
 
-    String getSimpleClassname();
+    String getSimpleTypeName();
 }

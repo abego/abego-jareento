@@ -16,7 +16,7 @@ public interface JavaType extends WithId {
     String getSimpleName();
 
     /**
-     * Returns the superclass of this class.
+     * Returns the supertype (e.g. "superclass") of this type.
      * <p>
      * For {@link Object}, interfaces, primitive types or void this will
      * return the Object class. (Notice: this is different from the way

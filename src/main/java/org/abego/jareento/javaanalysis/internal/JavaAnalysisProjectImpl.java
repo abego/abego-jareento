@@ -249,7 +249,7 @@ public class JavaAnalysisProjectImpl implements JavaAnalysisProjectInternal {
 
     @Override
     public JavaTypes subTypesAndType(String className) {
-        return subTypes(className).unitedWithClassNamed(className);
+        return subTypes(className).unitedWithTypeNamed(className);
     }
 
     @Override
@@ -266,7 +266,7 @@ public class JavaAnalysisProjectImpl implements JavaAnalysisProjectInternal {
 
     @Override
     public JavaTypes allSubTypesAndType(String className) {
-        return allSubTypes(className).unitedWithClassNamed(className);
+        return allSubTypes(className).unitedWithTypeNamed(className);
     }
 
     @Override

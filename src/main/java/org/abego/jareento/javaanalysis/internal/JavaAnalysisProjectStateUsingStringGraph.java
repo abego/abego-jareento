@@ -1,26 +1,18 @@
 package org.abego.jareento.javaanalysis.internal;
 
 import org.abego.commons.io.FileUtil;
-import org.abego.commons.lang.IntUtil;
-import org.abego.commons.lang.StringUtil;
-import org.abego.jareento.base.JareentoException;
 import org.abego.jareento.javaanalysis.JavaMethodDeclarator;
 import org.abego.stringgraph.core.Node;
 import org.abego.stringgraph.core.Nodes;
 import org.abego.stringgraph.core.StringGraph;
 import org.abego.stringgraph.core.StringGraphBuilder;
-import org.abego.stringgraph.core.StringGraphDump;
 import org.abego.stringgraph.core.StringGraphs;
 
 import javax.annotation.Syntax;
 import java.io.File;
-import java.io.PrintWriter;
 import java.net.URI;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Optional;
-import java.util.OptionalInt;
 import java.util.Set;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -287,7 +279,7 @@ public class JavaAnalysisProjectStateUsingStringGraph implements JavaAnalysisPro
     @Override
     public boolean isConstructor(String methodId) {
         JavaMethodDeclarator decl = newJavaMethodDeclarator(methodId);
-        return decl.getMethodName().equals(decl.getSimpleClassname());
+        return decl.getMethodName().equals(decl.getSimpleTypeName());
     }
 
     @Override
@@ -483,7 +475,7 @@ public class JavaAnalysisProjectStateUsingStringGraph implements JavaAnalysisPro
         // that information is currently encoded in the methodId/
         // methodDeclarator.
         return newJavaMethodDeclarator(
-                methodDeclaratorTextOfMethodWithId(methodId)).getClassname();
+                methodDeclaratorTextOfMethodWithId(methodId)).getTypeName();
     }
 
     @Override

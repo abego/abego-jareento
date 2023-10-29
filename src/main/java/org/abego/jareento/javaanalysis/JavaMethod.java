@@ -5,7 +5,7 @@ import org.abego.jareento.base.WithId;
 public interface JavaMethod extends WithId {
     String getName();
 
-    String getClassName();
+    String getTypeName();
 
     JavaType getJavaType();
 

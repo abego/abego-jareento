@@ -50,7 +50,7 @@ class JavaTypesImpl extends ManyWithIdDefault<JavaType, JavaTypes> implements Ja
     }
 
     @Override
-    public JavaTypes unitedWithClassNamed(String typeName) {
+    public JavaTypes unitedWithTypeNamed(String typeName) {
         return unitedWithElementWithId(typeName);
     }
 }

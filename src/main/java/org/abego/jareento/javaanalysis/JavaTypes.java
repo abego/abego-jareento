@@ -11,5 +11,5 @@ public interface JavaTypes extends ManyWithId<JavaType, JavaTypes> {
 
     JavaMethodSignatures getMethodSignatures();
 
-    JavaTypes unitedWithClassNamed(String typeName);
+    JavaTypes unitedWithTypeNamed(String typeName);
 }

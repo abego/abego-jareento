@@ -42,13 +42,13 @@ public class JavaMethodDeclaratorImpl implements JavaMethodDeclarator {
     }
 
     @Override
-    public String getClassname() {
+    public String getTypeName() {
         return hashIndex >= 0 ? text.substring(0, hashIndex) : "";
     }
 
     @Override
-    public String getSimpleClassname() {
-        String typeName = getClassname();
+    public String getSimpleTypeName() {
+        String typeName = getTypeName();
         int i = typeName.lastIndexOf('.');
         return i >= 0 ? typeName.substring(i + 1) : typeName;
     }

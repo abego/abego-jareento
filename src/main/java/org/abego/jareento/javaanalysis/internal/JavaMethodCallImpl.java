@@ -39,7 +39,7 @@ class JavaMethodCallImpl implements JavaMethodCall {
     }
 
     @Override
-    public JavaType getCallingClass() {
+    public JavaType getCallingType() {
         return newJavaType(project.classContainingMethodCall(id), project);
     }
 
