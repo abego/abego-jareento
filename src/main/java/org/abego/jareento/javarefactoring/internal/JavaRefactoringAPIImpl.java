@@ -18,8 +18,8 @@ public class JavaRefactoringAPIImpl implements JavaRefactoringAPI {
     }
 
     @Override
-    public void removeMethods(JavaRefactoringProject project, JavaMethodDeclarators methodSet, Consumer<String> progress) {
-        RemoveMethodsOperation.removeMethods(project, methodSet, progress);
+    public void removeMethods(JavaRefactoringProject project, JavaMethodDeclarators methodDeclarators, Consumer<String> progress) {
+        RemoveMethodsOperation.removeMethods(project, methodDeclarators, progress);
     }
 
     @Override

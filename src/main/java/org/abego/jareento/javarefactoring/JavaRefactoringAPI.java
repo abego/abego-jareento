@@ -13,7 +13,7 @@ public interface JavaRefactoringAPI {
     //endregion
     //region removeMethods
     void removeMethods(JavaRefactoringProject project,
-                       JavaMethodDeclarators methodSet,
+                       JavaMethodDeclarators methodDeclarators,
                        Consumer<String> progress);
 
     void removeMethods(JavaRefactoringProject project,
