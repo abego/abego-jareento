@@ -164,7 +164,7 @@ public interface JavaAnalysisAPI {
      * See {@link #checkForProblems(File[], Iterable, Consumer, Predicate)}.
      */
     default Problems checkForProblems(
-            File[] sourceRoots, ProblemCheckers problemCheckers) {
+            File[] sourceRoots, Iterable<ProblemChecker> problemCheckers) {
         return checkForProblems(
                 sourceRoots, problemCheckers, p -> {}, f -> true);
     }

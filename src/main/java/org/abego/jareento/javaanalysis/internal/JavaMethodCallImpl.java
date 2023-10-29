@@ -1,13 +1,13 @@
 package org.abego.jareento.javaanalysis.internal;
 
-import org.abego.jareento.javaanalysis.JavaType;
 import org.abego.jareento.javaanalysis.JavaMethod;
 import org.abego.jareento.javaanalysis.JavaMethodCall;
 import org.abego.jareento.javaanalysis.JavaMethodSignature;
+import org.abego.jareento.javaanalysis.JavaType;
 
-import static org.abego.jareento.javaanalysis.internal.JavaTypeImpl.newJavaType;
 import static org.abego.jareento.javaanalysis.internal.JavaMethodImpl.newJavaMethod;
 import static org.abego.jareento.javaanalysis.internal.JavaMethodSignatureImpl.newJavaMethodSignature;
+import static org.abego.jareento.javaanalysis.internal.JavaTypeImpl.newJavaType;
 
 class JavaMethodCallImpl implements JavaMethodCall {
     private final String id;
@@ -41,6 +41,11 @@ class JavaMethodCallImpl implements JavaMethodCall {
     @Override
     public JavaType getCallingType() {
         return newJavaType(project.classContainingMethodCall(id), project);
+    }
+
+    @Override
+    public String getCallingTypeName() {
+        return project.classContainingMethodCall(id);
     }
 
     @Override
