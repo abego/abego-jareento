@@ -7,7 +7,9 @@ import java.util.Set;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-class IDsImpl implements IDs {
+import static java.util.Collections.unmodifiableSet;
+
+final class IDsImpl implements IDs {
     private final Supplier<Set<String>> idsSupplier;
     @Nullable
     private Set<String> ids;
@@ -22,24 +24,24 @@ class IDsImpl implements IDs {
 
     @Override
     public int getSize() {
-        return set().size();
+        return toSet().size();
     }
 
     @Override
-    public Set<String> set() {
+    public Set<String> toSet() {
         if (ids == null) {
-            ids = idsSupplier.get();
+            ids = unmodifiableSet(idsSupplier.get());
         }
         return ids;
     }
 
     @Override
     public Stream<String> stream() {
-        return set().stream();
+        return toSet().stream();
     }
 
     @Override
     public Iterator<String> iterator() {
-        return set().iterator();
+        return toSet().iterator();
     }
 }

@@ -80,7 +80,7 @@ public class JavaAnalysisProjectImpl implements JavaAnalysisProject {
             String signature = signatureOfMethod(methodId);
             Set<String> result = new HashSet<>();
             for (String candidateMethodId : state.idsOfMethodsWithSignature(signature)
-                    .set()) {
+                    .toSet()) {
                 // don't include the original method itself, or synthetic methods
                 if (candidateMethodId.equals(methodId) || isMethodSynthetic(candidateMethodId)) {
                     continue;
@@ -147,7 +147,7 @@ public class JavaAnalysisProjectImpl implements JavaAnalysisProject {
     private String idOfMethodOfClassWithSignature(String classId, String methodSignature) {
         //TODO or use the methodsOfClass(...)? More local.
         for (String methodId : state.idsOfMethodsWithSignature(methodSignature)
-                .set()) {
+                .toSet()) {
             if (classOfMethod(methodId).equals(classId)) {
                 return methodId;
             }
@@ -334,7 +334,7 @@ public class JavaAnalysisProjectImpl implements JavaAnalysisProject {
         } else {
             types.idStream().forEach(t -> {
                 collection.addAll(state.methodSignatureSpecificationsOfClass(t)
-                        .set());
+                        .toSet());
                 addInheritedMethodSignatureSpecificationsOfClass(collection, t);
             });
         }

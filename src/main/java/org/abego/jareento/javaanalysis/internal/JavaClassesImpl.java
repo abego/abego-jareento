@@ -34,6 +34,11 @@ class JavaClassesImpl extends ManyWithIdDefault<JavaClass, JavaClasses> implemen
     }
 
     @Override
+    public Iterable<String> getNames() {
+        return toSet();
+    }
+
+    @Override
     public JavaMethodSignatures getMethodSignatures() {
 
         return newJavaMethodSignatures(newIDs(() -> {

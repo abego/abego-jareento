@@ -19,7 +19,7 @@ final class EmptyIDs implements IDs {
     }
 
     @Override
-    public Set<String> set() {
+    public Set<String> toSet() {
         return Collections.emptySet();
     }
 

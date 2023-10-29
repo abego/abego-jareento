@@ -43,14 +43,14 @@ abstract class ManyWithIdDefault<T extends WithId, M extends ManyWithId<T, M>> i
         return ids.stream();
     }
 
-    public Set<String> idSet() {
-        return ids.set();
+    public Set<String> toSet() {
+        return ids.toSet();
     }
 
     @Override
     public M unitedWith(M other) {
         return newInstance(newIDs(() -> {
-            Set<String> result = new HashSet<>(idSet());
+            Set<String> result = new HashSet<>(toSet());
             other.idStream().forEach(result::add);
             return result;
         }));
@@ -64,7 +64,7 @@ abstract class ManyWithIdDefault<T extends WithId, M extends ManyWithId<T, M>> i
     @Override
     public M unitedWithElementWithId(String elementId) {
         return newInstance(newIDs(() -> {
-            Set<String> result = new HashSet<>(idSet());
+            Set<String> result = new HashSet<>(toSet());
             result.add(elementId);
             return result;
         }));
@@ -74,8 +74,8 @@ abstract class ManyWithIdDefault<T extends WithId, M extends ManyWithId<T, M>> i
     @Override
     public M intersectedWith(M other) {
         return newInstance(newIDs(() -> {
-            Set<String> result = new HashSet<>(idSet());
-            result.retainAll(other.idSet());
+            Set<String> result = new HashSet<>(toSet());
+            result.retainAll(other.toSet());
             return result;
         }));
     }

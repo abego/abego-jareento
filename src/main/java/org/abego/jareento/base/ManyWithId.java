@@ -37,7 +37,7 @@ public interface ManyWithId<T extends WithId, M extends ManyWithId<T, M>> extend
     /**
      * Returns a {@link Set} with the IDs of the elements of this instance.
      */
-    Set<String> idSet();
+    Set<String> toSet();
 
     /**
      * Returns a new instance of this type containing the elements of both this
