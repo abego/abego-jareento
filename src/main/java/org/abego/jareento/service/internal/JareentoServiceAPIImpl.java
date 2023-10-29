@@ -2,9 +2,8 @@ package org.abego.jareento.service.internal;
 
 import org.abego.commons.lang.ArrayUtil;
 import org.abego.commons.util.ServiceLoaderUtil;
-import org.abego.jareento.javaanalysis.JavaAnalysisAPI;
 import org.abego.jareento.javaanalysis.JavaAnalysisProject;
-import org.abego.jareento.javaanalysis.JavaMethodSelector;
+import org.abego.jareento.javaanalysis.JavaMethod;
 import org.abego.jareento.javarefactoring.JavaRefactoringAPI;
 import org.abego.jareento.javarefactoring.JavaRefactoringProject;
 import org.abego.jareento.service.JareentoServiceAPI;
@@ -12,9 +11,9 @@ import org.abego.jareento.service.SelectedAndOverridingMethods;
 
 import java.io.File;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 public class JareentoServiceAPIImpl implements JareentoServiceAPI {
-    private final JavaAnalysisAPI javaAnalysisAPI = ServiceLoaderUtil.loadService(JavaAnalysisAPI.class);
     private final JavaRefactoringAPI javaRefactoringAPI = ServiceLoaderUtil.loadService(JavaRefactoringAPI.class);
 
     public JareentoServiceAPIImpl() {
@@ -24,7 +23,7 @@ public class JareentoServiceAPIImpl implements JareentoServiceAPI {
     @Override
     public SelectedAndOverridingMethods selectedAndOverridingMethods(
             JavaAnalysisProject javaAnalysisProject,
-            JavaMethodSelector methodSelector,
+            Predicate<JavaMethod> methodSelector,
             String[] classesToCheckForMethods,
             Consumer<String> progress) {
         return new SelectedAndOverridingMethodsOperation()
@@ -35,7 +34,7 @@ public class JareentoServiceAPIImpl implements JareentoServiceAPI {
     @Override
     public void removeSelectedMethodsAndFixOverrides(
             JavaAnalysisProject javaAnalysisProject,
-            JavaMethodSelector methodSelector,
+            Predicate<JavaMethod> methodSelector,
             String[] classesToCheckForMethods,
             Consumer<String> progress) {
 

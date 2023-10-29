@@ -4,12 +4,13 @@ import org.abego.jareento.javaanalysis.JavaAnalysisAPI;
 import org.abego.jareento.javaanalysis.JavaAnalysisProject;
 import org.abego.jareento.javaanalysis.JavaAnalysisProjectConfiguration;
 import org.abego.jareento.javaanalysis.JavaAnalysisProjectStorage;
-import org.abego.jareento.javaanalysis.JavaMethodSelector;
+import org.abego.jareento.javaanalysis.JavaMethod;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 import java.io.File;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 import static org.abego.commons.io.FileUtil.copyResourcesInLocationDeep;
 import static org.abego.commons.test.JUnit5Util.assertEqualFiles;
@@ -38,10 +39,9 @@ public class JareentoServiceAPITest {
                         "sample1",
                         mavenDir,
                         new File[]{sourcesDir});
-        //TODO: don't use methodId but method
-        JavaMethodSelector methodSelector = (methodId, project) ->
-                // all methods but the constructor        
-                !project.isConstructor(methodId);
+
+        // remove all methods but the constructor
+        Predicate<JavaMethod> methodSelector = m -> !m.isConstructor();
 
         Consumer<String> progress = System.out::println;
 
