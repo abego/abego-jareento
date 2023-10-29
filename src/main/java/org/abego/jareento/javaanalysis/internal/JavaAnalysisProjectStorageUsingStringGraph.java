@@ -12,6 +12,7 @@ import org.abego.jareento.javaanalysis.JavaAnalysisProjectStorage;
 import org.abego.jareento.javaanalysis.internal.input.javap.InputFromJavap;
 import org.abego.jareento.shared.commons.progress.ProgressUtil;
 import org.abego.stringgraph.core.StringGraphs;
+import org.eclipse.jdt.annotation.Nullable;
 
 import java.io.File;
 import java.io.PrintStream;
@@ -75,9 +76,11 @@ class JavaAnalysisProjectStorageUsingStringGraph implements JavaAnalysisProjectS
         // Write disassembly (if missing or out-dated)
         File[] jarFiles = projectConfiguration.getProjectJars();
         if (jarFiles.length == 0) {
-            throw new JareentoException("No jar files found for project " +
-                    projectConfiguration.getMavenProjectDirectory()
-                            .getAbsolutePath());
+            @Nullable File dir = projectConfiguration.getMavenProjectDirectory();
+            String message = dir != null 
+                    ? "No jar files found for project %s".formatted(dir.getAbsolutePath())
+                    : "No project jar files specified";
+            throw new JareentoException(message);
         }
         writeFileIfOutdated(disassemblyFile, jarFiles,
                 f -> writeDisassemblyFile(f, jarFiles, progress));
@@ -93,7 +96,13 @@ class JavaAnalysisProjectStorageUsingStringGraph implements JavaAnalysisProjectS
         return projectURI;
     }
 
-    private void newJavaAnalysisProjectFromDisassemblyFile(URI projectURI, File disassemblyFile, File[] sourceRoots, File[] dependencies, Consumer<String> progress) {
+    private void newJavaAnalysisProjectFromDisassemblyFile(
+            URI projectURI, 
+            File disassemblyFile, 
+            File[] sourceRoots, 
+            File[] dependencies, 
+            Consumer<String> progress) {
+        
         progress.accept("Creating java analysis project from disassembled classes...");
         Consumer<String> innerProgress = indent(progress);
         Consumer<String> innerInnerProgress = indent(innerProgress);
@@ -112,7 +121,7 @@ class JavaAnalysisProjectStorageUsingStringGraph implements JavaAnalysisProjectS
         progress.accept(String.format("Created java analysis project '%s'.", projectURI));
     }
 
-    private void newJavaAnalysisProjectFromInput(
+    private JavaAnalysisProject newJavaAnalysisProjectFromInput(
             URI uri,
             JavaAnalysisProjectInput input,
             File[] sourceRoots,
@@ -125,7 +134,7 @@ class JavaAnalysisProjectStorageUsingStringGraph implements JavaAnalysisProjectS
         input.feed(builder, problemConsumer);
         JavaAnalysisProjectStateWithSave state = builder.build();
         state.save();
-        JavaAnalysisProjectImpl.newJavaAnalysisProject(state);
+        return JavaAnalysisProjectImpl.newJavaAnalysisProject(state);
     }
 
 
