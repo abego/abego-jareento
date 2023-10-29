@@ -80,26 +80,31 @@ public interface JavaAnalysisAPI {
     //region Problem(s) factories
     Problem newProblem(
             ProblemType problemType,
-            long locationInFileId,
+            @Nullable File file,
+            int lineNumber,
             Properties properties,
             @Nullable Object details);
 
     default Problem newProblem(
             ProblemType problemType,
-            long locationInFileId,
+            @Nullable File file,
+            int lineNumber,
             Properties properties) {
-        return newProblem(problemType, locationInFileId, properties, null);
+        return newProblem(problemType, file, lineNumber, properties, null);
     }
 
-    default Problem newProblem(ProblemType problemType, long locationInFileId) {
-        return newProblem(problemType, locationInFileId, new Properties());
+    default Problem newProblem(
+            ProblemType problemType,
+            @Nullable File file,
+            int lineNumber) {
+        return newProblem(problemType, file, lineNumber, new Properties());
     }
 
     Problems newProblems(Iterable<Problem> problems);
     //endregion
 
     //region Problem Checking & Reporting
-    
+
     ProblemCheckers newProblemCheckers(Iterable<ProblemChecker> items);
 
     ProblemReporters newProblemReporters(Iterable<ProblemReporter> items);

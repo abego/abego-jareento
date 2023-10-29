@@ -22,7 +22,6 @@ import static org.abego.stringpool.StringPools.newMutableStringPool;
  * The class keeps the pathes of all files used with this class in memory.
  * They are never freed. This may lead to memory issues in certain scenarios.
  */
-//TODO: open this class? Already used outside.
 public final class LocationInFile {
     LocationInFile() {
         throw new MustNotInstantiateException();
@@ -37,6 +36,10 @@ public final class LocationInFile {
      * See JavaDoc of {@link LocationInFile} for details.
      */
     public static long getId(File file, long lineNumber) {
+        if (lineNumber < 0 || lineNumber > 0xffffffffL) {
+            throw new IllegalArgumentException(
+                    "Invalid lineNumber. Got: %d".formatted(lineNumber));
+        }
         String path = file.getAbsolutePath();
         int fileId = allFilePaths.add(path);
         return (lineNumber << 32) | fileId;

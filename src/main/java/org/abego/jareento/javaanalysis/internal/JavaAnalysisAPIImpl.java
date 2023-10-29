@@ -34,8 +34,8 @@ public class JavaAnalysisAPIImpl implements JavaAnalysisAPI {
     }
 
     @Override
-    public Problem newProblem(ProblemType problemType, long locationInFileId, Properties properties, @Nullable Object details) {
-        return ProblemImpl.newProblemImpl(problemType, locationInFileId, properties, details);
+    public Problem newProblem(ProblemType problemType, @Nullable File file, int lineNumber, Properties properties, @Nullable Object details) {
+        return ProblemImpl.newProblemImpl(problemType, file, lineNumber, properties, details);
     }
 
     @Override

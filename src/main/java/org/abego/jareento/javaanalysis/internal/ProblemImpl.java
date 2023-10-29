@@ -19,23 +19,29 @@ class ProblemImpl implements Problem {
 
     private ProblemImpl(
             ProblemType problemType,
-            long locationInFileId,
+            @Nullable File file,
+            int lineNumber,
             Properties properties,
             @Nullable Object details) {
-
+        if (file == null && lineNumber != 0) {
+            throw new IllegalArgumentException(
+                    "lineNumber defined (%d), but no file specified."
+                            .formatted(lineNumber));
+        }
         this.problemType = problemType;
         this.properties = properties;
-        this.locationInFileId = locationInFileId;
+        this.locationInFileId =
+                file != null ? LocationInFile.getId(file, lineNumber) : 0;
         this.details = details;
     }
 
     public static ProblemImpl newProblemImpl(
             ProblemType problemType,
-            long locationInFileId,
+            @Nullable File file,
+            int lineNumber,
             Properties properties,
             @Nullable Object details) {
-
-        return new ProblemImpl(problemType, locationInFileId, properties, details);
+        return new ProblemImpl(problemType, file, lineNumber, properties, details);
     }
 
     @Override
