@@ -25,14 +25,14 @@ public interface JavaMethodDeclarators extends Many<JavaMethodDeclarator> {
      * Returns {@code true} if this instance contains at least one method of the given
      * class (or some inner class of that class), or {@code false} otherwise.
      */
-    boolean containsMethodOfClass(@Syntax(QUALIFIED_TYPE_NAME_SYNTAX) String typeName);
+    boolean containsMethodOfType(@Syntax(QUALIFIED_TYPE_NAME_SYNTAX) String typeName);
 
     /**
      * Returns {@code true} if this instance contains at least one method of the 
      * given class (or some inner class of that class) with the requested
      * {@code signature}, or {@code false} otherwise.
      */
-    boolean containsMethodOfClassWithSignature(
+    boolean containsMethodOfTypeWithSignature(
             @Syntax(QUALIFIED_TYPE_NAME_SYNTAX) String typeName,
             @Syntax(METHOD_SIGNATURE_SYNTAX) String signature);
 
@@ -43,7 +43,7 @@ public interface JavaMethodDeclarators extends Many<JavaMethodDeclarator> {
      */
     @Nullable
     @Syntax(METHOD_DECLARATOR_SYNTAX)
-    String getMethodDeclaratorTextOfMethodOfClassWithSignatureOrNull(
+    String getMethodDeclaratorTextOfMethodOfTypeWithSignatureOrNull(
             @Syntax(QUALIFIED_TYPE_NAME_SYNTAX) String typeName,
             @Syntax(METHOD_SIGNATURE_SYNTAX) String signature);
 

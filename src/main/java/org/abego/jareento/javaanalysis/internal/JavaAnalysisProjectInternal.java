@@ -44,7 +44,7 @@ public interface JavaAnalysisProjectInternal extends JavaAnalysisProject {
 
 
     //TODO: hide from API
-    JavaTypes classesContainingMethodWithSignature(String methodSignature);
+    JavaTypes typesContainingMethodWithSignature(String methodSignature);
 
     //TODO: hide from API
     boolean isClassInitializationMethod(String methodId);

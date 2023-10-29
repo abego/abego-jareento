@@ -18,7 +18,7 @@ public class JavaMethodDeclaratorUtil {
     }
 
     //TODO: do we need this?
-    public static String simpleClassnameOfMethodDeclarator(
+    public static String simpleTypeNameOfMethodDeclarator(
             @Syntax(JareentoSyntax.METHOD_DECLARATOR_SYNTAX) String methodDeclarator) {
         String s = StringUtil.prefixBefore(methodDeclarator, "#");
         int i = s.lastIndexOf('.');

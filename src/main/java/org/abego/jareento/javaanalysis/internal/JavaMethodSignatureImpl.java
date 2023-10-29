@@ -19,7 +19,7 @@ class JavaMethodSignatureImpl implements JavaMethodSignature {
 
     @Override
     public JavaTypes getClassesWithMethod() {
-        return project.classesContainingMethodWithSignature(id);
+        return project.typesContainingMethodWithSignature(id);
     }
 
     @Override

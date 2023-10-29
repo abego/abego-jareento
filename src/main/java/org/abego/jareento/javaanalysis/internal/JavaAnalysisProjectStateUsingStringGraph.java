@@ -343,16 +343,16 @@ public class JavaAnalysisProjectStateUsingStringGraph implements JavaAnalysisPro
     @Override
     public String extendedType(String className) {
         //TODO add Nodes.optionalNodeIdOrElse(String) (next to "singleNodeId()")
-        Nodes superclasses = graph.nodes(className, EXTENDS, "?");
-        if (superclasses.getSize() == 0) {
+        Nodes superTypes = graph.nodes(className, EXTENDS, "?");
+        if (superTypes.getSize() == 0) {
             return "java.lang.Object";
         }
         //TODO fail when > 1 nodes exist.
-        return superclasses.iterator().next().id();
+        return superTypes.iterator().next().id();
     }
 
     @Override
-    public IDs classesExtending(String className) {
+    public IDs typesExtending(String className) {
         return ids(graph.nodes("?", EXTENDS, className));
     }
 
@@ -386,17 +386,17 @@ public class JavaAnalysisProjectStateUsingStringGraph implements JavaAnalysisPro
     }
 
     @Override
-    public IDs classes() {
+    public IDs types() {
         return ids(graph.nodes("?", RDF_TYPE, CLASS));
     }
     
     @Override
-    public IDs classesReferencingClass(String typeName) {
+    public IDs typesReferencingClass(String typeName) {
         return ids(graph.nodes("?", REFS, typeName));
     }
 
     @Override
-    public IDs classesContainingMethodWithSignature(String methodSignature) {
+    public IDs typesContainingMethodWithSignature(String methodSignature) {
         return newIDs(() -> methodsWithSignature(methodSignature).stream()
                 .map(m -> classOfMethod(m.id()))
                 .collect(Collectors.toSet()));

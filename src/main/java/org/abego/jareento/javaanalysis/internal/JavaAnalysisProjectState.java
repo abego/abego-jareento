@@ -40,7 +40,7 @@ public interface JavaAnalysisProjectState {
     
     String extendedType(String className);
 
-    IDs classesExtending(String className);
+    IDs typesExtending(String className);
 
     IDs implementedInterfaces(String className);
 
@@ -52,12 +52,12 @@ public interface JavaAnalysisProjectState {
 
     IDs idsOfMethodsWithSignature(String signature);
     
-    IDs classes();
+    IDs types();
 
-    IDs classesReferencingClass(
+    IDs typesReferencingClass(
             @Syntax(QUALIFIED_TYPE_NAME_SYNTAX) String typeName);
 
-    IDs classesContainingMethodWithSignature(
+    IDs typesContainingMethodWithSignature(
             @Syntax(JareentoSyntax.METHOD_SIGNATURE_SYNTAX) String methodSignature);
 
     @Syntax(CLASS_FILE_PATH_SYNTAX)

@@ -238,7 +238,7 @@ public class JavaAnalysisProjectImpl implements JavaAnalysisProjectInternal {
             return newJavaTypes(emptyIDs());
         }
 
-        IDs ids = state.classesExtending(typeName);
+        IDs ids = state.typesExtending(typeName);
         return newJavaTypes(ids);
     }
 
@@ -259,7 +259,7 @@ public class JavaAnalysisProjectImpl implements JavaAnalysisProjectInternal {
         }
         return JavaTypesImpl.newJavaTypes(newIDs(() -> {
             Set<String> result = new HashSet<>();
-            addAllSubClasses(className, result);
+            addAllSubTypes(className, result);
             return result;
         }), this);
     }
@@ -273,7 +273,7 @@ public class JavaAnalysisProjectImpl implements JavaAnalysisProjectInternal {
     public JavaTypes getAllSubTypes(JavaTypes types) {
         return JavaTypesImpl.newJavaTypes(newIDs(() -> {
             Set<String> result = new HashSet<>();
-            types.idStream().forEach(c -> addAllSubClasses(c, result));
+            types.idStream().forEach(c -> addAllSubTypes(c, result));
             return result;
         }), this);
     }
@@ -311,8 +311,8 @@ public class JavaAnalysisProjectImpl implements JavaAnalysisProjectInternal {
     }
 
     @Override
-    public JavaTypes classesContainingMethodWithSignature(String methodSignature) {
-        return newJavaTypes(state.classesContainingMethodWithSignature(methodSignature));
+    public JavaTypes typesContainingMethodWithSignature(String methodSignature) {
+        return newJavaTypes(state.typesContainingMethodWithSignature(methodSignature));
     }
 
     public JavaMethodSignatures methodSignaturesOfType(String className) {
@@ -383,12 +383,12 @@ public class JavaAnalysisProjectImpl implements JavaAnalysisProjectInternal {
 
     @Override
     public JavaTypes getTypes() {
-        return newJavaTypes(state.classes());
+        return newJavaTypes(state.types());
     }
 
     @Override
     public JavaTypes typesReferencingType(String typeName) {
-        return newJavaTypes(state.classesReferencingClass(typeName));
+        return newJavaTypes(state.typesReferencingClass(typeName));
     }
 
     @Override
@@ -406,11 +406,11 @@ public class JavaAnalysisProjectImpl implements JavaAnalysisProjectInternal {
         return state.isClassDeclared(typeName);
     }
 
-    private void addAllSubClasses(String className, Set<String> target) {
+    private void addAllSubTypes(String className, Set<String> target) {
         if (!isInterface(className)) {
             subTypes(className).idStream().forEach(c -> {
                 if (!target.contains(c)) {
-                    addAllSubClasses(c, target);
+                    addAllSubTypes(c, target);
                 }
                 target.add(c);
             });

@@ -137,7 +137,7 @@ public class InputFromJavap implements JavaAnalysisProjectInput {
 
         @Override
         public void onFlags(String typeName, String methodName, String parameters, String returnType, String[] flags) {
-            // For now, we are only interested in "synthetic methods" (not classes)
+            // For now, we are only interested in "synthetic *methods*" (not types)
             if (!methodName.isEmpty() && ArrayUtil.contains(flags, "ACC_SYNTHETIC")) {
                 String methodId = builder.getMethodId(
                         currentMethodSpecifier.declaringType(),
@@ -209,7 +209,7 @@ public class InputFromJavap implements JavaAnalysisProjectInput {
             // 
             // The "old" builder will still be used by the later operation, 
             // to include the additional information.
-            declareUndeclaredClasses(buildJavaAnalysisProject(builder));
+            declareUndeclaredTypes(buildJavaAnalysisProject(builder));
             updateMethodCallsWithUndefinedScope(buildJavaAnalysisProject(builder));
             setMethodCallBaseScope(buildJavaAnalysisProject(builder));
         }
@@ -266,16 +266,16 @@ public class InputFromJavap implements JavaAnalysisProjectInput {
             progress2.close();
         }
 
-        private void declareUndeclaredClasses(JavaAnalysisProject project) {
+        private void declareUndeclaredTypes(JavaAnalysisProject project) {
 
-            List<String> undeclared = getUndeclaredClasses(project);
+            List<String> undeclared = getUndeclaredTypes(project);
 
             ClassLoader classLoader = ClassLoaderUtil.classLoaderUsingJars(jarFiles);
-            Set<String> missingClasses = new HashSet<>();
+            Set<String> missingTypes = new HashSet<>();
             while (undeclared.size() > 0) {
                 List<String> oldUndeclared = undeclared;
                 for (String typeName : undeclared) {
-                    if (missingClasses.contains(typeName)) {
+                    if (missingTypes.contains(typeName)) {
                         continue;
                     }
                     try {
@@ -286,21 +286,21 @@ public class InputFromJavap implements JavaAnalysisProjectInput {
                         Class<?> clazz = classLoader.loadClass(name);
                         addClassToJavaAnalysisProjectState(clazz, builder);
                     } catch (Throwable e) {
-                        missingClasses.add(typeName);
+                        missingTypes.add(typeName);
                         //TODO
                         System.err.println("Class not found: " + typeName + " (" + e.getMessage() + ")");
                     }
                 }
 
-                // build the project again, as we added new classes (at least java.lang.Object)
+                // build the project again, as we added new types (at least java.lang.Object)
                 project = buildJavaAnalysisProject(builder);
-                undeclared = getUndeclaredClasses(project);
+                undeclared = getUndeclaredTypes(project);
 
-                // we need to re-run the loop as adding classes may have
+                // we need to re-run the loop as adding types may have
                 // added new dependencies we now need to load.
 
                 // Safety Check: When the last run did not change the list of
-                // undeclared classes we exit to avoid the endless loop.
+                // undeclared types we exit to avoid the endless loop.
                 if (oldUndeclared.equals(undeclared)) {
                     //TODO: add some warning or so we exited the loop "abnormally".
                     break;
@@ -427,7 +427,7 @@ public class InputFromJavap implements JavaAnalysisProjectInput {
         return !project.hasTypeWithName(fullName) && !isPrimitiveType(fullName);
     }
 
-    private static List<String> getUndeclaredClasses(JavaAnalysisProject project) {
+    private static List<String> getUndeclaredTypes(JavaAnalysisProject project) {
         return project.getTypes().stream()
                 .filter(c -> isUndeclared(c, project))
                 .map(WithId::getId)

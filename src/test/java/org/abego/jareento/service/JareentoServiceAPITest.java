@@ -30,7 +30,7 @@ public class JareentoServiceAPITest {
         copyResourcesInLocationDeep(getClass(),
                 "/org/abego/jareento/sample-projects/sample2", mavenDir);
 
-        String[] classesToCheckForMethods = {
+        String[] typesToCheckForMethods = {
                 "com.example.sample2.SynBase"
         };
 
@@ -53,7 +53,7 @@ public class JareentoServiceAPITest {
         jareentoServiceAPI.removeSelectedMethodsAndFixOverrides(
                 project,
                 methodSelector,
-                classesToCheckForMethods,
+                typesToCheckForMethods,
                 progress);
 
         assertEqualFiles(expectedDir, sourcesDir);
