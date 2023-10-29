@@ -145,23 +145,23 @@ public interface JavaAnalysisAPI {
      */
     Problems checkForProblems(
             File[] sourceRootsAndDependencies,
-            ProblemCheckers problemCheckers,
+            Iterable<ProblemChecker> problemCheckers,
             Consumer<Problem> problemConsumer,
             Predicate<File> aboutToCheckFile);
 
     /**
-     * See {@link #checkForProblems(File[], ProblemCheckers, Consumer, Predicate)}.
+     * See {@link #checkForProblems(File[], Iterable, Consumer, Predicate)}.
      */
     default Problems checkForProblems(
             File[] sourceRoots,
-            ProblemCheckers problemCheckers,
+            Iterable<ProblemChecker> problemCheckers,
             Consumer<Problem> problemConsumer) {
         return checkForProblems(
                 sourceRoots, problemCheckers, problemConsumer, f -> true);
     }
 
     /**
-     * See {@link #checkForProblems(File[], ProblemCheckers, Consumer, Predicate)}.
+     * See {@link #checkForProblems(File[], Iterable, Consumer, Predicate)}.
      */
     default Problems checkForProblems(
             File[] sourceRoots, ProblemCheckers problemCheckers) {
@@ -171,12 +171,12 @@ public interface JavaAnalysisAPI {
 
     void reportProblems(
             Problems problems,
-            ProblemReporters problemReporters,
+            Iterable<ProblemReporter> problemReporters,
             Consumer<String> progress);
 
     /**
-     * See {@link #checkForProblems(File[], ProblemCheckers, Consumer, Predicate)} and
-     * {@link #reportProblems(Problems, ProblemReporters, Consumer)}; returns the
+     * See {@link #checkForProblems(File[], Iterable, Consumer, Predicate)} and
+     * {@link #reportProblems(Problems, Iterable, Consumer)}; returns the
      * detected {@link Problems}.
      *
      * @param processedFileToProgress when {@code true} {@code progress}

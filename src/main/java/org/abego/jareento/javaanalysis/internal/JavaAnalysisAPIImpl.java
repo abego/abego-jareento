@@ -65,7 +65,8 @@ public class JavaAnalysisAPIImpl implements JavaAnalysisAPI {
 
     @Override
     public Problems checkForProblems(
-            File[] sourceRootsAndDependencies, ProblemCheckers problemCheckers,
+            File[] sourceRootsAndDependencies,
+            Iterable<ProblemChecker> problemCheckers,
             Consumer<Problem> problemConsumer,
             Predicate<File> aboutToCheckFile) {
 
@@ -76,7 +77,7 @@ public class JavaAnalysisAPIImpl implements JavaAnalysisAPI {
     @Override
     public void reportProblems(
             Problems problems,
-            ProblemReporters problemReporters,
+            Iterable<ProblemReporter> problemReporters,
             Consumer<String> progress) {
         ProblemUtil.reportProblems(problems, problemReporters, progress);
     }
