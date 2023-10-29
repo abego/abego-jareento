@@ -19,17 +19,17 @@ public interface JavaAnalysisProject {
     File[] getDependencies();
 
     //endregion
-    //region Class-related
+    //region Type-related
 
-    JavaTypes getClasses();
+    JavaTypes getTypes();
 
-    boolean hasClassWithName(@Syntax(QUALIFIED_TYPE_NAME_SYNTAX) String classname);
+    boolean hasTypeWithName(@Syntax(QUALIFIED_TYPE_NAME_SYNTAX) String typeName);
 
-    JavaType getClassWithName(@Syntax(QUALIFIED_TYPE_NAME_SYNTAX) String classname);
+    JavaType getTypeWithName(@Syntax(QUALIFIED_TYPE_NAME_SYNTAX) String typeName);
     
-    JavaTypes getAllSubClasses(JavaTypes classes);
+    JavaTypes getAllSubTypes(JavaTypes types);
 
-    JavaTypes getAllSubClassesAndClasses(JavaTypes classes);
+    JavaTypes getAllSubTypesAndTypes(JavaTypes types);
 
 
     //endregion

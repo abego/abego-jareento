@@ -105,7 +105,7 @@ public class SelectedAndOverridingMethodsOperation {
     private List<String> idsOfSelectedMethodsOfClass(
             JavaAnalysisProjectInternal project, String className, Predicate<JavaMethod> methodSelector) {
 
-        return project.methodsOfClass(className)
+        return project.methodsOfType(className)
                 .stream()
                 .filter(methodSelector)
                 .map(WithId::getId)

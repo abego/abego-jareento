@@ -88,10 +88,10 @@ public class InputFromJavap implements JavaAnalysisProjectInput {
 
 
         @Override
-        public void onClass(String classname, String access, String modifier, String type, String[] extendedTypes, String[] implementedTypes) {
-            progressWithRange.update(classIndex++, classname);
+        public void onClass(String typeName, String access, String modifier, String type, String[] extendedTypes, String[] implementedTypes) {
+            progressWithRange.update(classIndex++, typeName);
 
-            String rawClassname = rawName(classname);
+            String rawClassname = rawName(typeName);
             builder.addClass(rawClassname);
             builder.addClassInClassFile(rawClassname, currentClassfile);
             builder.setClassIsDeclared(rawClassname, true);
@@ -101,12 +101,12 @@ public class InputFromJavap implements JavaAnalysisProjectInput {
                 builder.setIsInterfaceOfClass(rawClassname, true);
             }
             //TODO shall we also include generic type information?
-//                if (isGenericType(classname)) {
-//                    builder.addClass(classname);
-//                    builder.addClassInClassFile(classname, currentClassfile[0]);
-//                    builder.addClassHasRawType(classname, rawClassname);
+//                if (isGenericType(typeName)) {
+//                    builder.addClass(typeName);
+//                    builder.addClassInClassFile(typeName, currentClassfile[0]);
+//                    builder.addClassHasRawType(typeName, rawClassname);
 //                }
-            updateTypeParameters(typeParameters, classname);
+            updateTypeParameters(typeParameters, typeName);
             methodTypeParameters.clear();
             if (extendedTypes.length != 0) {
                 for (String extendedType : extendedTypes) {
@@ -126,9 +126,9 @@ public class InputFromJavap implements JavaAnalysisProjectInput {
         }
 
         @Override
-        public void onMethod(String classname, String methodName, String access, String modifier, String returnType, String parameters, String exceptions, String typeParametersOfMethod) {
+        public void onMethod(String typeName, String methodName, String access, String modifier, String returnType, String parameters, String exceptions, String typeParametersOfMethod) {
             currentMethodSpecifier = getQualifiedMethodSpecifier(
-                    classname, methodName, returnType, parameters, typeParametersOfMethod);
+                    typeName, methodName, returnType, parameters, typeParametersOfMethod);
             builder.addMethod(
                     currentMethodSpecifier.declaringType(),
                     currentMethodSpecifier.methodSignature(),
@@ -136,7 +136,7 @@ public class InputFromJavap implements JavaAnalysisProjectInput {
         }
 
         @Override
-        public void onFlags(String classname, String methodName, String parameters, String returnType, String[] flags) {
+        public void onFlags(String typeName, String methodName, String parameters, String returnType, String[] flags) {
             // For now, we are only interested in "synthetic methods" (not classes)
             if (!methodName.isEmpty() && ArrayUtil.contains(flags, "ACC_SYNTHETIC")) {
                 String methodId = builder.getMethodId(
@@ -147,7 +147,7 @@ public class InputFromJavap implements JavaAnalysisProjectInput {
             }
         }
 
-        private QualifiedMethodSpecifier getQualifiedMethodSpecifier(String classname, String methodName, String returnType, String parameters, String typeParametersOfMethod) {
+        private QualifiedMethodSpecifier getQualifiedMethodSpecifier(String typeName, String methodName, String returnType, String parameters, String typeParametersOfMethod) {
             updateTypeParameters(methodTypeParameters, typeParametersOfMethod);
             if (!typeParametersOfMethod.isEmpty()) {
                 parameters = bindTypeParameter(methodTypeParameters, parameters);
@@ -158,10 +158,10 @@ public class InputFromJavap implements JavaAnalysisProjectInput {
                 returnType = bindTypeParameter(typeParameters, returnType);
             }
             //TODO pass typeParametersOfMethod to builder
-            String typeName = rawName(classname);
+            String rawTypeName = rawName(typeName);
             String methodSignature = signatureFromMethodNameAndParameters(methodName, parameters);
             String rawReturnType = rawName(returnType);
-            return new QualifiedMethodSpecifier(typeName, methodSignature, rawReturnType);
+            return new QualifiedMethodSpecifier(rawTypeName, methodSignature, rawReturnType);
         }
 
         @Override
@@ -256,11 +256,11 @@ public class InputFromJavap implements JavaAnalysisProjectInput {
                     builder.setMethodCallScope(methodCallId, scope);
                 } catch (Exception e) {
                     //TODO: fix this
-                    String classname = project.classContainingMethodCall(methodCallId);
+                    String typeName = project.classContainingMethodCall(methodCallId);
                     String signature = project.signatureOfMethodCall(methodCallId);
                     LOGGER.log(Level.SEVERE, e, () ->
                             String.format("Error when resolving method with signature `%s` in class `%s`",
-                                    signature, classname));
+                                    signature, typeName));
                 }
             }
             progress2.close();
@@ -274,21 +274,21 @@ public class InputFromJavap implements JavaAnalysisProjectInput {
             Set<String> missingClasses = new HashSet<>();
             while (undeclared.size() > 0) {
                 List<String> oldUndeclared = undeclared;
-                for (String classname : undeclared) {
-                    if (missingClasses.contains(classname)) {
+                for (String typeName : undeclared) {
+                    if (missingClasses.contains(typeName)) {
                         continue;
                     }
                     try {
-                        String name = classname;
+                        String name = typeName;
                         while (name.endsWith("[]")) {
                             name = name.substring(0, name.length() - 2);
                         }
                         Class<?> clazz = classLoader.loadClass(name);
                         addClassToJavaAnalysisProjectState(clazz, builder);
                     } catch (Throwable e) {
-                        missingClasses.add(classname);
+                        missingClasses.add(typeName);
                         //TODO
-                        System.err.println("Class not found: " + classname + " (" + e.getMessage() + ")");
+                        System.err.println("Class not found: " + typeName + " (" + e.getMessage() + ")");
                     }
                 }
 
@@ -354,13 +354,13 @@ public class InputFromJavap implements JavaAnalysisProjectInput {
                 }).collect(Collectors.joining(", "));
     }
 
-    private static void updateTypeParameters(Map<String, String> genericTypes, String classname) {
+    private static void updateTypeParameters(Map<String, String> genericTypes, String typeName) {
         genericTypes.clear();
 
-        int start = classname.indexOf('<');
-        int end = classname.lastIndexOf('>');
+        int start = typeName.indexOf('<');
+        int end = typeName.lastIndexOf('>');
         if (start >= 0 && end > start) {
-            String text = classname.substring(start + 1, end);
+            String text = typeName.substring(start + 1, end);
             SeparatedItemScanner scanner = newSeparatedItemScanner(text);
             String nextItem = scanner.nextItem();
             while (!nextItem.isEmpty()) {
@@ -383,18 +383,18 @@ public class InputFromJavap implements JavaAnalysisProjectInput {
 
     private static void addClassToJavaAnalysisProjectStateHelper(Class<?> clazz, JavaAnalysisProjectStateBuilder builder) {
 
-        String classname = clazz.getTypeName();
+        String typeName = clazz.getTypeName();
 
-        builder.addClass(classname);
-        builder.setClassIsDeclared(classname, true);
+        builder.addClass(typeName);
+        builder.setClassIsDeclared(typeName, true);
 
         Type superClass = clazz.getGenericSuperclass();
         if (superClass != null) {
-            builder.addTypeExtends(classname, rawName(superClass.getTypeName()));
+            builder.addTypeExtends(typeName, rawName(superClass.getTypeName()));
         }
 
         for (Class<?> type : clazz.getInterfaces()) {
-            builder.addTypeImplements(classname, rawName(type.getTypeName()));
+            builder.addTypeImplements(typeName, rawName(type.getTypeName()));
         }
 
         for (Method method : clazz.getDeclaredMethods()) {
@@ -404,7 +404,7 @@ public class InputFromJavap implements JavaAnalysisProjectInput {
                             .map(p -> p.getType().getTypeName())
                             .collect(Collectors.joining(", ")) +
                     ')';
-            builder.addMethod(classname, signature, method.getReturnType()
+            builder.addMethod(typeName, signature, method.getReturnType()
                     .getTypeName());
         }
 
@@ -424,11 +424,11 @@ public class InputFromJavap implements JavaAnalysisProjectInput {
     //TODO: to project API?
     private static boolean isUndeclared(JavaType javaType, JavaAnalysisProject project) {
         String fullName = javaType.getId();
-        return !project.hasClassWithName(fullName) && !isPrimitiveType(fullName);
+        return !project.hasTypeWithName(fullName) && !isPrimitiveType(fullName);
     }
 
     private static List<String> getUndeclaredClasses(JavaAnalysisProject project) {
-        return project.getClasses().stream()
+        return project.getTypes().stream()
                 .filter(c -> isUndeclared(c, project))
                 .map(WithId::getId)
                 .collect(Collectors.toList());

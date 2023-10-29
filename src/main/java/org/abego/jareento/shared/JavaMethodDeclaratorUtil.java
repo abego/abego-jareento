@@ -8,13 +8,13 @@ import javax.annotation.Syntax;
 
 public class JavaMethodDeclaratorUtil {
     @Syntax(JareentoSyntax.METHOD_DECLARATOR_SYNTAX)
-    public static String methodDeclaratorText(String classname, String methodSignature, String returnType) {
-        return classname + "#" + methodSignature + ":" + returnType;
+    public static String methodDeclaratorText(String typeName, String methodSignature, String returnType) {
+        return typeName + "#" + methodSignature + ":" + returnType;
     }
 
     @Syntax(JareentoSyntax.SIMPLE_METHOD_DECLARATOR_SYNTAX)
-    public static String simpleMethodDeclaratorText(String classname, String methodSignature) {
-        return classname + "#" + methodSignature;
+    public static String simpleMethodDeclaratorText(String typeName, String methodSignature) {
+        return typeName + "#" + methodSignature;
     }
 
     //TODO: do we need this?
@@ -41,8 +41,8 @@ public class JavaMethodDeclaratorUtil {
     }
 
     public static JavaMethodDeclarator newJavaMethodDeclarator(
-            String classname, String methodSignature, String returnType) {
+            String typeName, String methodSignature, String returnType) {
         return JavaMethodDeclaratorImpl.newJavaMethodDeclaratorImpl(
-                methodDeclaratorText(classname, methodSignature, returnType));
+                methodDeclaratorText(typeName, methodSignature, returnType));
     }
 }

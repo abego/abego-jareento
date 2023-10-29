@@ -124,8 +124,8 @@ public class JavaAnalysisProjectStateUsingStringGraph implements JavaAnalysisPro
         }
         
         @Override
-        public void setIsInterfaceOfClass(String classname, boolean value) {
-            graphBuilder.setNodeProperty(classname, IS_INTERFACE, String.valueOf(value));
+        public void setIsInterfaceOfClass(String typeName, boolean value) {
+            graphBuilder.setNodeProperty(typeName, IS_INTERFACE, String.valueOf(value));
         }
 
         @Override
@@ -232,18 +232,18 @@ public class JavaAnalysisProjectStateUsingStringGraph implements JavaAnalysisPro
         }
 
         @Override
-        public void addClassHasRawType(String classname, String rawClassname) {
-            graphBuilder.addEdge(classname, HAS_RAW_TYPE, rawClassname);
+        public void addClassHasRawType(String typeName, String rawClassname) {
+            graphBuilder.addEdge(typeName, HAS_RAW_TYPE, rawClassname);
         }
 
         @Override
-        public void addClassInClassFile(String classname, String classfileName) {
-            graphBuilder.addEdge(classname, IN_CLASSFILE, classfileName);
+        public void addClassInClassFile(String typeName, String classfileName) {
+            graphBuilder.addEdge(typeName, IN_CLASSFILE, classfileName);
         }
 
         @Override
-        public void setClassIsDeclared(String classname, boolean value) {
-            graphBuilder.setNodeProperty(classname, IS_DECLARED, String.valueOf(value));
+        public void setClassIsDeclared(String typeName, boolean value) {
+            graphBuilder.setNodeProperty(typeName, IS_DECLARED, String.valueOf(value));
         }
 
         @Override
@@ -391,8 +391,8 @@ public class JavaAnalysisProjectStateUsingStringGraph implements JavaAnalysisPro
     }
     
     @Override
-    public IDs classesReferencingClass(String classname) {
-        return ids(graph.nodes("?", REFS, classname));
+    public IDs classesReferencingClass(String typeName) {
+        return ids(graph.nodes("?", REFS, typeName));
     }
 
     @Override
@@ -403,8 +403,8 @@ public class JavaAnalysisProjectStateUsingStringGraph implements JavaAnalysisPro
     }
     
     @Override
-    public Optional<String> classFileOfClass(String classname) {
-        Nodes nodes = graph.nodesFromNodeViaEdgeLabeled(classname, IN_CLASSFILE);
+    public Optional<String> classFileOfClass(String typeName) {
+        Nodes nodes = graph.nodesFromNodeViaEdgeLabeled(typeName, IN_CLASSFILE);
         return optionalSingleId(nodes);
     }
 
@@ -415,13 +415,13 @@ public class JavaAnalysisProjectStateUsingStringGraph implements JavaAnalysisPro
     }
     
     @Override
-    public boolean isInterface(String classname) {
-        return graph.getBooleanNodePropertyValue(classname, IS_INTERFACE);
+    public boolean isInterface(String typeName) {
+        return graph.getBooleanNodePropertyValue(typeName, IS_INTERFACE);
     }
 
     @Override
-    public boolean isClassDeclared(String classname) {
-        return graph.getBooleanNodePropertyValue(classname, IS_DECLARED);
+    public boolean isClassDeclared(String typeName) {
+        return graph.getBooleanNodePropertyValue(typeName, IS_DECLARED);
     }
 
     @Override

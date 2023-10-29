@@ -19,7 +19,7 @@ public interface JavaMethodSignature extends WithId {
 
     /**
      * Returns the {@link JavaMethodCalls} to the method with this signature
-     * in the class with the given {@code classname}.
+     * in the class with the given {@code typeName}.
      */
-    JavaMethodCalls getMethodCallsToClass(String classname);
+    JavaMethodCalls getMethodCallsToClass(String typeName);
 }

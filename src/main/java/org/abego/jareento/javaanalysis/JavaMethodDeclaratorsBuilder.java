@@ -57,15 +57,15 @@ public final class JavaMethodDeclaratorsBuilder {
             @Syntax(METHOD_DECLARATOR_SYNTAX) String methodDeclarator) {
         checkNotFinished();
 
-        String classname = JavaMethodDeclaratorUtil.simpleClassnameOfMethodDeclarator(methodDeclarator);
-        classes.add(classname);
+        String typeName = JavaMethodDeclaratorUtil.simpleClassnameOfMethodDeclarator(methodDeclarator);
+        classes.add(typeName);
 
         // also include the outer class when the method belongs
         // to an inner class.
-        while (classname.contains("$")) {
-            int i = classname.lastIndexOf("$");
-            classname = classname.substring(0, i);
-            classes.add(classname);
+        while (typeName.contains("$")) {
+            int i = typeName.lastIndexOf("$");
+            typeName = typeName.substring(0, i);
+            classes.add(typeName);
         }
         //TODO: shall we really replace the '$' by a '.' ??? Cannot tell a package from an outer class!
         String fixedMethodDeclarator = methodDeclarator.replaceAll("\\$", ".");
@@ -134,18 +134,18 @@ public final class JavaMethodDeclaratorsBuilder {
         }
 
         @Override
-        public boolean containsMethodOfClassWithSignature(String classname, String signature) {
-            return getMethodDeclaratorTextOfMethodOfClassWithSignatureOrNull(classname, signature) != null;
+        public boolean containsMethodOfClassWithSignature(String typeName, String signature) {
+            return getMethodDeclaratorTextOfMethodOfClassWithSignatureOrNull(typeName, signature) != null;
         }
 
         @Override
-        public @Nullable String getMethodDeclaratorTextOfMethodOfClassWithSignatureOrNull(String classname, String signature) {
-            return simpleMethodDeclaratorToMethodDeclarator.get(JavaMethodDeclaratorUtil.simpleMethodDeclaratorText(classname, signature));
+        public @Nullable String getMethodDeclaratorTextOfMethodOfClassWithSignatureOrNull(String typeName, String signature) {
+            return simpleMethodDeclaratorToMethodDeclarator.get(JavaMethodDeclaratorUtil.simpleMethodDeclaratorText(typeName, signature));
         }
 
         @Override
-        public boolean containsMethodOfClass(String classname) {
-            return classes.contains(classname);
+        public boolean containsMethodOfClass(String typeName) {
+            return classes.contains(typeName);
         }
 
         @Override

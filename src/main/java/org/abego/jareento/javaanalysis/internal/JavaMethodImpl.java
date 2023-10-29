@@ -47,7 +47,7 @@ class JavaMethodImpl implements JavaMethod {
 
     @Override
     public JavaType getJavaType() {
-        return project.getClassWithName(getClassName());
+        return project.getTypeWithName(getClassName());
     }
 
     @Override

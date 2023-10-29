@@ -44,28 +44,28 @@ class JavaTypeImpl implements JavaType {
     }
 
     @Override
-    public JavaType getSuperclass() {
-        return project.superClass(id);
+    public JavaType getSuperType() {
+        return project.superType(id);
     }
 
     @Override
-    public JavaTypes getSubClasses() {
-        return project.subClasses(id);
+    public JavaTypes getSubTypes() {
+        return project.subTypes(id);
     }
 
     @Override
-    public JavaTypes getSubClassesAndClass() {
-        return project.subClassesAndClass(id);
+    public JavaTypes getSubTypesAndType() {
+        return project.subTypesAndType(id);
     }
 
     @Override
-    public JavaTypes getAllSubClasses() {
-        return project.allSubClasses(id);
+    public JavaTypes getAllSubTypes() {
+        return project.allSubTypes(id);
     }
 
     @Override
-    public JavaTypes getAllSubClassesAndClass() {
-        return project.allSubClassesAndClass(id);
+    public JavaTypes getAllSubTypesAndType() {
+        return project.allSubTypesAndType(id);
     }
 
     @Override
@@ -79,28 +79,28 @@ class JavaTypeImpl implements JavaType {
     }
 
     @Override
-    public JavaTypes getReferencingClasses() {
-        return project.classesReferencingClass(id);
+    public JavaTypes getReferencingTypes() {
+        return project.typesReferencingType(id);
     }
 
     @Override
     public JavaMethods getMethods() {
-        return project.methodsOfClass(id);
+        return project.methodsOfType(id);
     }
 
     @Override
     public JavaMethodSignatures getMethodSignatures() {
-        return project.methodSignaturesOfClass(id);
+        return project.methodSignaturesOfType(id);
     }
 
     @Override
     public JavaMethodSignatures getInheritedMethodSignatures() {
-        return project.inheritedMethodSignaturesOfClass(id);
+        return project.inheritedMethodSignaturesOfType(id);
     }
 
     @Override
-    public JavaMethodCalls getMethodCallsToClassWithSignature(String methodSignature) {
-        return project.methodCallsWithSignatureOnClass(methodSignature,id);
+    public JavaMethodCalls getMethodCallsToTypeWithSignature(String methodSignature) {
+        return project.methodCallsWithSignatureOnType(methodSignature,id);
     }
 
     @Override

@@ -55,18 +55,18 @@ public interface JavaAnalysisProjectState {
     IDs classes();
 
     IDs classesReferencingClass(
-            @Syntax(QUALIFIED_TYPE_NAME_SYNTAX) String classname);
+            @Syntax(QUALIFIED_TYPE_NAME_SYNTAX) String typeName);
 
     IDs classesContainingMethodWithSignature(
             @Syntax(JareentoSyntax.METHOD_SIGNATURE_SYNTAX) String methodSignature);
 
     @Syntax(CLASS_FILE_PATH_SYNTAX)
     Optional<String> classFileOfClass(
-            @Syntax(QUALIFIED_TYPE_NAME_SYNTAX) String classname);
+            @Syntax(QUALIFIED_TYPE_NAME_SYNTAX) String typeName);
     
-    boolean isInterface(@Syntax(QUALIFIED_TYPE_NAME_SYNTAX) String classname);
+    boolean isInterface(@Syntax(QUALIFIED_TYPE_NAME_SYNTAX) String typeName);
 
-    boolean isClassDeclared(@Syntax(QUALIFIED_TYPE_NAME_SYNTAX) String classname);
+    boolean isClassDeclared(@Syntax(QUALIFIED_TYPE_NAME_SYNTAX) String typeName);
 
     //TODO name?
     IDs methodSignatureSpecificationsOfClass(

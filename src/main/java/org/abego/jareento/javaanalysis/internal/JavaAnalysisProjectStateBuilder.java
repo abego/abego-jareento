@@ -12,7 +12,7 @@ public interface JavaAnalysisProjectStateBuilder {
 
     void addReference(String from, String to);
     
-    void setIsInterfaceOfClass(String classname, boolean value);
+    void setIsInterfaceOfClass(String typeName, boolean value);
 
     void addTypeExtends(String typeName, String otherTypename);
 
@@ -48,11 +48,11 @@ public interface JavaAnalysisProjectStateBuilder {
 
     void setMethodCallBaseScope(String methodCallId, String baseScopeTypename);
 
-    void addClassHasRawType(String classname, String rawClassname);
+    void addClassHasRawType(String typeName, String rawClassname);
 
-    void addClassInClassFile(String classname, String classfileName);
+    void addClassInClassFile(String typeName, String classfileName);
 
-    void setClassIsDeclared(String classname, boolean value);
+    void setClassIsDeclared(String typeName, boolean value);
 
     JavaAnalysisProjectStateWithSave build();
 

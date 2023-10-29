@@ -43,14 +43,14 @@ class JavaTypesImpl extends ManyWithIdDefault<JavaType, JavaTypes> implements Ja
         return newJavaMethodSignatures(newIDs(() -> {
             Set<String> result = new HashSet<>();
             idStream().forEach(classId ->
-                    project.methodSignaturesOfClass(classId).idStream()
+                    project.methodSignaturesOfType(classId).idStream()
                             .forEach(result::add));
             return result;
         }), project);
     }
 
     @Override
-    public JavaTypes unitedWithClassNamed(String classname) {
-        return unitedWithElementWithId(classname);
+    public JavaTypes unitedWithClassNamed(String typeName) {
+        return unitedWithElementWithId(typeName);
     }
 }

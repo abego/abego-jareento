@@ -15,26 +15,26 @@ import static org.abego.jareento.base.JareentoSyntax.QUALIFIED_TYPE_NAME_SYNTAX;
 
 public interface JavaAnalysisProjectInternal extends JavaAnalysisProject {
     //TODO: hide from API
-    JavaTypes classesReferencingClass(
-            @Syntax(QUALIFIED_TYPE_NAME_SYNTAX) String classname);
+    JavaTypes typesReferencingType(
+            @Syntax(QUALIFIED_TYPE_NAME_SYNTAX) String typeName);
 
     //TODO: hide from API
-    boolean isInterface(@Syntax(QUALIFIED_TYPE_NAME_SYNTAX) String classname);
+    boolean isInterface(@Syntax(QUALIFIED_TYPE_NAME_SYNTAX) String typeName);
 
     //TODO: hide from API
-    JavaType superClass(@Syntax(QUALIFIED_TYPE_NAME_SYNTAX) String className);
+    JavaType superType(@Syntax(QUALIFIED_TYPE_NAME_SYNTAX) String className);
 
     //TODO: hide from API
-    JavaTypes subClasses(@Syntax(QUALIFIED_TYPE_NAME_SYNTAX) String className);
+    JavaTypes subTypes(@Syntax(QUALIFIED_TYPE_NAME_SYNTAX) String className);
 
     //TODO: hide from API
-    JavaTypes subClassesAndClass(String className);
+    JavaTypes subTypesAndType(String className);
 
     //TODO: hide from API
-    JavaTypes allSubClasses(String className);
+    JavaTypes allSubTypes(String className);
 
     //TODO: hide from API
-    JavaTypes allSubClassesAndClass(String className);
+    JavaTypes allSubTypesAndType(String className);
 
     //TODO: hide from API
     JavaTypes implementedInterfaces(String className);
@@ -66,10 +66,10 @@ public interface JavaAnalysisProjectInternal extends JavaAnalysisProject {
     String nameOfMethod(String methodId);
 
     //TODO: hide from API
-    JavaMethodSignatures methodSignaturesOfClass(String className);
+    JavaMethodSignatures methodSignaturesOfType(String className);
 
     //TODO: hide from API
-    JavaMethodSignatures inheritedMethodSignaturesOfClass(String className);
+    JavaMethodSignatures inheritedMethodSignaturesOfType(String className);
 
     //TODO: hide from API
     String returnTypeOfMethod(String methodId);
@@ -81,7 +81,7 @@ public interface JavaAnalysisProjectInternal extends JavaAnalysisProject {
     String packageOfMethod(String methodId);
 
     //TODO: hide from API
-    JavaMethods methodsOfClass(String className);
+    JavaMethods methodsOfType(String className);
 
     //TODO: hide from API
     boolean hasMethodOverrideAnnotation(String methodId);
@@ -105,7 +105,7 @@ public interface JavaAnalysisProjectInternal extends JavaAnalysisProject {
     JavaMethodCalls methodCallsWithSignature(String methodSignature);
 
     //TODO: hide from API
-    JavaMethodCalls methodCallsWithSignatureOnClass(String methodSignature, String className);
+    JavaMethodCalls methodCallsWithSignatureOnType(String methodSignature, String className);
 
     //TODO: hide from API
     /**

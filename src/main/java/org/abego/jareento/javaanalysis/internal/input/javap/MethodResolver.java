@@ -37,50 +37,50 @@ class MethodResolver {
      * Throws an exception when the method cannot be found.
      */
     public String idOfMethodForMethodCall(String methodCallId) {
-        String classname = project.classContainingMethodCall(methodCallId);
-        return idOfMethodForMethodCall(methodCallId, classname);
+        String typeName = project.classContainingMethodCall(methodCallId);
+        return idOfMethodForMethodCall(methodCallId, typeName);
     }
 
     /**
      * Returns the id of the method that would be called by the MethodCall with
      * the given {@code methodCallId}, starting the method lookup at the class
-     * with the given {@code classname}.
+     * with the given {@code typeName}.
      * <p>
      * Throws an exception when the method cannot be found.
      */
-    public String idOfMethodForMethodCall(String methodCallId, String classname) {
+    public String idOfMethodForMethodCall(String methodCallId, String typeName) {
         String signature = project.signatureOfMethodCall(methodCallId);
-        String methodId = idOfMethodForSignatureAndClassOrNull(signature, classname);
+        String methodId = idOfMethodForSignatureAndClassOrNull(signature, typeName);
         if (methodId == null) {
             throw new JareentoException(String.format(
                     "No method found with signature `%s` (in or below `%s`). Called by %s.",
-                    signature, classname, methodCallId));
+                    signature, typeName, methodCallId));
         }
         return methodId;
     }
 
     @Nullable
-    public String idOfMethodForSignatureAndClassOrNull(String signature, String classname) {
+    public String idOfMethodForSignatureAndClassOrNull(String signature, String typeName) {
         @Nullable
-        String methodId = resolveSignatureToMethodIdOrNull(signature, classname);
+        String methodId = resolveSignatureToMethodIdOrNull(signature, typeName);
         if (methodId == null && signature.startsWith("\"<init>\"")) {
-            // check for the constructor (i.e. replace the quoted <init> with the classname)
-            String sig2 = classname + signature.substring(8);
-            methodId = resolveSignatureToMethodIdOrNull(sig2, classname);
+            // check for the constructor (i.e. replace the quoted <init> with the typeName)
+            String sig2 = typeName + signature.substring(8);
+            methodId = resolveSignatureToMethodIdOrNull(sig2, typeName);
         }
         if (methodId == null && signature.endsWith("[])")) {
             // look for a varargs definition (i.e. replace the '[]' with '...')
             String sig2 = StringUtil.prefix(signature, -3) + "...)";
-            methodId = resolveSignatureToMethodIdOrNull(sig2, classname);
+            methodId = resolveSignatureToMethodIdOrNull(sig2, typeName);
         }
         return methodId;
     }
 
-    private Set<String> getInheritedTypes(String classname) {
-        Set<String> result = inheritsFrom.get(classname);
+    private Set<String> getInheritedTypes(String typeName) {
+        Set<String> result = inheritsFrom.get(typeName);
         if (result == null) {
-            result = calcInheritedTypes(classname);
-            inheritsFrom.put(classname, result);
+            result = calcInheritedTypes(typeName);
+            inheritsFrom.put(typeName, result);
         }
         return result;
     }
@@ -216,13 +216,13 @@ class MethodResolver {
         return result;
     }
 
-    private Set<String> calcInheritedTypes(String classname) {
-        Set<String> cached = inheritsFrom.get(classname);
+    private Set<String> calcInheritedTypes(String typeName) {
+        Set<String> cached = inheritsFrom.get(typeName);
         if (cached != null) {
             return cached;
         }
         Set<String> result = new HashSet<>();
-        Set<String> directParents = directlyInheritsFrom.get(classname);
+        Set<String> directParents = directlyInheritsFrom.get(typeName);
         if (directParents != null) {
             for (String parent : directParents) {
                 result.addAll(calcInheritedTypes(parent));
@@ -233,28 +233,28 @@ class MethodResolver {
     }
 
     private void initDirectInheritance(JavaAnalysisProjectInternal project) {
-        project.getClasses().idStream().forEach(classname -> {
-            JavaTypes types = project.extendedTypes(classname)
-                    .unitedWith(project.implementedInterfaces(classname));
+        project.getTypes().idStream().forEach(typeName -> {
+            JavaTypes types = project.extendedTypes(typeName)
+                    .unitedWith(project.implementedInterfaces(typeName));
             for (String supertype : types.getNames()) {
                 directlyInheritsFrom
-                        .computeIfAbsent(classname, s -> new HashSet<>())
+                        .computeIfAbsent(typeName, s -> new HashSet<>())
                         .add(supertype);
             }
         });
     }
 
     @Nullable
-    private String resolveSignatureToMethodIdOrNull(String signature, String classname) {
+    private String resolveSignatureToMethodIdOrNull(String signature, String typeName) {
         @Nullable
-        String result = resolveSignatureToMethodOfSpecificClassOrNull(signature, classname);
+        String result = resolveSignatureToMethodOfSpecificClassOrNull(signature, typeName);
         if (result != null) {
             return result;
         }
 
         // search in the inherited types for a matching method
-        JavaTypes extendedTypes = project.extendedTypes(classname);
-        JavaTypes interfaces = project.implementedInterfaces(classname);
+        JavaTypes extendedTypes = project.extendedTypes(typeName);
+        JavaTypes interfaces = project.implementedInterfaces(typeName);
 
         JavaTypes types = extendedTypes.unitedWith(interfaces);
 
@@ -263,8 +263,8 @@ class MethodResolver {
             return null;
 
         } else {
-            for (String typeName : types.getNames()) {
-                @Nullable String id = resolveSignatureToMethodIdOrNull(signature, typeName);
+            for (String name : types.getNames()) {
+                @Nullable String id = resolveSignatureToMethodIdOrNull(signature, name);
                 if (id != null) {
                     return id;
                 }
@@ -275,14 +275,14 @@ class MethodResolver {
 
     @Nullable
     private String resolveSignatureToMethodOfSpecificClassOrNull(
-            String signature, String classname) {
+            String signature, String typeName) {
         // To resolve the signature in the context of the class with the given
-        // classname we first select those methods from the class that are
+        // typeName we first select those methods from the class that are
         // possible "candidates" to match the signature. 
         // 
         // To be a candidate a method must have the same name as the name used 
         // in the signature and the same number of parameters as the signature.
-        JavaMethods methods = project.methodsOfClass(classname);
+        JavaMethods methods = project.methodsOfType(typeName);
         Map<String, List<String>> candidates =
                 getMethodCandidatesForSignatureIgnoringTypes(methods, signature);
 

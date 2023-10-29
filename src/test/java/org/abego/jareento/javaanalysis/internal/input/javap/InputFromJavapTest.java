@@ -138,7 +138,7 @@ class InputFromJavapTest {
         JavaAnalysisProjectInternal project = createProjectUsingJavapData(tempDir, "javap-CallsSample.txt");
 
         StringBuilder result = new StringBuilder();
-        project.methodsOfClass("calls.CallsSample$Main")
+        project.methodsOfType("calls.CallsSample$Main")
                 .idStream()
                 .forEach(methodId -> {
                     String calledMethods = calledMethodsSummary(project, methodId);
@@ -154,10 +154,10 @@ class InputFromJavapTest {
 
     private static void withMethodCallsToMethodsOfClassDo(
             JavaAnalysisProjectInternal project, String className, BiConsumer<String, JavaMethodCalls> calledMethodAndMethodCalls) {
-        project.methodsOfClass(className)
+        project.methodsOfType(className)
                 .idStream().sorted().forEach(calledMethodId -> {
                     JavaMethodCalls methodCalls = 
-                            project.methodCallsWithSignatureOnClass(
+                            project.methodCallsWithSignatureOnType(
                                     project.signatureOfMethod(calledMethodId), className);
                     calledMethodAndMethodCalls.accept(calledMethodId, methodCalls);
                 });

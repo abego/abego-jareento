@@ -61,7 +61,7 @@ public class JavaAnalysisProjectImpl implements JavaAnalysisProjectInternal {
     }
     
     @Override
-    public JavaMethods methodsOfClass(String className) {
+    public JavaMethods methodsOfType(String className) {
         return JavaMethodsImpl.newJavaMethods(state.methodsOfClass(className), this);
     }
 
@@ -135,12 +135,12 @@ public class JavaAnalysisProjectImpl implements JavaAnalysisProjectInternal {
                     : null;
 
         } else {
-            for (String classname : types.getNames()) {
-                if (methodSignaturesOfClass(classname).contains(methodSignature)) {
-                    return idOfMethodOfClassWithSignature(classname, methodSignature);
+            for (String typeName : types.getNames()) {
+                if (methodSignaturesOfType(typeName).contains(methodSignature)) {
+                    return idOfMethodOfClassWithSignature(typeName, methodSignature);
                 } else {
                     @Nullable String id = idOfMethodWithSignatureInheritedByClassOrNull(
-                            methodSignature, classname);
+                            methodSignature, typeName);
                     if (id != null) {
                         return id;
                     }
@@ -175,7 +175,7 @@ public class JavaAnalysisProjectImpl implements JavaAnalysisProjectInternal {
 
     @Override
     public JavaMethodCalls methodCallsToMethod(String methodId) {
-        return methodCallsWithSignatureOnClass(
+        return methodCallsWithSignatureOnType(
                 signatureOfMethod(methodId), classOfMethod(methodId));
     }
 
@@ -185,7 +185,7 @@ public class JavaAnalysisProjectImpl implements JavaAnalysisProjectInternal {
     }
 
     @Override
-    public JavaMethodCalls methodCallsWithSignatureOnClass(String methodSignature, String className) {
+    public JavaMethodCalls methodCallsWithSignatureOnType(String methodSignature, String className) {
         return newJavaMethodCalls(state.methodCallsWithSignatureOnClass(methodSignature, className), this);
     }
 
@@ -225,7 +225,7 @@ public class JavaAnalysisProjectImpl implements JavaAnalysisProjectInternal {
     }
 
     @Override
-    public JavaType superClass(String typeName) {
+    public JavaType superType(String typeName) {
         return newJavaType(
                 isInterface(typeName)
                         ? "java.lang.Object" : state.extendedType(typeName),
@@ -233,7 +233,7 @@ public class JavaAnalysisProjectImpl implements JavaAnalysisProjectInternal {
     }
 
     @Override
-    public JavaTypes subClasses(String typeName) {
+    public JavaTypes subTypes(String typeName) {
         if (isInterface(typeName)) {
             return newJavaTypes(emptyIDs());
         }
@@ -248,12 +248,12 @@ public class JavaAnalysisProjectImpl implements JavaAnalysisProjectInternal {
 
 
     @Override
-    public JavaTypes subClassesAndClass(String className) {
-        return subClasses(className).unitedWithClassNamed(className);
+    public JavaTypes subTypesAndType(String className) {
+        return subTypes(className).unitedWithClassNamed(className);
     }
 
     @Override
-    public JavaTypes allSubClasses(String className) {
+    public JavaTypes allSubTypes(String className) {
         if (isInterface(className)) {
             return newJavaTypes(emptyIDs());
         }
@@ -265,22 +265,22 @@ public class JavaAnalysisProjectImpl implements JavaAnalysisProjectInternal {
     }
 
     @Override
-    public JavaTypes allSubClassesAndClass(String className) {
-        return allSubClasses(className).unitedWithClassNamed(className);
+    public JavaTypes allSubTypesAndType(String className) {
+        return allSubTypes(className).unitedWithClassNamed(className);
     }
 
     @Override
-    public JavaTypes getAllSubClasses(JavaTypes classes) {
+    public JavaTypes getAllSubTypes(JavaTypes types) {
         return JavaTypesImpl.newJavaTypes(newIDs(() -> {
             Set<String> result = new HashSet<>();
-            classes.idStream().forEach(c -> addAllSubClasses(c, result));
+            types.idStream().forEach(c -> addAllSubClasses(c, result));
             return result;
         }), this);
     }
 
     @Override
-    public JavaTypes getAllSubClassesAndClasses(JavaTypes classes) {
-        return getAllSubClasses(classes).unitedWith(classes);
+    public JavaTypes getAllSubTypesAndTypes(JavaTypes types) {
+        return getAllSubTypes(types).unitedWith(types);
     }
 
     @Override
@@ -315,13 +315,13 @@ public class JavaAnalysisProjectImpl implements JavaAnalysisProjectInternal {
         return newJavaTypes(state.classesContainingMethodWithSignature(methodSignature));
     }
 
-    public JavaMethodSignatures methodSignaturesOfClass(String className) {
+    public JavaMethodSignatures methodSignaturesOfType(String className) {
         return newJavaMethodSignatures(
                 state.methodSignatureSpecificationsOfClass(className), this);
     }
 
     @Override
-    public JavaMethodSignatures inheritedMethodSignaturesOfClass(String className) {
+    public JavaMethodSignatures inheritedMethodSignaturesOfType(String className) {
         return newJavaMethodSignatures(newIDs(() -> {
             Set<String> result = new HashSet<>();
             addInheritedMethodSignatureSpecificationsOfClass(result, className);
@@ -382,33 +382,33 @@ public class JavaAnalysisProjectImpl implements JavaAnalysisProjectInternal {
     }
 
     @Override
-    public JavaTypes getClasses() {
+    public JavaTypes getTypes() {
         return newJavaTypes(state.classes());
     }
 
     @Override
-    public JavaTypes classesReferencingClass(String classname) {
-        return newJavaTypes(state.classesReferencingClass(classname));
+    public JavaTypes typesReferencingType(String typeName) {
+        return newJavaTypes(state.classesReferencingClass(typeName));
     }
 
     @Override
-    public JavaType getClassWithName(String classname) {
-        return newJavaType(classname, this);
+    public JavaType getTypeWithName(String typeName) {
+        return newJavaType(typeName, this);
     }
 
     @Override
-    public boolean isInterface(String classname) {
-        return state.isInterface(classname);
+    public boolean isInterface(String typeName) {
+        return state.isInterface(typeName);
     }
 
     @Override
-    public boolean hasClassWithName(String classname) {
-        return state.isClassDeclared(classname);
+    public boolean hasTypeWithName(String typeName) {
+        return state.isClassDeclared(typeName);
     }
 
     private void addAllSubClasses(String className, Set<String> target) {
         if (!isInterface(className)) {
-            subClasses(className).idStream().forEach(c -> {
+            subTypes(className).idStream().forEach(c -> {
                 if (!target.contains(c)) {
                     addAllSubClasses(c, target);
                 }

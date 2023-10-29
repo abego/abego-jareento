@@ -22,21 +22,21 @@ public interface JavaType extends WithId {
      * return the Object class. (Notice: this is different from the way
      * {@code Class.getSuperclass()} is defined.)
      */
-    JavaType getSuperclass();
+    JavaType getSuperType();
 
-    JavaTypes getSubClasses();
+    JavaTypes getSubTypes();
 
-    JavaTypes getSubClassesAndClass();
+    JavaTypes getSubTypesAndType();
 
-    JavaTypes getAllSubClasses();
+    JavaTypes getAllSubTypes();
 
-    JavaTypes getAllSubClassesAndClass();
+    JavaTypes getAllSubTypesAndType();
 
     JavaTypes getImplementedInterfaces();
 
     JavaTypes getExtendedTypes();
 
-    JavaTypes getReferencingClasses();
+    JavaTypes getReferencingTypes();
 
     JavaMethods getMethods();
 
@@ -44,6 +44,6 @@ public interface JavaType extends WithId {
 
     JavaMethodSignatures getInheritedMethodSignatures();
 
-    JavaMethodCalls getMethodCallsToClassWithSignature(String methodSignature);
+    JavaMethodCalls getMethodCallsToTypeWithSignature(String methodSignature);
     
 }

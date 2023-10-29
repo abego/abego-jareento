@@ -85,7 +85,7 @@ public interface JareentoSyntax {
      * <p>
      * The simple method declarator of a (Java) method is the concatenation of
      * <ul>
-     *     <li>its qualified classname ({@linkplain JareentoSyntax#QUALIFIED_TYPE_NAME_SYNTAX})</li>
+     *     <li>its qualified typeName ({@linkplain JareentoSyntax#QUALIFIED_TYPE_NAME_SYNTAX})</li>
      *     <li>a '#'</li>
      *     <li>its signature ({@linkplain JareentoSyntax#METHOD_SIGNATURE_SYNTAX})</li>
      * </ul>

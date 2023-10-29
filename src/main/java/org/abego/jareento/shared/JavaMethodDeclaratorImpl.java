@@ -15,7 +15,7 @@ public class JavaMethodDeclaratorImpl implements JavaMethodDeclarator {
         colonIndex = text.indexOf(':');
         openParenthesisIndex = text.indexOf('(');
 
-        //TODO do we allow methodId with classname (i.e. hashIndex <= 0)?
+        //TODO do we allow methodId with typeName (i.e. hashIndex <= 0)?
         if ((colonIndex <= hashIndex) ||
                 (openParenthesisIndex <= hashIndex)) {
             throw new IllegalArgumentException("Invalid method declarator: " + text);
@@ -48,9 +48,9 @@ public class JavaMethodDeclaratorImpl implements JavaMethodDeclarator {
 
     @Override
     public String getSimpleClassname() {
-        String classname = getClassname();
-        int i = classname.lastIndexOf('.');
-        return i >= 0 ? classname.substring(i + 1) : classname;
+        String typeName = getClassname();
+        int i = typeName.lastIndexOf('.');
+        return i >= 0 ? typeName.substring(i + 1) : typeName;
     }
 
     static JavaMethodDeclaratorImpl newJavaMethodDeclaratorImpl(String text) {
