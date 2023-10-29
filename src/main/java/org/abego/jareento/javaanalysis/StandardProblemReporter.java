@@ -6,7 +6,7 @@ import java.util.function.Consumer;
 
 import static org.abego.commons.io.PrintStreamUtil.newPrintStreamToBufferedFile;
 
-public final class StandardProblemsReporter implements ProblemReporter {
+public final class StandardProblemReporter implements ProblemReporter {
 
     private static final String OUTPUT_FILE_NAME = "problems.txt";
 
@@ -29,7 +29,7 @@ public final class StandardProblemsReporter implements ProblemReporter {
             out.println(count + (count == 1 ? " problem." : " problems."));
 
             problems.stream()
-                    .map(StandardProblemsReporter::longProblemLineText)
+                    .map(StandardProblemReporter::longProblemLineText)
                     .forEach(out::println);
         }
         progress.accept(
