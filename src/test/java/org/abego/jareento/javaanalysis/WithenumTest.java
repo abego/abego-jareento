@@ -14,8 +14,8 @@ public class WithenumTest {
         JavaAnalysisProject project = 
                 SampleProjectUtil.setupSampleProject("withenum", tempDir);
 
-        JavaClass myEnum = project.classWithName("withenum.MyEnum");
+        JavaType myEnum = project.getTypeWithName("withenum.MyEnum");
         
-        assertEquals("withenum.MyEnum", myEnum.id());
+        assertEquals("withenum.MyEnum", myEnum.getId());
     }
 }

@@ -20,6 +20,7 @@ public class CallsTest {
         String expected = textOfResource(InputFromJavap.class, "javap-CallsSample.txt");
         String actual = FileUtil.textOf(new File(tempDir,"storage/calls/disassembly.txt"));
         actual = actual.replaceAll(Pattern.quote(tempDir.getAbsolutePath()),"{tempDir}");
+        actual = actual.replaceAll("Last modified \\d+ \\w+ \\d+;","Last modified 27 Oct 2023;");
         assertEquals(expected,actual);
     }
 }

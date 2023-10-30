@@ -9,17 +9,18 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * See issue <a href="https://github.com/abego/abego-jareento/issues/1">
- *     Exception when calling method of non-first extended Interface</a>.
+ * Exception when calling method of non-first extended Interface</a>.
  */
 public class Issue1Test {
 
     @Test
     void smoketest(@TempDir File tempDir) {
-        JavaAnalysisProject project = 
+        JavaAnalysisProject project =
                 SampleProjectUtil.setupSampleProject("issue1", tempDir);
 
         StringBuilder info = infoOfMethodCallsInMethod(
-                project, "issue1.InterfaceC#methodInterfaceC():void");
+                project.getMethodWithMethodDeclarator(
+                "issue1.InterfaceC#methodInterfaceC():void"));
 
         assertEquals("""
                 # info of methodCalls in method issue1.InterfaceC#methodInterfaceC():void
@@ -30,17 +31,16 @@ public class Issue1Test {
     }
 
     @SuppressWarnings("SameParameterValue")
-    private static StringBuilder infoOfMethodCallsInMethod(JavaAnalysisProject project, String methodId) {
+    private static StringBuilder infoOfMethodCallsInMethod(JavaMethod method) {
         StringBuilder output = new StringBuilder();
         output
                 .append("# info of methodCalls in method ")
-                .append(methodId).append('\n');
-        for (var c : project.methodCallsInMethod(methodId)) {
-            output.append(c.id()).append('\n');
+                .append(method.getMethodDeclaratorText()).append('\n');
+        for (var c : method.getMethodCallsFromMe()) {
+            output.append(c.getId()).append('\n');
             output.append("- signature: ")
-                    .append(project.signatureOfMethodCall(c.id())).append('\n');
-            output.append("- scope: ")
-                    .append(project.scopeOfMethodCall(c.id())).append('\n');
+                    .append(c.getMethodSignature().getText()).append('\n');
+            output.append("- scope: ").append(c.getScope()).append('\n');
         }
         return output;
     }

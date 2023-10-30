@@ -5,14 +5,9 @@ import org.abego.jareento.base.JareentoSyntax;
 
 import javax.annotation.Syntax;
 import java.io.File;
-import java.io.PrintWriter;
 import java.util.Optional;
-import java.util.OptionalInt;
 
 import static org.abego.jareento.base.JareentoSyntax.CLASS_FILE_PATH_SYNTAX;
-import static org.abego.jareento.base.JareentoSyntax.FILE_PATH_SYNTAX;
-import static org.abego.jareento.base.JareentoSyntax.JAVA_FILE_PATH_SYNTAX;
-import static org.abego.jareento.base.JareentoSyntax.MD5_SYNTAX;
 import static org.abego.jareento.base.JareentoSyntax.QUALIFIED_TYPE_NAME_SYNTAX;
 
 public interface JavaAnalysisProjectState {
@@ -35,19 +30,17 @@ public interface JavaAnalysisProjectState {
     IDs methodCallsWithSignature(String methodSignature);
 
     @ID("JavaMethodCall")
-    IDs methodCallsWithSignatureToClass(String methodSignature, String className);
+    IDs methodCallsWithSignatureOnClass(String methodSignature, String className);
 
     String scopeOfMethodCall(String methodCallId);
 
     String baseScopeOfMethodCall(String methodCallId);
 
     String signatureOfMethodCall(String methodCallId);
-
-    String fileOfMethodCall(String methodCallId);
-
+    
     String extendedType(String className);
 
-    IDs classesExtending(String className);
+    IDs typesExtending(String className);
 
     IDs implementedInterfaces(String className);
 
@@ -58,40 +51,22 @@ public interface JavaAnalysisProjectState {
     String returnTypeOfMethod(String methodId);
 
     IDs idsOfMethodsWithSignature(String signature);
+    
+    IDs types();
 
-    //TODO: also introduce JavaFiles interface?!
-    String[] javaFiles();
+    IDs typesReferencingClass(
+            @Syntax(QUALIFIED_TYPE_NAME_SYNTAX) String typeName);
 
-    IDs classes();
-
-    IDs classesOfJavaFile(@Syntax(FILE_PATH_SYNTAX) String file);
-
-    IDs classesReferencingClass(
-            @Syntax(QUALIFIED_TYPE_NAME_SYNTAX) String classname);
-
-    IDs classesContainingMethodWithSignature(
-            @Syntax(JareentoSyntax.QUALIFIED_METHOD_SIGNATURE_SYNTAX) String methodSignature);
-
-    boolean isJavaFile(@Syntax(FILE_PATH_SYNTAX) String name);
-
-    @Syntax(JAVA_FILE_PATH_SYNTAX)
-    Optional<String> javaFileOfClass(
-            @Syntax(QUALIFIED_TYPE_NAME_SYNTAX) String classname);
+    IDs typesContainingMethodWithSignature(
+            @Syntax(JareentoSyntax.METHOD_SIGNATURE_SYNTAX) String methodSignature);
 
     @Syntax(CLASS_FILE_PATH_SYNTAX)
     Optional<String> classFileOfClass(
-            @Syntax(QUALIFIED_TYPE_NAME_SYNTAX) String classname);
+            @Syntax(QUALIFIED_TYPE_NAME_SYNTAX) String typeName);
+    
+    boolean isInterface(@Syntax(QUALIFIED_TYPE_NAME_SYNTAX) String typeName);
 
-    OptionalInt bytecodeSizeOfClass(
-            @Syntax(QUALIFIED_TYPE_NAME_SYNTAX) String classname);
-
-    @Syntax(MD5_SYNTAX)
-    Optional<String> md5OfClass(
-            @Syntax(QUALIFIED_TYPE_NAME_SYNTAX) String classname);
-
-    boolean isInterface(@Syntax(QUALIFIED_TYPE_NAME_SYNTAX) String classname);
-
-    boolean isClassDeclared(@Syntax(QUALIFIED_TYPE_NAME_SYNTAX) String classname);
+    boolean isClassDeclared(@Syntax(QUALIFIED_TYPE_NAME_SYNTAX) String typeName);
 
     //TODO name?
     IDs methodSignatureSpecificationsOfClass(
@@ -103,9 +78,9 @@ public interface JavaAnalysisProjectState {
 
     String nameOfMethod(String methodId);
 
-    String idOfMethodDeclaredAs(String fullMethodDeclarator);
+    String idOfMethodDeclaredAs(String methodDeclaratorText);
 
-    String fullDeclaratorOfMethod(String methodId);
+    String methodDeclaratorTextOfMethodWithId(String methodId);
 
     String classOfMethod(String methodId);
 
@@ -114,7 +89,4 @@ public interface JavaAnalysisProjectState {
     File[] sourceRoots();
 
     File[] dependencies();
-
-    void dump(PrintWriter writer);
-
 }

@@ -57,13 +57,13 @@ class JavapParser {
         default void onJavaFilename(String classfile, String javaFilename) {
         }
 
-        default void onClass(String classname, String access, String modifier, String type, String[] extendedTypes, String[] implementedTypes) {
+        default void onClass(String typeName, String access, String modifier, String type, String[] extendedTypes, String[] implementedTypes) {
         }
 
-        default void onClassEnd(String classname) {
+        default void onClassEnd(String typeName) {
         }
 
-        default void onMethod(String classname, String methodName, String access, String modifier, String returnType, String parameter, String exceptions, String typeParametersOfMethod) {
+        default void onMethod(String typeName, String methodName, String access, String modifier, String returnType, String parameter, String exceptions, String typeParametersOfMethod) {
         }
 
         default void onField(String className, String fieldName, String access, String modifier, String type) {

@@ -1,90 +1,89 @@
 package org.abego.jareento.service.internal;
 
-import org.abego.jareento.base.JavaMethodSet;
-import org.abego.jareento.base.JavaMethodSetBuilder;
-import org.abego.jareento.javaanalysis.JavaAnalysisAPI;
-import org.abego.jareento.javaanalysis.JavaAnalysisProject;
-import org.abego.jareento.javaanalysis.JavaMethodSelector;
+import org.abego.jareento.base.WithId;
+import org.abego.jareento.javaanalysis.JavaMethod;
+import org.abego.jareento.javaanalysis.JavaMethodDeclarators;
+import org.abego.jareento.javaanalysis.JavaMethodDeclaratorsBuilder;
 import org.abego.jareento.javaanalysis.JavaMethods;
+import org.abego.jareento.javaanalysis.internal.JavaAnalysisProjectInternal;
 import org.abego.jareento.service.SelectedAndOverridingMethods;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static org.abego.commons.lang.StringUtil.indent;
-import static org.abego.jareento.base.JavaMethodSetBuilder.newJavaMethodSetBuilder;
+import static org.abego.jareento.javaanalysis.JavaMethodDeclaratorsBuilder.newJavaMethodDeclaratorsBuilder;
 
 public class SelectedAndOverridingMethodsOperation {
-    @SuppressWarnings("FieldCanBeLocal")
-    private final JavaAnalysisAPI javaAnalysisAPI;
 
-    public SelectedAndOverridingMethodsOperation(JavaAnalysisAPI javaAnalysisAPI) {
-        this.javaAnalysisAPI = javaAnalysisAPI;
+    public SelectedAndOverridingMethodsOperation() {
     }
 
     public SelectedAndOverridingMethods getSelectedAndOverridingMethods(
-            JavaAnalysisProject javaAnalysisProject,
-            JavaMethodSelector methodSelector,
-            String[] classesToCheckForMethods,
+            JavaAnalysisProjectInternal javaAnalysisProject,
+            Predicate<JavaMethod> methodSelector,
+            String[] typesToCheckForMethods,
             Consumer<String> progress) {
 
 
-        JavaMethodSetBuilder selectedMethodsSetBuilder = newJavaMethodSetBuilder();
-        JavaMethodSetBuilder overridingMethodsSetBuilder = newJavaMethodSetBuilder();
+        JavaMethodDeclaratorsBuilder selectedMethodsSetBuilder = newJavaMethodDeclaratorsBuilder();
+        JavaMethodDeclaratorsBuilder overridingMethodsSetBuilder = newJavaMethodDeclaratorsBuilder();
 
         addSelectedAndOverridingMethods(
-                javaAnalysisProject, methodSelector, classesToCheckForMethods,
+                javaAnalysisProject, methodSelector, typesToCheckForMethods,
                 selectedMethodsSetBuilder, overridingMethodsSetBuilder, progress);
 
-        JavaMethodSet selectedMethods = selectedMethodsSetBuilder.build();
-        JavaMethodSet overridingMethods = overridingMethodsSetBuilder.build();
+        JavaMethodDeclarators selectedMethods = selectedMethodsSetBuilder.build();
+        JavaMethodDeclarators overridingMethods = overridingMethodsSetBuilder.build();
 
         return new SelectedAndOverridingMethods() {
 
             @Override
-            public JavaMethodSet selectedMethods() {
+            public JavaMethodDeclarators selectedMethods() {
                 return selectedMethods;
             }
 
             @Override
-            public JavaMethodSet overridingMethods() {
+            public JavaMethodDeclarators overridingMethods() {
                 return overridingMethods;
             }
         };
     }
 
     private void addSelectedAndOverridingMethods(
-            JavaAnalysisProject javaAnalysisProject,
-            JavaMethodSelector methodSelector,
-            String[] classnames,
-            JavaMethodSetBuilder selectedMethods,
-            JavaMethodSetBuilder overridingMethods,
+            JavaAnalysisProjectInternal javaAnalysisProject,
+            Predicate<JavaMethod> methodSelector,
+            String[] typeNames,
+            JavaMethodDeclaratorsBuilder selectedMethods,
+            JavaMethodDeclaratorsBuilder overridingMethods,
             Consumer<String> progress) {
 
         progress.accept("Finding selected methods and affected overrides...");
         Consumer<String> innerProgress = indent(progress);
         long afterLoad = System.currentTimeMillis();
-        for (String classname : classnames) {
-            innerProgress.accept(String.format("Checking '%s'...", classname));
-            addSelectedAndOverridingMethodsOfClass(
-                    javaAnalysisProject, methodSelector, classname, selectedMethods, overridingMethods);
+        for (String typeName : typeNames) {
+            innerProgress.accept(String.format("Checking '%s'...", typeName));
+            addSelectedAndOverridingMethodsOfType(
+                    javaAnalysisProject, methodSelector, typeName, selectedMethods, overridingMethods);
         }
         long afterCalc = System.currentTimeMillis();
         progress.accept(String.format("%d selected methods and %d affected overrides found. [%d ms]",
-                selectedMethods.methodCount(), overridingMethods.methodCount(),
+                selectedMethods.getSize(), overridingMethods.getSize(),
                 afterCalc - afterLoad));
     }
 
-    private void addSelectedAndOverridingMethodsOfClass(
-            JavaAnalysisProject project,
-            JavaMethodSelector methodSelector,
+    private void addSelectedAndOverridingMethodsOfType(
+            JavaAnalysisProjectInternal project,
+            Predicate<JavaMethod> methodSelector,
             String className,
-            JavaMethodSetBuilder selectedMethods,
-            JavaMethodSetBuilder overridingMethods) {
+            JavaMethodDeclaratorsBuilder selectedMethods,
+            JavaMethodDeclaratorsBuilder overridingMethods) {
 
-        Set<String> selectedMethodsOfClass =
+        List<String> selectedMethodsOfClass =
                 idsOfSelectedMethodsOfClass(project, className, methodSelector);
         selectedMethods.addAllMethods(selectedMethodsOfClass);
 
@@ -93,7 +92,7 @@ public class SelectedAndOverridingMethodsOperation {
     }
 
     private Set<String> idsOfDirectlyOverridingMethods(
-            JavaAnalysisProject project, Set<String> idsOfDeadMethods) {
+            JavaAnalysisProjectInternal project, Iterable<String> idsOfDeadMethods) {
         Set<String> allOverridingMethods = new HashSet<>();
         for (String methodId : idsOfDeadMethods) {
             JavaMethods overridingMethods = project.methodsDirectlyOverridingMethod(methodId);
@@ -103,18 +102,13 @@ public class SelectedAndOverridingMethodsOperation {
         return allOverridingMethods;
     }
 
-    private Set<String> idsOfSelectedMethodsOfClass(
-            JavaAnalysisProject project, String className, JavaMethodSelector methodSelector) {
+    private List<String> idsOfSelectedMethodsOfClass(
+            JavaAnalysisProjectInternal project, String className, Predicate<JavaMethod> methodSelector) {
 
-        Set<String> result = new HashSet<>();
-        project.methodsOfClass(className)
-                .idStream()
-                .sorted()
-                .forEach(methodId -> {  //TODO use filter
-                    if (methodSelector.isMethodSelected(methodId, project)) {
-                        result.add(methodId);
-                    }
-                });
-        return result;
+        return project.methodsOfType(className)
+                .stream()
+                .filter(methodSelector)
+                .map(WithId::getId)
+                .toList();
     }
 }

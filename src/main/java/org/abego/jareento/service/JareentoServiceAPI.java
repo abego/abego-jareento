@@ -1,21 +1,22 @@
 package org.abego.jareento.service;
 
 import org.abego.jareento.javaanalysis.JavaAnalysisProject;
-import org.abego.jareento.javaanalysis.JavaMethodSelector;
+import org.abego.jareento.javaanalysis.JavaMethod;
 
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 public interface JareentoServiceAPI {
 
     SelectedAndOverridingMethods selectedAndOverridingMethods(
             JavaAnalysisProject javaAnalysisProject,
-            JavaMethodSelector methodSelector,
-            String[] classesToCheckForMethods,
+            Predicate<JavaMethod> methodSelector,
+            String[] typesToCheckForMethods,
             Consumer<String> progress);
 
     void removeSelectedMethodsAndFixOverrides(
             JavaAnalysisProject javaAnalysisProject,
-            JavaMethodSelector methodSelector,
-            String[] classesToCheckForMethods,
+            Predicate<JavaMethod> methodSelector,
+            String[] typesToCheckForMethods,
             Consumer<String> progress);
 }

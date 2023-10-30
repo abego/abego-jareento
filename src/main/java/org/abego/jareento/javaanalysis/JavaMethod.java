@@ -5,15 +5,19 @@ import org.abego.jareento.base.WithId;
 public interface JavaMethod extends WithId {
     String getName();
 
-    String getSignature();
+    String getTypeName();
 
-    String getReturnTypeName();
-
-    String getClassName();
+    JavaType getJavaType();
 
     String getPackage();
+    
+    String getReturnTypeName();
 
-    String getFullDeclarator();
+    String getMethodDeclaratorText();
+
+    JavaMethodSignature getMethodSignature();
+
+    String getMethodSignatureText();
 
     boolean isConstructor();
 
@@ -22,4 +26,12 @@ public interface JavaMethod extends WithId {
     boolean isClassInitializationMethod();
 
     boolean isObjectInitializationMethod();
+
+    boolean isAnnotatedWithOverride();
+
+    JavaMethods getMethodsDirectlyOverridingMe();
+
+    JavaMethodCalls getMethodCallsToMe();
+
+    JavaMethodCalls getMethodCallsFromMe();
 }

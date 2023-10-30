@@ -5,7 +5,7 @@ import org.abego.commons.annotation.SPI;
 import java.util.function.Consumer;
 
 @SPI
-public interface ProblemsReporter {
+public interface ProblemReporter {
     String getID();
 
     String getTitle();

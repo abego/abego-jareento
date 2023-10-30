@@ -1,7 +1,8 @@
 package org.abego.jareento.base;
 
 /**
- * Used on types those instances can be identified by a String value (the ID).
+ * The instance can be identified by a String value, as returned by its 
+ * {@code id} property.
  */
 public interface WithId {
 
@@ -11,5 +12,5 @@ public interface WithId {
      * More specific implementations may refine the {@code @ID} value.
      */
     @ID("")
-    String id();
+    String getId();
 }

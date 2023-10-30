@@ -1,29 +1,38 @@
 package org.abego.jareento.javaanalysis.internal;
 
-import org.abego.jareento.javaanalysis.JavaAnalysisProject;
 import org.abego.jareento.javaanalysis.JavaMethodCall;
 import org.abego.jareento.javaanalysis.JavaMethodCalls;
 
-class JavaMethodCallsImpl extends ManyImpl<JavaMethodCall, JavaMethodCalls> implements JavaMethodCalls {
-    private final JavaAnalysisProject project;
+import java.util.stream.Collectors;
 
-    private JavaMethodCallsImpl(IDs ids, JavaAnalysisProject project) {
+class JavaMethodCallsImpl extends ManyWithIdDefault<JavaMethodCall, JavaMethodCalls> implements JavaMethodCalls {
+    private final JavaAnalysisProjectInternal project;
+
+    private JavaMethodCallsImpl(IDs ids, JavaAnalysisProjectInternal project) {
         super(ids);
         this.project = project;
     }
-    
-    static JavaMethodCalls newJavaMethodCalls(IDs ids, JavaAnalysisProject project) {
+
+    static JavaMethodCalls newJavaMethodCalls(IDs ids, JavaAnalysisProjectInternal project) {
         return new JavaMethodCallsImpl(ids, project);
     }
 
     @Override
     protected JavaMethodCall elementWithId(String id) {
-        return JavaMethodCallImpl.newJavaMethodCall(id);
+        return JavaMethodCallImpl.newJavaMethodCall(id, project);
     }
 
     @Override
     protected JavaMethodCalls newInstance(IDs ids) {
         return newJavaMethodCalls(ids, project);
+    }
+
+    @Override
+    public String getBriefSummary() {
+        return idStream()
+                .map(project::signatureOfMethodCall)
+                .sorted()
+                .collect(Collectors.joining(";"));
     }
 
 }

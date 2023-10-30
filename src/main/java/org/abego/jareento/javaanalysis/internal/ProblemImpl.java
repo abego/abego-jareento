@@ -2,6 +2,7 @@ package org.abego.jareento.javaanalysis.internal;
 
 import org.abego.jareento.javaanalysis.Problem;
 import org.abego.jareento.javaanalysis.ProblemType;
+import org.abego.jareento.util.LocationsInFile;
 import org.eclipse.jdt.annotation.Nullable;
 
 import java.io.File;
@@ -11,6 +12,9 @@ import java.util.Properties;
 import static org.abego.commons.stringevaluator.StringEvaluatorUtil.evaluatedString;
 
 class ProblemImpl implements Problem {
+    private static final LocationsInFile LOCATIONS_IN_FILE = 
+            LocationsInFile.getInstance();
+    
     private final ProblemType problemType;
     private final long locationInFileId;
     private final Properties properties;
@@ -19,23 +23,29 @@ class ProblemImpl implements Problem {
 
     private ProblemImpl(
             ProblemType problemType,
-            long locationInFileId,
+            @Nullable File file,
+            int lineNumber,
             Properties properties,
             @Nullable Object details) {
-
+        if (file == null && lineNumber != 0) {
+            throw new IllegalArgumentException(
+                    "lineNumber defined (%d), but no file specified."
+                            .formatted(lineNumber));
+        }
         this.problemType = problemType;
         this.properties = properties;
-        this.locationInFileId = locationInFileId;
+        this.locationInFileId =
+                file != null ? LOCATIONS_IN_FILE.getId(file, lineNumber) : 0;
         this.details = details;
     }
 
     public static ProblemImpl newProblemImpl(
             ProblemType problemType,
-            long locationInFileId,
+            @Nullable File file,
+            int lineNumber,
             Properties properties,
             @Nullable Object details) {
-
-        return new ProblemImpl(problemType, locationInFileId, properties, details);
+        return new ProblemImpl(problemType, file, lineNumber, properties, details);
     }
 
     @Override
@@ -45,12 +55,12 @@ class ProblemImpl implements Problem {
 
     @Override
     public File getFile() {
-        return LocationInFile.getFile(locationInFileId);
+        return LOCATIONS_IN_FILE.getFile(locationInFileId);
     }
 
     @Override
     public int getLineNumber() {
-        return LocationInFile.getLineNumber(locationInFileId);
+        return LOCATIONS_IN_FILE.getLineNumber(locationInFileId);
     }
 
     @Override

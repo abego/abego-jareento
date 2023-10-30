@@ -8,32 +8,32 @@ public interface MethodDescriptor {
     /**
      * Returns the name of the method.
      */
-    String methodName();
+    String getMethodName();
 
     /**
      * Returns the qualified name of the method.
      */
-    String qualifiedMethodName();
+    String getQualifiedMethodName();
 
     /**
      * Returns the signature of the method.
      */
-    String methodSignature();
+    String getMethodSignature();
 
     /**
      * Returns the types of parameters of the method.
      */
-    String[] methodParameterTypes();
+    String[] getMethodParameterTypeNames();
 
     /**
      * Returns the qualified name of the type declaring the method.
      */
-    String typeDeclaringMethod();
+    String getTypeDeclaringMethod();
 
     /**
      * Return the package containing the type the method belongs to.
      */
-    String methodPackageName();
+    String getMethodPackageName();
 
-    String methodSignatureWithRawTypes();
+    String getMethodSignatureWithRawTypes();
 }

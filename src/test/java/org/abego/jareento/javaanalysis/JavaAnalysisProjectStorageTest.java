@@ -15,9 +15,9 @@ class JavaAnalysisProjectStorageTest {
     private final JavaAnalysisAPI javaAnalysisAPI = loadService(JavaAnalysisAPI.class);
 
     @Test
-    void missingStorage(@TempDir File tempDir) throws URISyntaxException {
+    void missingStorage(@TempDir File tempDir) {
         JavaAnalysisProjectStorage storage = javaAnalysisAPI
-                .javaAnalysisProjectStorage(tempDir.toURI());
+                .getJavaAnalysisProjectStorage(tempDir.toURI());
         File file = new File(tempDir, "p1");
         
         JareentoException e = assertThrows(JareentoException.class, () -> 

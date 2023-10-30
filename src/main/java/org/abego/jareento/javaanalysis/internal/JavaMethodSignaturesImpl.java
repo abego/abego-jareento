@@ -1,6 +1,5 @@
 package org.abego.jareento.javaanalysis.internal;
 
-import org.abego.jareento.javaanalysis.JavaAnalysisProject;
 import org.abego.jareento.javaanalysis.JavaMethodSignature;
 import org.abego.jareento.javaanalysis.JavaMethodSignatures;
 
@@ -10,15 +9,15 @@ import java.util.Set;
 import static org.abego.jareento.javaanalysis.internal.IDsImpl.newIDs;
 import static org.abego.jareento.javaanalysis.internal.JavaMethodSignatureImpl.newJavaMethodSignature;
 
-class JavaMethodSignaturesImpl extends ManyImpl<JavaMethodSignature, JavaMethodSignatures> implements JavaMethodSignatures {
-    private final JavaAnalysisProject project;
+class JavaMethodSignaturesImpl extends ManyWithIdDefault<JavaMethodSignature, JavaMethodSignatures> implements JavaMethodSignatures {
+    private final JavaAnalysisProjectInternal project;
 
-    private JavaMethodSignaturesImpl(IDs ids, JavaAnalysisProject project) {
+    private JavaMethodSignaturesImpl(IDs ids, JavaAnalysisProjectInternal project) {
         super(ids);
         this.project = project;
     }
 
-    public static JavaMethodSignaturesImpl newJavaMethodSignatures(IDs ids, JavaAnalysisProject project) {
+    public static JavaMethodSignaturesImpl newJavaMethodSignatures(IDs ids, JavaAnalysisProjectInternal project) {
         return new JavaMethodSignaturesImpl(ids, project);
     }
 
@@ -33,15 +32,15 @@ class JavaMethodSignaturesImpl extends ManyImpl<JavaMethodSignature, JavaMethodS
     }
 
     @Override
-    public boolean contains(String methodSignature) {
-        return idSet().contains(methodSignature);
+    public boolean contains(String methodSignatureText) {
+        return toSet().contains(methodSignatureText);
     }
 
     @Override
     public JavaMethodSignatures intersectedWith(JavaMethodSignatures otherSignatures) {
         return newJavaMethodSignatures(newIDs(() -> {
-            Set<String> result = new HashSet<>(idSet());
-            result.retainAll(otherSignatures.idSet());
+            Set<String> result = new HashSet<>(toSet());
+            result.retainAll(otherSignatures.toSet());
             return result;
         }), project);
     }

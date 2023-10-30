@@ -50,16 +50,13 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-import static java.util.logging.Logger.getLogger;
 import static org.abego.commons.io.FileUtil.withFilesInDirectoryAndDeeperDo;
 import static org.abego.commons.var.VarUtil.newVar;
 import static org.abego.jareento.shared.commons.progress.ProgressWithRangeListenerWithStringConsumer.newProgressListenerWithStringConsumer;
 
 public final class JavaParserUtil {
-    private static final Logger LOGGER = getLogger(JavaParserUtil.class.getName());
     private static final Supplier<IllegalStateException> INTERNAL_ERROR =
             () -> new IllegalStateException("Internal Error");
 
@@ -119,10 +116,13 @@ public final class JavaParserUtil {
     }
 
     public static void forEveryJavaFileDo(
-            File[] sourceRootsAndDependencies, Predicate<File> javaFileSelector, Consumer<CompilationUnit> compilationUnitHandler,
+            File[] sourceRootsAndDependencies, 
+            Predicate<File> javaFileSelector, 
+            Consumer<CompilationUnit> compilationUnitHandler,
             Consumer<String> progress) {
 
-        SymbolResolver resolver = getSymbolResolverForSourceRootsAndDependencies(sourceRootsAndDependencies);
+        SymbolResolver resolver = getSymbolResolverForSourceRootsAndDependencies(
+                sourceRootsAndDependencies);
         StaticJavaParser.getParserConfiguration().setSymbolResolver(resolver);
         usePrinterWithoutComments(StaticJavaParser.getParserConfiguration());
         // for performance and memory reasons, no comments support
@@ -133,7 +133,8 @@ public final class JavaParserUtil {
         Predicate<File> filter = (file) -> file.getName()
                 .endsWith(".java") && javaFileSelector.test(file);
 
-        int fileCount = countFilesInDirectoriesAndDeeper(sourceRootsAndDependencies, filter);
+        int fileCount = countFilesInDirectoriesAndDeeper(
+                sourceRootsAndDependencies, filter);
 
         Var<Integer> index = newVar(0);
         ProgressWithRange progressWithRange = Progresses.createProgressWithRange(

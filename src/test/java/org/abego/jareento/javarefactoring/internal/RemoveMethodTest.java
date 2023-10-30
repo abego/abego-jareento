@@ -26,12 +26,12 @@ class RemoveMethodTest {
         // remove all methods containing "Base" in their name 
         javaRefactoring.removeMethods(
                 project,
-                mad -> mad.methodName().contains("Base"),
+                mad -> mad.getMethodName().contains("Base"),
                 f -> true,
                 mad -> listenerLog.append(
                         String.format("removing %s.%s\n",
-                                mad.typeDeclaringMethod(),
-                                mad.methodSignature())),
+                                mad.getTypeDeclaringMethod(),
+                                mad.getMethodSignature())),
                 s -> {});
 
         assertEquals("""

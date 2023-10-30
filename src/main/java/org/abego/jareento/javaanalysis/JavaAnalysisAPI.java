@@ -22,7 +22,7 @@ public interface JavaAnalysisAPI {
      * {@link URI} that is different from the URI of the
      * JavaAnalysisProjectStorage containing the project.
      */
-    JavaAnalysisProjectStorage javaAnalysisProjectStorage(URI storageURI);
+    JavaAnalysisProjectStorage getJavaAnalysisProjectStorage(URI storageURI);
     //endregion
 
     //region Configuration
@@ -80,28 +80,44 @@ public interface JavaAnalysisAPI {
     //region Problem(s) factories
     Problem newProblem(
             ProblemType problemType,
-            long locationInFileId,
+            @Nullable File file,
+            int lineNumber,
             Properties properties,
             @Nullable Object details);
 
     default Problem newProblem(
             ProblemType problemType,
-            long locationInFileId,
+            @Nullable File file,
+            int lineNumber,
             Properties properties) {
-        return newProblem(problemType, locationInFileId, properties, null);
+        return newProblem(problemType, file, lineNumber, properties, null);
     }
 
-    default Problem newProblem(ProblemType problemType, long locationInFileId) {
-        return newProblem(problemType, locationInFileId, new Properties());
+    default Problem newProblem(
+            ProblemType problemType,
+            @Nullable File file,
+            int lineNumber) {
+        return newProblem(problemType, file, lineNumber, new Properties());
     }
 
     Problems newProblems(Iterable<Problem> problems);
     //endregion
 
-    //region Problem Checking & Reporting    
-    Iterable<ProblemChecker> getAllProblemCheckers();
+    //region Problem Checking & Reporting
 
-    Iterable<ProblemsReporter> getAllProblemsReporters();
+    ProblemCheckers newProblemCheckers(Iterable<ProblemChecker> items);
+
+    ProblemReporters newProblemReporters(Iterable<ProblemReporter> items);
+
+    /**
+     * Returns all {@link ProblemChecker}s currently available.
+     */
+    ProblemCheckers getAllProblemCheckers();
+
+    /**
+     * Returns all {@link ProblemReporter}s currently available.
+     */
+    ProblemReporters getAllProblemReporters();
 
     /**
      * Checks for problems in the Java files under the source roots given in
@@ -155,7 +171,7 @@ public interface JavaAnalysisAPI {
 
     void reportProblems(
             Problems problems,
-            Iterable<ProblemsReporter> problemsReporters,
+            Iterable<ProblemReporter> problemReporters,
             Consumer<String> progress);
 
     /**
@@ -170,8 +186,8 @@ public interface JavaAnalysisAPI {
      */
     Problems checkForProblemsAndWriteReports(
             File[] sourceRootsAndDependencies,
-            Iterable<ProblemChecker> problemCheckers,
-            Iterable<ProblemsReporter> problemsReporters,
+            ProblemCheckers problemCheckers,
+            ProblemReporters problemReporters,
             boolean processedFileToProgress,
             Consumer<String> progress);
 

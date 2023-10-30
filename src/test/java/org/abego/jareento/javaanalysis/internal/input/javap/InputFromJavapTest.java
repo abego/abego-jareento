@@ -3,18 +3,19 @@ package org.abego.jareento.javaanalysis.internal.input.javap;
 import org.abego.commons.io.FileUtil;
 import org.abego.commons.io.PrintStreamToBuffer;
 import org.abego.jareento.javaanalysis.JavaAnalysisAPI;
-import org.abego.jareento.javaanalysis.JavaAnalysisProject;
-import org.abego.jareento.javaanalysis.JavaAnalysisProjectUtil;
 import org.abego.jareento.javaanalysis.JavaMethodCalls;
 import org.abego.jareento.javaanalysis.internal.JavaAnalysisInternalFactories;
+import org.abego.jareento.javaanalysis.internal.JavaAnalysisProjectInternal;
 import org.abego.jareento.javaanalysis.internal.JavaAnalysisProjectStateBuilder;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 import java.io.File;
 import java.util.Comparator;
+import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import static java.util.logging.Logger.getLogger;
 import static org.abego.commons.lang.StringUtil.sortedUnixLines;
@@ -79,10 +80,10 @@ class InputFromJavapTest {
     }
 
     private String methodCallsTestHelper(File tempDir, String resourceName) {
-        JavaAnalysisProject project = createProjectUsingJavapData(tempDir, resourceName);
+        JavaAnalysisProjectInternal project = createProjectUsingJavapData(tempDir, resourceName);
 
         PrintStreamToBuffer out = PrintStreamToBuffer.newPrintStreamToBuffer();
-        project.methodCalls().idStream()
+        project.getMethodCalls().idStream()
                 .sorted(Comparator.comparing(id -> project.scopeOfMethodCall(id) + "." + project.signatureOfMethodCall(id) + " - " + id))
                 .forEach(id -> out.println(project.scopeOfMethodCall(id) + "." + project.signatureOfMethodCall(id) + " - " + id));
         out.close();
@@ -90,7 +91,7 @@ class InputFromJavapTest {
         return out.text();
     }
 
-    private JavaAnalysisProject createProjectUsingJavapData(File tempDir, String resourceName) {
+    private JavaAnalysisProjectInternal createProjectUsingJavapData(File tempDir, String resourceName) {
         File file = new File(tempDir, "sample.txt");
         FileUtil.copyResourceToFile(getClass(), resourceName, file);
 
@@ -105,7 +106,7 @@ class InputFromJavapTest {
 
     @Test
     void withMethodCallsToMethodsOfClassDoTest(@TempDir File tempDir) {
-        JavaAnalysisProject project = createProjectUsingJavapData(tempDir, "javap-CallsSample.txt");
+        JavaAnalysisProjectInternal project = createProjectUsingJavapData(tempDir, "javap-CallsSample.txt");
 
         String rootCalls = reportMethodCalls(project, "calls.CallsSample$Root", m -> true);
         assertEquals("""
@@ -134,14 +135,13 @@ class InputFromJavapTest {
 
     @Test
     void calledMethods(@TempDir File tempDir) {
-        JavaAnalysisProject project = createProjectUsingJavapData(tempDir, "javap-CallsSample.txt");
+        JavaAnalysisProjectInternal project = createProjectUsingJavapData(tempDir, "javap-CallsSample.txt");
 
         StringBuilder result = new StringBuilder();
-        project.methodsOfClass("calls.CallsSample$Main")
+        project.methodsOfType("calls.CallsSample$Main")
                 .idStream()
                 .forEach(methodId -> {
-                    String calledMethods = JavaAnalysisProjectUtil.
-                            calledMethodsSummary(project, methodId);
+                    String calledMethods = calledMethodsSummary(project, methodId);
                     result.append(calledMethods);
                     result.append("\n");
                 });
@@ -152,9 +152,21 @@ class InputFromJavapTest {
                 """, result.toString());
     }
 
-    private static String reportMethodCalls(JavaAnalysisProject project, String className, Predicate<JavaMethodCalls> reportPredicate) {
+    private static void withMethodCallsToMethodsOfClassDo(
+            JavaAnalysisProjectInternal project, String className, BiConsumer<String, JavaMethodCalls> calledMethodAndMethodCalls) {
+        project.methodsOfType(className)
+                .idStream().sorted().forEach(calledMethodId -> {
+                    JavaMethodCalls methodCalls = 
+                            project.methodCallsWithSignatureOnType(
+                                    project.signatureOfMethod(calledMethodId), className);
+                    calledMethodAndMethodCalls.accept(calledMethodId, methodCalls);
+                });
+    }
+
+
+    private static String reportMethodCalls(JavaAnalysisProjectInternal project, String className, Predicate<JavaMethodCalls> reportPredicate) {
         StringBuilder result = new StringBuilder();
-        project.withMethodCallsToMethodsOfClassDo(className, (calledMethodId, methodCalls) -> {
+        withMethodCallsToMethodsOfClassDo(project, className, (calledMethodId, methodCalls) -> {
             if (reportPredicate.test(methodCalls)) {
                 result.append(calledMethodId);
                 result.append(":\n");
@@ -166,6 +178,13 @@ class InputFromJavapTest {
             }
         });
         return result.toString();
+    }
+
+    private static String calledMethodsSummary(JavaAnalysisProjectInternal project, String methodId) {
+        return project.methodCallsInMethod(methodId)
+                .idStream()
+                .map(project::signatureOfMethodCall)
+                .collect(Collectors.joining(";"));
     }
 
 }

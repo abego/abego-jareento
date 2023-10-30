@@ -1,11 +1,11 @@
 package org.abego.jareento.cli;
 
-import org.abego.commons.lang.IterableUtil;
 import org.abego.jareento.javaanalysis.JavaAnalysisAPI;
 import org.abego.jareento.javaanalysis.ProblemChecker;
+import org.abego.jareento.javaanalysis.ProblemCheckers;
+import org.abego.jareento.javaanalysis.ProblemReporters;
 import org.abego.jareento.javaanalysis.ProblemType;
 import org.abego.jareento.javaanalysis.Problems;
-import org.abego.jareento.javaanalysis.ProblemsReporter;
 
 import java.io.File;
 import java.io.PrintStream;
@@ -105,11 +105,11 @@ public class CheckForProblemsApp {
         checkArgs(args);
 
         var problemCheckers = problemCheckersWithIds(args.checkerIds);
-        if (IterableUtil.isEmpty(problemCheckers)) {
+        if (problemCheckers.isEmpty()) {
             throw new IllegalArgumentException("No problem checkers specified.");
         }
-        var problemsReporters = javaAnalysisAPI.getAllProblemsReporters();
-        if (IterableUtil.isEmpty(problemsReporters)) {
+        var problemReporters = javaAnalysisAPI.getAllProblemReporters();
+        if (problemReporters.isEmpty()) {
             throw new IllegalArgumentException("No problem reporters found.");
         }
         File[] sourceRootsAndDependencies = parseFiles(
@@ -124,7 +124,7 @@ public class CheckForProblemsApp {
         return javaAnalysisAPI.checkForProblemsAndWriteReports(
                 sourceRootsAndDependencies,
                 problemCheckers,
-                problemsReporters,
+                problemReporters,
                 processedFileToProgress,
                 progress);
     }
@@ -146,7 +146,7 @@ public class CheckForProblemsApp {
                         progress.accept("\t%s".formatted(f.getAbsolutePath())));
     }
 
-    private static void printProblemsToCheck(Iterable<ProblemChecker> problemCheckers, Consumer<String> progress) {
+    private static void printProblemsToCheck(ProblemCheckers problemCheckers, Consumer<String> progress) {
         progress.accept("Checking for problem(s): %s".formatted(
                 toList(problemCheckers).stream()
                         .map(pc -> pc.getProblemType().getID())
@@ -156,7 +156,7 @@ public class CheckForProblemsApp {
     private void printAvailableProblemCheckersAndReporters(PrintStream out) {
         printAvailableProblemCheckers(out, javaAnalysisAPI.getAllProblemCheckers());
         out.println();
-        printAvailableProblemReporters(out, javaAnalysisAPI.getAllProblemsReporters());
+        printAvailableProblemReporters(out, javaAnalysisAPI.getAllProblemReporters());
     }
 
     private static void printUsage(PrintStream out) {
@@ -182,8 +182,8 @@ public class CheckForProblemsApp {
     }
 
     private void printAvailableProblemCheckers(
-            PrintStream out, Iterable<ProblemChecker> problemCheckers) {
-        if (IterableUtil.isEmpty(problemCheckers)) {
+            PrintStream out, ProblemCheckers problemCheckers) {
+        if (problemCheckers.isEmpty()) {
             out.println("No Problem Checkers available.");
             return;
         }
@@ -197,20 +197,20 @@ public class CheckForProblemsApp {
     }
 
     private void printAvailableProblemReporters(
-            PrintStream out, Iterable<ProblemsReporter> problemsReporters) {
-        if (IterableUtil.isEmpty(problemsReporters)) {
+            PrintStream out, ProblemReporters problemReporters) {
+        if (problemReporters.isEmpty()) {
             out.println("No Problem Reporters available.");
             return;
         }
 
         out.println("Available Problem Reporters:");
         out.println("\t[ID]\t[Title]");
-        for (var pr : problemsReporters) {
+        for (var pr : problemReporters) {
             out.printf("\t%s\t%s%n", pr.getID(), pr.getTitle());
         }
     }
 
-    private Iterable<ProblemChecker> problemCheckersWithIds(
+    private ProblemCheckers problemCheckersWithIds(
             Set<String> checkerIds) {
 
         Map<String, ProblemChecker> map = new HashMap<>();
@@ -232,7 +232,7 @@ public class CheckForProblemsApp {
                     "ProblemChecker not found: %s".formatted(
                             String.join(", ", missingCheckers)));
         }
-        return result;
+        return javaAnalysisAPI.newProblemCheckers(result);
     }
 
 }

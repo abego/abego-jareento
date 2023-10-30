@@ -1,26 +1,18 @@
 package org.abego.jareento.javaanalysis.internal;
 
 import org.abego.commons.io.FileUtil;
-import org.abego.commons.lang.IntUtil;
-import org.abego.commons.lang.StringUtil;
-import org.abego.jareento.base.JareentoException;
-import org.abego.jareento.shared.FullMethodDeclarator;
+import org.abego.jareento.javaanalysis.JavaMethodDeclarator;
 import org.abego.stringgraph.core.Node;
 import org.abego.stringgraph.core.Nodes;
 import org.abego.stringgraph.core.StringGraph;
 import org.abego.stringgraph.core.StringGraphBuilder;
-import org.abego.stringgraph.core.StringGraphDump;
 import org.abego.stringgraph.core.StringGraphs;
 
 import javax.annotation.Syntax;
 import java.io.File;
-import java.io.PrintWriter;
 import java.net.URI;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Optional;
-import java.util.OptionalInt;
 import java.util.Set;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -28,7 +20,8 @@ import java.util.stream.Collectors;
 import static java.util.logging.Logger.getLogger;
 import static org.abego.jareento.base.JareentoSyntax.QUALIFIED_TYPE_OR_ARRAY_NAME_SYNTAX;
 import static org.abego.jareento.javaanalysis.internal.IDsImpl.newIDs;
-import static org.abego.jareento.shared.FullMethodDeclarator.fullMethodDeclaratorText;
+import static org.abego.jareento.shared.JavaMethodDeclaratorUtil.newJavaMethodDeclarator;
+import static org.abego.jareento.shared.JavaMethodDeclaratorUtil.methodDeclaratorText;
 import static org.abego.jareento.shared.SyntaxUtil.qualifier;
 import static org.abego.jareento.util.JavaLangUtil.rawNameNoArray;
 
@@ -46,7 +39,6 @@ public class JavaAnalysisProjectStateUsingStringGraph implements JavaAnalysisPro
     private static final String METHOD = "Method";
     private static final String METHOD_SIGNATURE = "MethodSignature";
     private static final String METHOD_CALL = "MethodCall";
-    private static final String JAVA_FILE = "JavaFile";
 
     private static final String REFS = "refs";
     private static final String CONTAINS = "contains";
@@ -64,10 +56,8 @@ public class JavaAnalysisProjectStateUsingStringGraph implements JavaAnalysisPro
     private static final String CALLS = "calls";
     private static final String IN_CLASSFILE = "inClassfile";
 
-    private static final String BYTECODE_SIZE = "bytecodeSize";
     private static final String IS_DECLARED = "isDeclared";
     private static final String IS_INTERFACE = "isInterface";
-    private static final String MD5 = "md5";
     private static final String HAS_OVERRIDE = "hasOverride";
     private static final String IS_SYNTHETIC = "isSynthetic";
     private static final String SOURCE_ROOTS = "sourceRoots";
@@ -124,30 +114,10 @@ public class JavaAnalysisProjectStateUsingStringGraph implements JavaAnalysisPro
         public void addReference(String from, String to) {
             graphBuilder.addEdge(from, REFS, to);
         }
-
+        
         @Override
-        public void addJavaFileContainsNode(String filename, String nodeId) {
-            addJavaFile(filename);
-            graphBuilder.addEdge(filename, CONTAINS, nodeId);
-        }
-
-        @Override
-        public void setMD5OfClass(String classname, String md5) {
-            graphBuilder.setNodeProperty(classname, MD5, md5);
-        }
-
-        @Override
-        public void setBytecodeSizeOfClass(String classname, int bytecodeSize) {
-            if (bytecodeSize < 0) {
-                throw new JareentoException(String.format(
-                        "Bytecode size must not be negative. Got %d", bytecodeSize));
-            }
-            graphBuilder.setNodeProperty(classname, BYTECODE_SIZE, String.valueOf(bytecodeSize));
-        }
-
-        @Override
-        public void setIsInterfaceOfClass(String classname, boolean value) {
-            graphBuilder.setNodeProperty(classname, IS_INTERFACE, String.valueOf(value));
+        public void setIsInterfaceOfClass(String typeName, boolean value) {
+            graphBuilder.setNodeProperty(typeName, IS_INTERFACE, String.valueOf(value));
         }
 
         @Override
@@ -156,32 +126,32 @@ public class JavaAnalysisProjectStateUsingStringGraph implements JavaAnalysisPro
         }
 
         @Override
-        public void addTypeExtends(String typename, String otherTypename) {
-            addClass(typename);
+        public void addTypeExtends(String typeName, String otherTypename) {
+            addClass(typeName);
             addClass(otherTypename);
-            graphBuilder.addEdge(typename, EXTENDS, otherTypename);
+            graphBuilder.addEdge(typeName, EXTENDS, otherTypename);
         }
 
         @Override
-        public void addTypeImplements(String typename, String otherTypename) {
-            addClass(typename);
+        public void addTypeImplements(String typeName, String otherTypename) {
+            addClass(typeName);
             addClass(otherTypename);
-            graphBuilder.addEdge(typename, IMPLEMENTS, otherTypename);
+            graphBuilder.addEdge(typeName, IMPLEMENTS, otherTypename);
 
         }
 
         @Override
         public String addMethod(
-                String typename, String methodSignature, String returnType) {
-            addClass(typename);
+                String typeName, String methodSignature, String returnType) {
+            addClass(typeName);
             addMethodSignature(methodSignature);
             if (!returnType.isEmpty()) {
                 addClass(rawNameNoArray(returnType));
             }
 
-            String methodId = getMethodId(typename, methodSignature, returnType);
+            String methodId = getMethodId(typeName, methodSignature, returnType);
             addMethod(methodId);
-            graphBuilder.addEdge(typename, CONTAINS, methodId);
+            graphBuilder.addEdge(typeName, CONTAINS, methodId);
             addMethodSignature(methodSignature);
             graphBuilder.addEdge(methodId, HAS_SIGNATURE, methodSignature);
             if (!returnType.isEmpty()) {
@@ -191,8 +161,8 @@ public class JavaAnalysisProjectStateUsingStringGraph implements JavaAnalysisPro
         }
 
         @Override
-        public String getMethodId(String typename, String methodSignature, String returnType) {
-            return fullMethodDeclaratorText(typename, methodSignature, returnType);
+        public String getMethodId(String typeName, String methodSignature, String returnType) {
+            return methodDeclaratorText(typeName, methodSignature, returnType);
         }
 
         @Override
@@ -254,18 +224,18 @@ public class JavaAnalysisProjectStateUsingStringGraph implements JavaAnalysisPro
         }
 
         @Override
-        public void addClassHasRawType(String classname, String rawClassname) {
-            graphBuilder.addEdge(classname, HAS_RAW_TYPE, rawClassname);
+        public void addClassHasRawType(String typeName, String rawClassname) {
+            graphBuilder.addEdge(typeName, HAS_RAW_TYPE, rawClassname);
         }
 
         @Override
-        public void addClassInClassFile(String classname, String classfileName) {
-            graphBuilder.addEdge(classname, IN_CLASSFILE, classfileName);
+        public void addClassInClassFile(String typeName, String classfileName) {
+            graphBuilder.addEdge(typeName, IN_CLASSFILE, classfileName);
         }
 
         @Override
-        public void setClassIsDeclared(String classname, boolean value) {
-            graphBuilder.setNodeProperty(classname, IS_DECLARED, String.valueOf(value));
+        public void setClassIsDeclared(String typeName, boolean value) {
+            graphBuilder.setNodeProperty(typeName, IS_DECLARED, String.valueOf(value));
         }
 
         @Override
@@ -289,9 +259,6 @@ public class JavaAnalysisProjectStateUsingStringGraph implements JavaAnalysisPro
             builder.addEdge(name, RDF_TYPE, classNode);
         }
 
-        private void addJavaFile(String filename) {
-            addInstance(graphBuilder, JAVA_FILE, filename);
-        }
     }
 
     @Override
@@ -311,7 +278,8 @@ public class JavaAnalysisProjectStateUsingStringGraph implements JavaAnalysisPro
 
     @Override
     public boolean isConstructor(String methodId) {
-        return !graph.nodes(methodId, RETURN_TYPE, "?").hasSingleNode();
+        JavaMethodDeclarator decl = newJavaMethodDeclarator(methodId);
+        return decl.getMethodName().equals(decl.getSimpleTypeName());
     }
 
     @Override
@@ -335,7 +303,7 @@ public class JavaAnalysisProjectStateUsingStringGraph implements JavaAnalysisPro
     }
 
     @Override
-    public IDs methodCallsWithSignatureToClass(String methodSignature, String className) {
+    public IDs methodCallsWithSignatureOnClass(String methodSignature, String className) {
         Nodes callsWithScopeOrBaseScope =
                 graph.nodes("?", HAS_SCOPE, className)
                         .union(graph.nodes("?", BASE_SCOPE, className));
@@ -363,25 +331,20 @@ public class JavaAnalysisProjectStateUsingStringGraph implements JavaAnalysisPro
     public String signatureOfMethodCall(String methodCallId) {
         return graph.nodes(methodCallId, SIGNATURE, "?").singleNodeId();
     }
-
-    @Override
-    public String fileOfMethodCall(String methodCallId) {
-        return graph.nodes("?", CONTAINS, methodCallId).singleNodeId();
-    }
-
+    
     @Override
     public String extendedType(String className) {
         //TODO add Nodes.optionalNodeIdOrElse(String) (next to "singleNodeId()")
-        Nodes superclasses = graph.nodes(className, EXTENDS, "?");
-        if (superclasses.getSize() == 0) {
+        Nodes superTypes = graph.nodes(className, EXTENDS, "?");
+        if (superTypes.getSize() == 0) {
             return "java.lang.Object";
         }
         //TODO fail when > 1 nodes exist.
-        return superclasses.iterator().next().id();
+        return superTypes.iterator().next().id();
     }
 
     @Override
-    public IDs classesExtending(String className) {
+    public IDs typesExtending(String className) {
         return ids(graph.nodes("?", EXTENDS, className));
     }
 
@@ -414,49 +377,26 @@ public class JavaAnalysisProjectStateUsingStringGraph implements JavaAnalysisPro
         return ids(methodsWithSignature(signature));
     }
 
-    //TODO: also introduce JavaFiles interface?!
     @Override
-    public String[] javaFiles() {
-        Nodes nodes = graph.nodes("?", RDF_TYPE, JAVA_FILE);
-        return toStringArray(nodes);
-    }
-
-    @Override
-    public IDs classes() {
+    public IDs types() {
         return ids(graph.nodes("?", RDF_TYPE, CLASS));
     }
-
+    
     @Override
-    public IDs classesOfJavaFile(String file) {
-        return ids(graph.nodes(file, CONTAINS, "?"));
+    public IDs typesReferencingClass(String typeName) {
+        return ids(graph.nodes("?", REFS, typeName));
     }
 
     @Override
-    public IDs classesReferencingClass(String classname) {
-        return ids(graph.nodes("?", REFS, classname));
-    }
-
-    @Override
-    public IDs classesContainingMethodWithSignature(String methodSignature) {
+    public IDs typesContainingMethodWithSignature(String methodSignature) {
         return newIDs(() -> methodsWithSignature(methodSignature).stream()
                 .map(m -> classOfMethod(m.id()))
                 .collect(Collectors.toSet()));
     }
-
+    
     @Override
-    public boolean isJavaFile(String name) {
-        return graph.hasEdge(name, RDF_TYPE, JAVA_FILE);
-    }
-
-    @Override
-    public Optional<String> javaFileOfClass(String classname) {
-        Nodes nodes = graph.nodesViaEdgeLabeledToNode(CONTAINS, classname);
-        return optionalSingleId(nodes);
-    }
-
-    @Override
-    public Optional<String> classFileOfClass(String classname) {
-        Nodes nodes = graph.nodesFromNodeViaEdgeLabeled(classname, IN_CLASSFILE);
+    public Optional<String> classFileOfClass(String typeName) {
+        Nodes nodes = graph.nodesFromNodeViaEdgeLabeled(typeName, IN_CLASSFILE);
         return optionalSingleId(nodes);
     }
 
@@ -465,49 +405,15 @@ public class JavaAnalysisProjectStateUsingStringGraph implements JavaAnalysisPro
         return ids.length == 1
                 ? Optional.of(ids[0]) : Optional.empty();
     }
-
+    
     @Override
-    public OptionalInt bytecodeSizeOfClass(String classname) {
-        if (graph.hasNodeProperty(classname, BYTECODE_SIZE)) {
-            String s = graph.getNodePropertyValue(classname, BYTECODE_SIZE);
-            OptionalInt result = IntUtil.parseInt(s);
-            if (result.isEmpty() || result.getAsInt() < 0) {
-                LOGGER.warning(() -> String.format(
-                        "Invalid value stored for bytecode size of class %s: %s",
-                        classname, StringUtil.quoted2(s)));
-            }
-            return result;
-        } else {
-            return OptionalInt.empty();
-        }
+    public boolean isInterface(String typeName) {
+        return graph.getBooleanNodePropertyValue(typeName, IS_INTERFACE);
     }
 
     @Override
-    public Optional<String> md5OfClass(String classname) {
-        return graph.getOptionalNodePropertyValue(classname, MD5);
-    }
-
-    @Override
-    public boolean isInterface(String classname) {
-        return graph.getBooleanNodePropertyValue(classname, IS_INTERFACE);
-    }
-
-    @Override
-    public boolean isClassDeclared(String classname) {
-        return graph.getBooleanNodePropertyValue(classname, IS_DECLARED);
-    }
-
-    //TODO: is this the correct place for this method
-    @Override
-    public void dump(PrintWriter writer) {
-        Map<String, String> translation = new HashMap<>();
-        translation.put(RDF_TYPE, "a");
-        translation.put(RDFS_SUB_CLASS_OF, "rdfs:subClassOf");
-        translation.put(RDFS_RESOURCE, "rdfs:Resource");
-
-        StringGraphDump dump = StringGraphs.getInstance()
-                .createStringGraphDump(graph, key -> translation.getOrDefault(key, key));
-        dump.write(writer);
+    public boolean isClassDeclared(String typeName) {
+        return graph.getBooleanNodePropertyValue(typeName, IS_DECLARED);
     }
 
     @Override
@@ -535,31 +441,31 @@ public class JavaAnalysisProjectStateUsingStringGraph implements JavaAnalysisPro
     public String signatureOfMethod(String methodId) {
         // Shortcut: no need to check the graph for the signature as
         // that information is currently encoded in the methodId/
-        // fullMethodDeclarator.
-        return FullMethodDeclarator.newFullMethodDeclarator(
-                fullDeclaratorOfMethod(methodId)).signature();
+        // methodDeclarator.
+        return newJavaMethodDeclarator(
+                methodDeclaratorTextOfMethodWithId(methodId)).getSignatureText();
     }
 
     @Override
     public String nameOfMethod(String methodId) {
         // Shortcut: no need to check the graph for the method name as
         // that information is currently encoded in the methodId/
-        // fullMethodDeclarator.
-        return FullMethodDeclarator.newFullMethodDeclarator(
-                fullDeclaratorOfMethod(methodId)).name();
+        // methodDeclarator.
+        return newJavaMethodDeclarator(
+                methodDeclaratorTextOfMethodWithId(methodId)).getMethodName();
     }
 
     @Override
-    public String idOfMethodDeclaredAs(String fullMethodDeclarator) {
-        // currently the methodId has the exact same value as the fullMethodDeclarator.
+    public String idOfMethodDeclaredAs(String methodDeclaratorText) {
+        // currently the methodId has the exact same value as the methodDeclarator.
         //TODO: check if the method exists using hasNode (when in StringGraph's 
         //  public API) and throw exception if not
-        return fullMethodDeclarator;
+        return methodDeclaratorText;
     }
 
     @Override
-    public String fullDeclaratorOfMethod(String methodId) {
-        // currently the methodId has the exact same value as the fullMethodDeclarator
+    public String methodDeclaratorTextOfMethodWithId(String methodId) {
+        // currently the methodId has the exact same value as the methodDeclarator
         return methodId;
     }
 
@@ -567,9 +473,9 @@ public class JavaAnalysisProjectStateUsingStringGraph implements JavaAnalysisPro
     public String classOfMethod(String methodId) {
         // Shortcut: no need to check the graph for the class as
         // that information is currently encoded in the methodId/
-        // fullMethodDeclarator.
-        return FullMethodDeclarator.newFullMethodDeclarator(
-                fullDeclaratorOfMethod(methodId)).classname();
+        // methodDeclarator.
+        return newJavaMethodDeclarator(
+                methodDeclaratorTextOfMethodWithId(methodId)).getTypeName();
     }
 
     @Override

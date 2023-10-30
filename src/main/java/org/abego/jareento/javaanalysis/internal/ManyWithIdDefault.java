@@ -1,6 +1,6 @@
 package org.abego.jareento.javaanalysis.internal;
 
-import org.abego.jareento.base.Many;
+import org.abego.jareento.base.ManyWithId;
 import org.abego.jareento.base.WithId;
 import org.eclipse.jdt.annotation.Nullable;
 
@@ -12,10 +12,10 @@ import java.util.stream.Stream;
 
 import static org.abego.jareento.javaanalysis.internal.IDsImpl.newIDs;
 
-abstract class ManyImpl<T extends WithId, M extends Many<T, M>> implements Many<T, M> {
+abstract class ManyWithIdDefault<T extends WithId, M extends ManyWithId<T, M>> implements ManyWithId<T, M> {
     private final IDs ids;
 
-    protected ManyImpl(IDs ids) {
+    protected ManyWithIdDefault(IDs ids) {
         this.ids = ids;
     }
 
@@ -43,14 +43,14 @@ abstract class ManyImpl<T extends WithId, M extends Many<T, M>> implements Many<
         return ids.stream();
     }
 
-    public Set<String> idSet() {
-        return ids.set();
+    public Set<String> toSet() {
+        return ids.toSet();
     }
 
     @Override
     public M unitedWith(M other) {
         return newInstance(newIDs(() -> {
-            Set<String> result = new HashSet<>(idSet());
+            Set<String> result = new HashSet<>(toSet());
             other.idStream().forEach(result::add);
             return result;
         }));
@@ -58,13 +58,13 @@ abstract class ManyImpl<T extends WithId, M extends Many<T, M>> implements Many<
 
     @Override
     public M unitedWith(T element) {
-        return unitedWithElementWithId(element.id());
+        return unitedWithElementWithId(element.getId());
     }
 
     @Override
     public M unitedWithElementWithId(String elementId) {
         return newInstance(newIDs(() -> {
-            Set<String> result = new HashSet<>(idSet());
+            Set<String> result = new HashSet<>(toSet());
             result.add(elementId);
             return result;
         }));
@@ -74,8 +74,8 @@ abstract class ManyImpl<T extends WithId, M extends Many<T, M>> implements Many<
     @Override
     public M intersectedWith(M other) {
         return newInstance(newIDs(() -> {
-            Set<String> result = new HashSet<>(idSet());
-            result.retainAll(other.idSet());
+            Set<String> result = new HashSet<>(toSet());
+            result.retainAll(other.toSet());
             return result;
         }));
     }
@@ -85,7 +85,7 @@ abstract class ManyImpl<T extends WithId, M extends Many<T, M>> implements Many<
         if (this == o) {
             return true;
         } else if (o != null && this.getClass() == o.getClass()) {
-            ManyImpl<?, ?> other = (ManyImpl<?, ?>) o;
+            ManyWithIdDefault<?, ?> other = (ManyWithIdDefault<?, ?>) o;
             return this.ids.equals(other.ids);
         } else {
             return false;

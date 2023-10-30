@@ -84,7 +84,7 @@ public class SampleProjectUtil {
 
         File storageDir = new File(directory, "storage");
         JavaAnalysisProjectStorage storage =
-                javaAnalysisAPI.javaAnalysisProjectStorage(storageDir.toURI());
+                javaAnalysisAPI.getJavaAnalysisProjectStorage(storageDir.toURI());
         return storage.createAndLoadJavaAnalysisProject(
                 projectConfiguration, s -> {});
     }

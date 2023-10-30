@@ -5,9 +5,11 @@ import org.abego.jareento.javaanalysis.JavaAnalysisProjectConfiguration;
 import org.abego.jareento.javaanalysis.JavaAnalysisProjectStorage;
 import org.abego.jareento.javaanalysis.Problem;
 import org.abego.jareento.javaanalysis.ProblemChecker;
+import org.abego.jareento.javaanalysis.ProblemCheckers;
 import org.abego.jareento.javaanalysis.ProblemType;
 import org.abego.jareento.javaanalysis.Problems;
-import org.abego.jareento.javaanalysis.ProblemsReporter;
+import org.abego.jareento.javaanalysis.ProblemReporter;
+import org.abego.jareento.javaanalysis.ProblemReporters;
 import org.eclipse.jdt.annotation.Nullable;
 
 import java.io.File;
@@ -21,7 +23,7 @@ import static org.abego.jareento.javaanalysis.internal.ProblemsImpl.newProblemsI
 public class JavaAnalysisAPIImpl implements JavaAnalysisAPI {
 
     @Override
-    public JavaAnalysisProjectStorage javaAnalysisProjectStorage(URI storageURI) {
+    public JavaAnalysisProjectStorage getJavaAnalysisProjectStorage(URI storageURI) {
         return new JavaAnalysisProjectStorageUsingStringGraph(this, storageURI);
     }
 
@@ -32,8 +34,8 @@ public class JavaAnalysisAPIImpl implements JavaAnalysisAPI {
     }
 
     @Override
-    public Problem newProblem(ProblemType problemType, long locationInFileId, Properties properties, @Nullable Object details) {
-        return ProblemImpl.newProblemImpl(problemType, locationInFileId, properties, details);
+    public Problem newProblem(ProblemType problemType, @Nullable File file, int lineNumber, Properties properties, @Nullable Object details) {
+        return ProblemImpl.newProblemImpl(problemType, file, lineNumber, properties, details);
     }
 
     @Override
@@ -42,18 +44,29 @@ public class JavaAnalysisAPIImpl implements JavaAnalysisAPI {
     }
 
     @Override
-    public Iterable<ProblemChecker> getAllProblemCheckers() {
+    public ProblemCheckers newProblemCheckers(Iterable<ProblemChecker> items) {
+        return ProblemCheckersImpl.newProblemCheckersImpl(items);
+    }
+
+    @Override
+    public ProblemReporters newProblemReporters(Iterable<ProblemReporter> items) {
+        return ProblemReportersImpl.newProblemReportersImpl(items);
+    }
+
+    @Override
+    public ProblemCheckers getAllProblemCheckers() {
         return ProblemUtil.getAllProblemCheckers();
     }
 
     @Override
-    public Iterable<ProblemsReporter> getAllProblemsReporters() {
-        return ProblemUtil.getAllProblemsReporters();
+    public ProblemReporters getAllProblemReporters() {
+        return ProblemUtil.getAllProblemReporters();
     }
 
     @Override
     public Problems checkForProblems(
-            File[] sourceRootsAndDependencies, Iterable<ProblemChecker> problemCheckers,
+            File[] sourceRootsAndDependencies,
+            Iterable<ProblemChecker> problemCheckers,
             Consumer<Problem> problemConsumer,
             Predicate<File> aboutToCheckFile) {
 
@@ -64,22 +77,22 @@ public class JavaAnalysisAPIImpl implements JavaAnalysisAPI {
     @Override
     public void reportProblems(
             Problems problems,
-            Iterable<ProblemsReporter> problemsReporters,
+            Iterable<ProblemReporter> problemReporters,
             Consumer<String> progress) {
-        ProblemUtil.reportProblems(problems, problemsReporters, progress);
+        ProblemUtil.reportProblems(problems, problemReporters, progress);
     }
 
     @Override
     public Problems checkForProblemsAndWriteReports(
             File[] sourceRootsAndDependencies,
-            Iterable<ProblemChecker> problemCheckers,
-            Iterable<ProblemsReporter> problemsReporters,
+            ProblemCheckers problemCheckers,
+            ProblemReporters problemReporters,
             boolean processedFileToProgress,
             Consumer<String> progress) {
         return ProblemUtil.checkForProblemsAndWriteReports(
                 sourceRootsAndDependencies,
                 problemCheckers,
-                problemsReporters,
+                problemReporters,
                 processedFileToProgress,
                 progress);
     }

@@ -23,7 +23,7 @@
  */
 
 /**
- * Shared Code, only to be used by this project, not be external client code.
+ * "Internal" code shared within this project, not to be accessed by client code.
  */
 @NonNullByDefault
 package org.abego.jareento.shared;

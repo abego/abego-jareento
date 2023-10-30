@@ -58,8 +58,8 @@ class JavapParserTest {
         }
 
         @Override
-        public void onClass(String classname, String access, String modifier, String type, String[] extendedTypes, String[] implementedTypes) {
-            append("class", classname);
+        public void onClass(String typeName, String access, String modifier, String type, String[] extendedTypes, String[] implementedTypes) {
+            append("class", typeName);
             append("access", access);
             append("modifier", modifier);
             append("type", type);
@@ -69,15 +69,15 @@ class JavapParserTest {
         }
 
         @Override
-        public void onClassEnd(String classname) {
-            append("class-end", null, classname);
+        public void onClassEnd(String typeName) {
+            append("class-end", null, typeName);
             endLine();
         }
 
         @Override
-        public void onMethod(String classname, String methodName, String access, String modifier, String returnType, String parameter, String exceptions, String typeParametersOfMethod) {
+        public void onMethod(String typeName, String methodName, String access, String modifier, String returnType, String parameter, String exceptions, String typeParametersOfMethod) {
             append("method", methodName);
-            append("class", classname);
+            append("class", typeName);
             append("access", access);
             append("modifier", modifier);
             append("returnType", returnType);

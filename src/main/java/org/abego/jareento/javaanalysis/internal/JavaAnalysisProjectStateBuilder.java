@@ -11,22 +11,16 @@ public interface JavaAnalysisProjectStateBuilder {
     void addClass(@Syntax(QUALIFIED_TYPE_OR_ARRAY_NAME_SYNTAX) String name);
 
     void addReference(String from, String to);
+    
+    void setIsInterfaceOfClass(String typeName, boolean value);
 
-    void addJavaFileContainsNode(String filename, String nodeId);
+    void addTypeExtends(String typeName, String otherTypename);
 
-    void setMD5OfClass(String classname, String md5);
+    void addTypeImplements(String typeName, String otherTypename);
 
-    void setBytecodeSizeOfClass(String classname, int bytecodeSize);
+    String addMethod(String typeName, String methodSignature, String returnType);
 
-    void setIsInterfaceOfClass(String classname, boolean value);
-
-    void addTypeExtends(String typename, String otherTypename);
-
-    void addTypeImplements(String typename, String otherTypename);
-
-    String addMethod(String typename, String methodSignature, String returnType);
-
-    String getMethodId(String typename, String methodSignature, String returnType);
+    String getMethodId(String typeName, String methodSignature, String returnType);
 
     void setMethodHasOverride(String methodId, boolean hasOverride);
 
@@ -54,11 +48,11 @@ public interface JavaAnalysisProjectStateBuilder {
 
     void setMethodCallBaseScope(String methodCallId, String baseScopeTypename);
 
-    void addClassHasRawType(String classname, String rawClassname);
+    void addClassHasRawType(String typeName, String rawClassname);
 
-    void addClassInClassFile(String classname, String classfileName);
+    void addClassInClassFile(String typeName, String classfileName);
 
-    void setClassIsDeclared(String classname, boolean value);
+    void setClassIsDeclared(String typeName, boolean value);
 
     JavaAnalysisProjectStateWithSave build();
 

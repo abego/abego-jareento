@@ -1,9 +1,9 @@
 package org.abego.jareento.service;
 
-import org.abego.jareento.base.JavaMethodSet;
+import org.abego.jareento.javaanalysis.JavaMethodDeclarators;
 
 public interface SelectedAndOverridingMethods {
-    JavaMethodSet selectedMethods();
+    JavaMethodDeclarators selectedMethods();
 
-    JavaMethodSet overridingMethods();
+    JavaMethodDeclarators overridingMethods();
 }

@@ -7,7 +7,7 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter;
-import org.abego.jareento.base.JavaMethodSet;
+import org.abego.jareento.javaanalysis.JavaMethodDeclarators;
 import org.abego.jareento.javarefactoring.JavaRefactoringProject;
 import org.abego.jareento.javarefactoring.MethodAnnotationDescriptor;
 import org.abego.jareento.shared.commons.javaparser.JavaParserUtil;
@@ -68,7 +68,7 @@ class RemoveMethodAnnotationsOperation {
         progress.accept("Method annotations removed.");
     }
 
-    public static void removeMethodAnnotations(JavaRefactoringProject project, String annotationType, JavaMethodSet methodSet, Consumer<String> progress) {
+    public static void removeMethodAnnotations(JavaRefactoringProject project, String annotationType, JavaMethodDeclarators methodSet, Consumer<String> progress) {
         progress.accept("Removing method annotations...");
         Consumer<String> innerProgress = indent(progress);
         Consumer<String> innerInnerProgress = indent(innerProgress);
@@ -76,23 +76,25 @@ class RemoveMethodAnnotationsOperation {
         innerProgress.accept(String.format("%d method annotations to remove.", methodSet.getSize()));
 
         AtomicInteger removeCount = new AtomicInteger();
-        Set<String> remainingMethods = methodSet.declaratorStream()
+        Set<String> remainingMethods = methodSet.textStream()
                 .collect(Collectors.toSet());
         RemoveMethodAnnotationsOperation operation = newRemoveMethodAnnotationOperation(
-                m -> m.annotationType().equals(annotationType)
-                        && methodSet.containsMethodOfTypeWithSignature(m.typeDeclaringMethod(), m.methodSignatureWithRawTypes()),
+                m -> m.getAnnotationTypeName().equals(annotationType)
+                        && methodSet.containsMethodOfTypeWithSignature(m.getTypeDeclaringMethod(), m.getMethodSignatureWithRawTypes()),
                 m -> {
                     innerInnerProgress.accept(
                             String.format("Removing annotation '%s' from method %s#%s",
                                     annotationType,
-                                    m.typeDeclaringMethod(), m.methodSignature()));
-                    remainingMethods.remove(methodSet.fullMethodDeclaratorOfMethodOfTypeWithSignatureOrNull(m.typeDeclaringMethod(), m.methodSignatureWithRawTypes()));
+                                    m.getTypeDeclaringMethod(), m.getMethodSignature()));
+                    remainingMethods.remove(
+                            methodSet.getMethodDeclaratorTextOfMethodOfTypeWithSignatureOrNull(
+                                    m.getTypeDeclaringMethod(), m.getMethodSignatureWithRawTypes()));
                     removeCount.getAndIncrement();
                 }
         );
 
         operation.applyOn(project,
-                f -> methodSet.containsMethodOfClass(removeFileExtension(f.getName())),
+                f -> methodSet.containsMethodOfType(removeFileExtension(f.getName())),
                 innerProgress);
 
         progress.accept(String.format("Removed %d method annotations.", removeCount.get()));

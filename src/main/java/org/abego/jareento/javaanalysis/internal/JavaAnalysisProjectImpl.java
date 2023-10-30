@@ -2,32 +2,28 @@ package org.abego.jareento.javaanalysis.internal;
 
 import org.abego.jareento.base.JareentoException;
 import org.abego.jareento.javaanalysis.JavaAnalysisProject;
-import org.abego.jareento.javaanalysis.JavaClass;
-import org.abego.jareento.javaanalysis.JavaClasses;
+import org.abego.jareento.javaanalysis.JavaType;
+import org.abego.jareento.javaanalysis.JavaTypes;
+import org.abego.jareento.javaanalysis.JavaMethod;
 import org.abego.jareento.javaanalysis.JavaMethodCalls;
 import org.abego.jareento.javaanalysis.JavaMethodSignatures;
 import org.abego.jareento.javaanalysis.JavaMethods;
-import org.abego.jareento.javaanalysis.JavaTypes;
 import org.eclipse.jdt.annotation.Nullable;
 
 import java.io.File;
-import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Optional;
-import java.util.OptionalInt;
 import java.util.Set;
 
 import static org.abego.jareento.javaanalysis.internal.EmptyIDs.emptyIDs;
 import static org.abego.jareento.javaanalysis.internal.IDsImpl.newIDs;
-import static org.abego.jareento.javaanalysis.internal.JavaClassImpl.newJavaClass;
+import static org.abego.jareento.javaanalysis.internal.JavaTypeImpl.newJavaType;
 import static org.abego.jareento.javaanalysis.internal.JavaMethodCallsImpl.newJavaMethodCalls;
 import static org.abego.jareento.javaanalysis.internal.JavaMethodSignaturesImpl.newJavaMethodSignatures;
-import static org.abego.jareento.javaanalysis.internal.JavaTypesImpl.newJavaTypes;
-import static org.abego.jareento.shared.FullMethodDeclarator.newFullMethodDeclarator;
+import static org.abego.jareento.shared.JavaMethodDeclaratorUtil.newJavaMethodDeclarator;
 
-public class JavaAnalysisProjectImpl implements JavaAnalysisProject {
+public class JavaAnalysisProjectImpl implements JavaAnalysisProjectInternal {
     private static final Map<String, String> OBJECT_METHOD_SIGNATURES_TO_RETURN_TYPE = newObjectMethodSignatures();
 
     private static Map<String, String> newObjectMethodSignatures() {
@@ -52,12 +48,20 @@ public class JavaAnalysisProjectImpl implements JavaAnalysisProject {
         this.state = state;
     }
 
-    static JavaAnalysisProject newJavaAnalysisProject(JavaAnalysisProjectState state) {
+    static JavaAnalysisProjectInternal newJavaAnalysisProject(JavaAnalysisProjectState state) {
         return new JavaAnalysisProjectImpl(state);
     }
 
+    public static JavaAnalysisProjectInternal toInternal(JavaAnalysisProject project) {
+        if (project instanceof JavaAnalysisProjectInternal internalProject) {
+            return internalProject;
+        }
+        throw new JareentoException(
+                "Invalid JavaAnalysisProject %s".formatted(project));
+    }
+    
     @Override
-    public JavaMethods methodsOfClass(String className) {
+    public JavaMethods methodsOfType(String className) {
         return JavaMethodsImpl.newJavaMethods(state.methodsOfClass(className), this);
     }
 
@@ -82,7 +86,7 @@ public class JavaAnalysisProjectImpl implements JavaAnalysisProject {
             String signature = signatureOfMethod(methodId);
             Set<String> result = new HashSet<>();
             for (String candidateMethodId : state.idsOfMethodsWithSignature(signature)
-                    .set()) {
+                    .toSet()) {
                 // don't include the original method itself, or synthetic methods
                 if (candidateMethodId.equals(methodId) || isMethodSynthetic(candidateMethodId)) {
                     continue;
@@ -127,16 +131,16 @@ public class JavaAnalysisProjectImpl implements JavaAnalysisProject {
                     OBJECT_METHOD_SIGNATURES_TO_RETURN_TYPE.get(methodSignature);
             String fullClassname = Object.class.getName();
             return returnType != null
-                    ? idOfMethodDeclaredAs(newFullMethodDeclarator(fullClassname, methodSignature, returnType).text())
+                    ? idOfMethodDeclaredAs(newJavaMethodDeclarator(fullClassname, methodSignature, returnType).getText())
                     : null;
 
         } else {
-            for (String classname : types.classnames()) {
-                if (methodSignaturesOfClass(classname).contains(methodSignature)) {
-                    return idOfMethodOfClassWithSignature(classname, methodSignature);
+            for (String typeName : types.getNames()) {
+                if (methodSignaturesOfType(typeName).contains(methodSignature)) {
+                    return idOfMethodOfClassWithSignature(typeName, methodSignature);
                 } else {
                     @Nullable String id = idOfMethodWithSignatureInheritedByClassOrNull(
-                            methodSignature, classname);
+                            methodSignature, typeName);
                     if (id != null) {
                         return id;
                     }
@@ -149,7 +153,7 @@ public class JavaAnalysisProjectImpl implements JavaAnalysisProject {
     private String idOfMethodOfClassWithSignature(String classId, String methodSignature) {
         //TODO or use the methodsOfClass(...)? More local.
         for (String methodId : state.idsOfMethodsWithSignature(methodSignature)
-                .set()) {
+                .toSet()) {
             if (classOfMethod(methodId).equals(classId)) {
                 return methodId;
             }
@@ -160,7 +164,7 @@ public class JavaAnalysisProjectImpl implements JavaAnalysisProject {
     }
 
     @Override
-    public JavaMethodCalls methodCalls() {
+    public JavaMethodCalls getMethodCalls() {
         return newJavaMethodCalls(state.methodCalls(), this);
     }
 
@@ -171,7 +175,7 @@ public class JavaAnalysisProjectImpl implements JavaAnalysisProject {
 
     @Override
     public JavaMethodCalls methodCallsToMethod(String methodId) {
-        return methodCallsWithSignatureToClass(
+        return methodCallsWithSignatureOnType(
                 signatureOfMethod(methodId), classOfMethod(methodId));
     }
 
@@ -181,8 +185,8 @@ public class JavaAnalysisProjectImpl implements JavaAnalysisProject {
     }
 
     @Override
-    public JavaMethodCalls methodCallsWithSignatureToClass(String methodSignature, String className) {
-        return newJavaMethodCalls(state.methodCallsWithSignatureToClass(methodSignature, className), this);
+    public JavaMethodCalls methodCallsWithSignatureOnType(String methodSignature, String className) {
+        return newJavaMethodCalls(state.methodCallsWithSignatureOnClass(methodSignature, className), this);
     }
 
     @Override
@@ -198,11 +202,6 @@ public class JavaAnalysisProjectImpl implements JavaAnalysisProject {
     @Override
     public String signatureOfMethodCall(String methodCallId) {
         return state.signatureOfMethodCall(methodCallId);
-    }
-
-    @Override
-    public String fileOfMethodCall(String methodCallId) {
-        return state.fileOfMethodCall(methodCallId);
     }
 
     @Override
@@ -226,62 +225,62 @@ public class JavaAnalysisProjectImpl implements JavaAnalysisProject {
     }
 
     @Override
-    public String superClass(String className) {
-        if (isInterface(className)) {
-            return "java.lang.Object";
-        }
-        return state.extendedType(className);
+    public JavaType superType(String typeName) {
+        return newJavaType(
+                isInterface(typeName)
+                        ? "java.lang.Object" : state.extendedType(typeName),
+                this);
     }
 
     @Override
-    public JavaClasses subClasses(String className) {
-        if (isInterface(className)) {
-            return newJavaClasses(emptyIDs());
+    public JavaTypes subTypes(String typeName) {
+        if (isInterface(typeName)) {
+            return newJavaTypes(emptyIDs());
         }
 
-        IDs ids = state.classesExtending(className);
-        return newJavaClasses(ids);
+        IDs ids = state.typesExtending(typeName);
+        return newJavaTypes(ids);
     }
 
-    private JavaClasses newJavaClasses(IDs ids) {
-        return JavaClassesImpl.newJavaClasses(ids, this);
+    private JavaTypes newJavaTypes(IDs ids) {
+        return JavaTypesImpl.newJavaTypes(ids, this);
     }
 
 
     @Override
-    public JavaClasses subClassesAndClass(String className) {
-        return subClasses(className).unitedWithClassNamed(className);
+    public JavaTypes subTypesAndType(String className) {
+        return subTypes(className).unitedWithTypeNamed(className);
     }
 
     @Override
-    public JavaClasses allSubClasses(String className) {
+    public JavaTypes allSubTypes(String className) {
         if (isInterface(className)) {
-            return newJavaClasses(emptyIDs());
+            return newJavaTypes(emptyIDs());
         }
-        return JavaClassesImpl.newJavaClasses(newIDs(() -> {
+        return JavaTypesImpl.newJavaTypes(newIDs(() -> {
             Set<String> result = new HashSet<>();
-            addAllSubClasses(className, result);
+            addAllSubTypes(className, result);
             return result;
         }), this);
     }
 
     @Override
-    public JavaClasses allSubClassesAndClass(String className) {
-        return allSubClasses(className).unitedWithClassNamed(className);
+    public JavaTypes allSubTypesAndType(String className) {
+        return allSubTypes(className).unitedWithTypeNamed(className);
     }
 
     @Override
-    public JavaClasses allSubClasses(JavaClasses classes) {
-        return JavaClassesImpl.newJavaClasses(newIDs(() -> {
+    public JavaTypes getAllSubTypes(JavaTypes types) {
+        return JavaTypesImpl.newJavaTypes(newIDs(() -> {
             Set<String> result = new HashSet<>();
-            classes.idStream().forEach(c -> addAllSubClasses(c, result));
+            types.idStream().forEach(c -> addAllSubTypes(c, result));
             return result;
         }), this);
     }
 
     @Override
-    public JavaClasses allSubClassesAndClasses(JavaClasses classes) {
-        return allSubClasses(classes).unitedWith(classes);
+    public JavaTypes getAllSubTypesAndTypes(JavaTypes types) {
+        return getAllSubTypes(types).unitedWith(types);
     }
 
     @Override
@@ -295,32 +294,34 @@ public class JavaAnalysisProjectImpl implements JavaAnalysisProject {
     }
 
     @Override
-    public JavaMethods methods() {
+    public JavaMethods getMethods() {
         return JavaMethodsImpl.newJavaMethods(state.methods(), this);
     }
 
     @Override
-    public String idOfMethodDeclaredAs(String fullMethodDeclarator) {
-        return state.idOfMethodDeclaredAs(fullMethodDeclarator);
+    public JavaMethod getMethodWithMethodDeclarator(String methodDeclaratorText) {
+        return JavaMethodImpl.newJavaMethod(
+                idOfMethodDeclaredAs(methodDeclaratorText), this);
+    }
+
+
+    @Override
+    public String methodDeclaratorTextOfMethodWithId(String methodId) {
+        return state.methodDeclaratorTextOfMethodWithId(methodId);
     }
 
     @Override
-    public String fullDeclaratorOfMethod(String methodId) {
-        return state.fullDeclaratorOfMethod(methodId);
+    public JavaTypes typesContainingMethodWithSignature(String methodSignature) {
+        return newJavaTypes(state.typesContainingMethodWithSignature(methodSignature));
     }
 
-    @Override
-    public JavaClasses classesContainingMethodWithSignature(String methodSignature) {
-        return newJavaClasses(state.classesContainingMethodWithSignature(methodSignature));
-    }
-
-    public JavaMethodSignatures methodSignaturesOfClass(String className) {
+    public JavaMethodSignatures methodSignaturesOfType(String className) {
         return newJavaMethodSignatures(
                 state.methodSignatureSpecificationsOfClass(className), this);
     }
 
     @Override
-    public JavaMethodSignatures inheritedMethodSignaturesOfClass(String className) {
+    public JavaMethodSignatures inheritedMethodSignaturesOfType(String className) {
         return newJavaMethodSignatures(newIDs(() -> {
             Set<String> result = new HashSet<>();
             addInheritedMethodSignatureSpecificationsOfClass(result, className);
@@ -339,7 +340,7 @@ public class JavaAnalysisProjectImpl implements JavaAnalysisProject {
         } else {
             types.idStream().forEach(t -> {
                 collection.addAll(state.methodSignatureSpecificationsOfClass(t)
-                        .set());
+                        .toSet());
                 addInheritedMethodSignatureSpecificationsOfClass(collection, t);
             });
         }
@@ -371,89 +372,58 @@ public class JavaAnalysisProjectImpl implements JavaAnalysisProject {
     }
 
     @Override
-    public File[] sourceRoots() {
+    public File[] getSourceRoots() {
         return state.sourceRoots();
     }
 
     @Override
-    public File[] dependencies() {
+    public File[] getDependencies() {
         return state.dependencies();
     }
 
     @Override
-    //TODO: also introduce JavaFiles interface?!
-    public String[] javaFiles() {
-        return state.javaFiles();
+    public JavaTypes getTypes() {
+        return newJavaTypes(state.types());
     }
 
     @Override
-    public JavaClasses classes() {
-        return newJavaClasses(state.classes());
+    public JavaTypes typesReferencingType(String typeName) {
+        return newJavaTypes(state.typesReferencingClass(typeName));
     }
 
     @Override
-    public JavaClasses classesOfJavaFile(String file) {
-        return newJavaClasses(state.classesOfJavaFile(file));
+    public JavaType getTypeWithName(String typeName) {
+        return newJavaType(typeName, this);
     }
 
     @Override
-    public JavaClasses classesReferencingClass(String classname) {
-        return newJavaClasses(state.classesReferencingClass(classname));
+    public boolean isInterface(String typeName) {
+        return state.isInterface(typeName);
     }
 
     @Override
-    public boolean isJavaFile(String name) {
-        return state.isJavaFile(name);
+    public boolean hasTypeWithName(String typeName) {
+        return state.isClassDeclared(typeName);
     }
 
-    @Override
-    public JavaClass classWithName(String className) {
-        return newJavaClass(className, this);
-    }
-
-    @Override
-    public Optional<String> javaFileOfClass(String classname) {
-        return state.javaFileOfClass(classname);
-    }
-
-    @Override
-    public Optional<String> classFileOfClass(String classname) {
-        return state.classFileOfClass(classname);
-    }
-
-    @Override
-    public OptionalInt bytecodeSizeOfClass(String classname) {
-        return state.bytecodeSizeOfClass(classname);
-    }
-
-    @Override
-    public Optional<String> md5OfClass(String classname) {
-        return state.md5OfClass(classname);
-    }
-
-    @Override
-    public boolean isInterface(String classname) {
-        return state.isInterface(classname);
-    }
-
-    @Override
-    public boolean isClassDeclared(String classname) {
-        return state.isClassDeclared(classname);
-    }
-
-    @Override
-    public void dump(PrintWriter writer) {
-        state.dump(writer);
-    }
-
-    private void addAllSubClasses(String className, Set<String> target) {
+    private void addAllSubTypes(String className, Set<String> target) {
         if (!isInterface(className)) {
-            subClasses(className).idStream().forEach(c -> {
+            subTypes(className).idStream().forEach(c -> {
                 if (!target.contains(c)) {
-                    addAllSubClasses(c, target);
+                    addAllSubTypes(c, target);
                 }
                 target.add(c);
             });
         }
+    }
+
+    /**
+     * Returns the id of the method with the given {@code methodDeclaratorText},
+     * or throws an exception when the project does not contain such a method.
+     * <p>
+     * See also {@link #methodDeclaratorTextOfMethodWithId(String)}
+     **/
+    private String idOfMethodDeclaredAs(String methodDeclaratorText) {
+        return state.idOfMethodDeclaredAs(methodDeclaratorText);
     }
 }
