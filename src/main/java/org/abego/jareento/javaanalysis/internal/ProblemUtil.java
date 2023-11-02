@@ -3,9 +3,9 @@ package org.abego.jareento.javaanalysis.internal;
 import org.abego.jareento.javaanalysis.Problem;
 import org.abego.jareento.javaanalysis.ProblemChecker;
 import org.abego.jareento.javaanalysis.ProblemCheckers;
-import org.abego.jareento.javaanalysis.Problems;
 import org.abego.jareento.javaanalysis.ProblemReporter;
 import org.abego.jareento.javaanalysis.ProblemReporters;
+import org.abego.jareento.javaanalysis.Problems;
 import org.abego.jareento.shared.commons.javaparser.JavaParserUtil;
 import org.eclipse.jdt.annotation.Nullable;
 
@@ -103,7 +103,8 @@ class ProblemUtil {
             Consumer<String> progress) {
 
         printProblemsToCheck(problemCheckers, progress);
-        printSourceRootsToCheck(javaAnalysisFiles.getSourceRoots(), progress);
+        printFiles("Checking source root(s):", javaAnalysisFiles.getSourceRoots(), progress);
+        printFiles("using Dependencies:", javaAnalysisFiles.getDependencies(), progress);
 
         var problems = checkForProblems(
                 javaAnalysisFiles,
@@ -166,13 +167,11 @@ class ProblemUtil {
         return ProblemCheckersImpl.newProblemCheckersImpl(result);
     }
 
-    private static void printSourceRootsToCheck(
-            File[] sourceRootsDependenciesEtc, Consumer<String> progress) {
-        progress.accept("Checking source root(s):");
-        toList(sourceRootsDependenciesEtc).stream()
-                .filter(File::isDirectory)
-                .forEach(f ->
-                        progress.accept("\t%s".formatted(f.getAbsolutePath())));
+    private static void printFiles(
+            String title, File[] sourceRoots, Consumer<String> output) {
+        output.accept(title);
+        toList(sourceRoots).forEach(f ->
+                output.accept("\t%s".formatted(f.getAbsolutePath())));
     }
 
     private static void printProblemsToCheck(
@@ -182,5 +181,5 @@ class ProblemUtil {
                         .map(pc -> pc.getProblemType().getID())
                         .collect(Collectors.joining(" "))));
     }
-    
+
 }

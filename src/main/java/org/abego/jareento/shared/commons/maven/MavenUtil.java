@@ -3,7 +3,9 @@ package org.abego.jareento.shared.commons.maven;
 import org.abego.commons.io.FileUtil;
 import org.abego.commons.lang.ArrayUtil;
 import org.abego.commons.util.PropertiesGroup;
+import org.abego.jareento.shared.XMLUtil;
 import org.eclipse.jdt.annotation.Nullable;
+import org.w3c.dom.Element;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -92,9 +94,19 @@ public class MavenUtil {
 
     public static File sourceDirectoryFromMavenProject(
             File mavenProjectDirectory) {
-        // for now return the standard directory
-        return new File(new File(new File(mavenProjectDirectory, 
-                "src"), "main"), "java");
+
+        File pomXmlFile = new File(mavenProjectDirectory, "pom.xml");
+        if (pomXmlFile.exists()) {
+            Element documentElement = XMLUtil.getXMLDocumentElement(pomXmlFile);
+            @Nullable String value = XMLUtil.childText(
+                    documentElement, "build", "sourceDirectory");
+            if (value != null) {
+                return new File(mavenProjectDirectory, value);
+            }
+        }
+
+        // return the standard directory
+        return new File(mavenProjectDirectory, "src/main/java");
     }
 
     public enum JarFileType {

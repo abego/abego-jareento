@@ -68,7 +68,7 @@ public class JavaAnalysisAPIImpl implements JavaAnalysisAPI {
         for (File f : files) {
             if (f.getName().equals("pom.xml")) {
                 File mavenProjectDirectory = f.getParentFile();
-                mavenProjectDirectories.add(f);
+                mavenProjectDirectories.add(mavenProjectDirectory);
                 Collections.addAll(dependencies,
                         MavenUtil.classpathJarsFromMavenProject(mavenProjectDirectory));
                 dependencies.add(MavenUtil.sourceDirectoryFromMavenProject(
