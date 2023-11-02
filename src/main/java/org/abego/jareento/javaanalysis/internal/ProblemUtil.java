@@ -16,6 +16,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import static org.abego.commons.util.ListUtil.toList;
 import static org.abego.commons.util.ServiceLoaderUtil.loadServices;
@@ -52,7 +53,7 @@ class ProblemUtil {
     }
 
     public static Problems checkForProblems(
-            File[] sourceRootsAndDependencies,
+            JavaAnalysisFiles javaAnalysisFiles,
             Iterable<ProblemChecker> problemCheckers,
             Consumer<Problem> problemConsumer,
             Predicate<File> aboutToCheckFile) {
@@ -68,7 +69,9 @@ class ProblemUtil {
         problemCheckers.forEach(ProblemChecker::beginCheck);
 
         try {
-            JavaParserUtil.forEveryJavaFileDo(sourceRootsAndDependencies,
+            JavaParserUtil.forEachJavaFileDo(
+                    javaAnalysisFiles.getSourceRoots(),
+                    javaAnalysisFiles.getDependencies(),
                     cu -> {
                         File file = fileOf(cu);
                         if (aboutToCheckFile.test(file)) {
@@ -93,14 +96,17 @@ class ProblemUtil {
     }
 
     public static Problems checkForProblemsAndWriteReports(
-            File[] sourceRootsAndDependencies,
+            JavaAnalysisFiles javaAnalysisFiles,
             Iterable<ProblemChecker> problemCheckers,
             Iterable<ProblemReporter> problemReporters,
             boolean processedFileToProgress,
             Consumer<String> progress) {
 
+        printProblemsToCheck(problemCheckers, progress);
+        printSourceRootsToCheck(javaAnalysisFiles.getSourceRoots(), progress);
+
         var problems = checkForProblems(
-                sourceRootsAndDependencies,
+                javaAnalysisFiles,
                 problemCheckers,
                 p -> {},
                 f -> {
@@ -159,4 +165,22 @@ class ProblemUtil {
                 o -> o.getProblemType().getID()));
         return ProblemCheckersImpl.newProblemCheckersImpl(result);
     }
+
+    private static void printSourceRootsToCheck(
+            File[] sourceRootsDependenciesEtc, Consumer<String> progress) {
+        progress.accept("Checking source root(s):");
+        toList(sourceRootsDependenciesEtc).stream()
+                .filter(File::isDirectory)
+                .forEach(f ->
+                        progress.accept("\t%s".formatted(f.getAbsolutePath())));
+    }
+
+    private static void printProblemsToCheck(
+            Iterable<ProblemChecker> problemCheckers, Consumer<String> progress) {
+        progress.accept("Checking for problem(s): %s".formatted(
+                toList(problemCheckers).stream()
+                        .map(pc -> pc.getProblemType().getID())
+                        .collect(Collectors.joining(" "))));
+    }
+    
 }

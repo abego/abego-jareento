@@ -90,6 +90,13 @@ public class MavenUtil {
                 .toArray(File[]::new);
     }
 
+    public static File sourceDirectoryFromMavenProject(
+            File mavenProjectDirectory) {
+        // for now return the standard directory
+        return new File(new File(new File(mavenProjectDirectory, 
+                "src"), "main"), "java");
+    }
+
     public enum JarFileType {
         /**
          * Contains the "main" code of a module.

@@ -2,12 +2,12 @@ package org.abego.jareento.javaanalysis.internal;
 
 import org.abego.jareento.base.JareentoException;
 import org.abego.jareento.javaanalysis.JavaAnalysisProject;
-import org.abego.jareento.javaanalysis.JavaType;
-import org.abego.jareento.javaanalysis.JavaTypes;
 import org.abego.jareento.javaanalysis.JavaMethod;
 import org.abego.jareento.javaanalysis.JavaMethodCalls;
 import org.abego.jareento.javaanalysis.JavaMethodSignatures;
 import org.abego.jareento.javaanalysis.JavaMethods;
+import org.abego.jareento.javaanalysis.JavaType;
+import org.abego.jareento.javaanalysis.JavaTypes;
 import org.eclipse.jdt.annotation.Nullable;
 
 import java.io.File;
@@ -18,9 +18,9 @@ import java.util.Set;
 
 import static org.abego.jareento.javaanalysis.internal.EmptyIDs.emptyIDs;
 import static org.abego.jareento.javaanalysis.internal.IDsImpl.newIDs;
-import static org.abego.jareento.javaanalysis.internal.JavaTypeImpl.newJavaType;
 import static org.abego.jareento.javaanalysis.internal.JavaMethodCallsImpl.newJavaMethodCalls;
 import static org.abego.jareento.javaanalysis.internal.JavaMethodSignaturesImpl.newJavaMethodSignatures;
+import static org.abego.jareento.javaanalysis.internal.JavaTypeImpl.newJavaType;
 import static org.abego.jareento.shared.JavaMethodDeclaratorUtil.newJavaMethodDeclarator;
 
 public class JavaAnalysisProjectImpl implements JavaAnalysisProjectInternal {
@@ -59,7 +59,7 @@ public class JavaAnalysisProjectImpl implements JavaAnalysisProjectInternal {
         throw new JareentoException(
                 "Invalid JavaAnalysisProject %s".formatted(project));
     }
-    
+
     @Override
     public JavaMethods methodsOfType(String className) {
         return JavaMethodsImpl.newJavaMethods(state.methodsOfClass(className), this);
@@ -379,6 +379,12 @@ public class JavaAnalysisProjectImpl implements JavaAnalysisProjectInternal {
     @Override
     public File[] getDependencies() {
         return state.dependencies();
+    }
+
+    @Override
+    public JavaAnalysisFiles getJavaAnalysisFiles() {
+        return JavaAnalysisFilesImpl.newJavaAnalysisFilesImpl(
+                getSourceRoots(), getDependencies());
     }
 
     @Override

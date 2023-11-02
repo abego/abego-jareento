@@ -1,8 +1,8 @@
 package org.abego.jareento.javarefactoring.internal;
 
 import org.abego.jareento.javaanalysis.JavaMethodDeclarators;
+import org.abego.jareento.javaanalysis.internal.JavaAnalysisFiles;
 import org.abego.jareento.javarefactoring.JavaRefactoringAPI;
-import org.abego.jareento.javarefactoring.JavaRefactoringProject;
 import org.abego.jareento.javarefactoring.MethodAnnotationDescriptor;
 import org.abego.jareento.javarefactoring.MethodDescriptor;
 
@@ -13,33 +13,28 @@ import java.util.function.Predicate;
 public class JavaRefactoringAPIImpl implements JavaRefactoringAPI {
 
     @Override
-    public JavaRefactoringProject newJavaRefactoringProject(File... sourceRootsAndDependencies) {
-        return new JavaRefactoringProjectImpl(sourceRootsAndDependencies);
+    public void removeMethods(JavaAnalysisFiles javaAnalysisFiles, JavaMethodDeclarators methodDeclarators, Consumer<String> progress) {
+        RemoveMethodsOperation.removeMethods(javaAnalysisFiles, methodDeclarators, progress);
     }
 
     @Override
-    public void removeMethods(JavaRefactoringProject project, JavaMethodDeclarators methodDeclarators, Consumer<String> progress) {
-        RemoveMethodsOperation.removeMethods(project, methodDeclarators, progress);
+    public void removeMethods(JavaAnalysisFiles javaAnalysisFiles, Predicate<MethodDescriptor> selector, Predicate<File> javaFileFilter, Consumer<MethodDescriptor> willBeRemovedCallback, Consumer<String> progress) {
+        RemoveMethodsOperation.removeMethods(javaAnalysisFiles, selector, javaFileFilter, willBeRemovedCallback, progress);
     }
 
     @Override
-    public void removeMethods(JavaRefactoringProject project, Predicate<MethodDescriptor> selector, Predicate<File> javaFileFilter, Consumer<MethodDescriptor> willBeRemovedCallback, Consumer<String> progress) {
-        RemoveMethodsOperation.removeMethods(project, selector, javaFileFilter, willBeRemovedCallback, progress);
-    }
-
-    @Override
-    public void removeMethodAnnotations(JavaRefactoringProject project, String annotationType, JavaMethodDeclarators methodSet, Consumer<String> progress) {
-        RemoveMethodAnnotationsOperation.removeMethodAnnotations(project, annotationType, methodSet, progress);
+    public void removeMethodAnnotations(JavaAnalysisFiles javaAnalysisFiles, String annotationType, JavaMethodDeclarators methodSet, Consumer<String> progress) {
+        RemoveMethodAnnotationsOperation.removeMethodAnnotations(javaAnalysisFiles, annotationType, methodSet, progress);
     }
 
     @Override
     public void removeMethodAnnotations(
-            JavaRefactoringProject project,
+            JavaAnalysisFiles javaAnalysisFiles,
             Predicate<MethodAnnotationDescriptor> annotationSelector,
             Predicate<File> javaFileFilter,
             Consumer<MethodAnnotationDescriptor> willBeRemovedCallback,
             Consumer<String> progress) {
-        RemoveMethodAnnotationsOperation.removeMethodAnnotations(project, annotationSelector, javaFileFilter, willBeRemovedCallback, progress);
+        RemoveMethodAnnotationsOperation.removeMethodAnnotations(javaAnalysisFiles, annotationSelector, javaFileFilter, willBeRemovedCallback, progress);
     }
 
 }

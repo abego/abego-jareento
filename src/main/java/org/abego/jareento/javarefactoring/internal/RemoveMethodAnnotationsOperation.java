@@ -8,7 +8,7 @@ import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter;
 import org.abego.jareento.javaanalysis.JavaMethodDeclarators;
-import org.abego.jareento.javarefactoring.JavaRefactoringProject;
+import org.abego.jareento.javaanalysis.internal.JavaAnalysisFiles;
 import org.abego.jareento.javarefactoring.MethodAnnotationDescriptor;
 import org.abego.jareento.shared.commons.javaparser.JavaParserUtil;
 
@@ -25,7 +25,6 @@ import java.util.stream.Collectors;
 import static java.util.logging.Logger.getLogger;
 import static org.abego.commons.io.FileUtil.removeFileExtension;
 import static org.abego.commons.lang.StringUtil.indent;
-import static org.abego.jareento.javarefactoring.internal.JavaRefactoringProjectImpl.javaRefactoringProjectImpl;
 
 class RemoveMethodAnnotationsOperation {
     private static final Logger LOGGER = getLogger(RemoveMethodAnnotationsOperation.class.getName());
@@ -54,7 +53,7 @@ class RemoveMethodAnnotationsOperation {
     }
 
     public static void removeMethodAnnotations(
-            JavaRefactoringProject project,
+            JavaAnalysisFiles javaAnalysisFiles,
             Predicate<MethodAnnotationDescriptor> annotationSelector,
             Predicate<File> javaFileFilter,
             Consumer<MethodAnnotationDescriptor> willBeRemovedCallback,
@@ -63,12 +62,16 @@ class RemoveMethodAnnotationsOperation {
 
         RemoveMethodAnnotationsOperation operation = newRemoveMethodAnnotationOperation(
                 annotationSelector, willBeRemovedCallback);
-        operation.applyOn(project, javaFileFilter, indent(progress));
+        operation.applyOn(javaAnalysisFiles, javaFileFilter, indent(progress));
 
         progress.accept("Method annotations removed.");
     }
 
-    public static void removeMethodAnnotations(JavaRefactoringProject project, String annotationType, JavaMethodDeclarators methodSet, Consumer<String> progress) {
+    public static void removeMethodAnnotations(
+            JavaAnalysisFiles javaAnalysisFiles, 
+            String annotationType, 
+            JavaMethodDeclarators methodSet, 
+            Consumer<String> progress) {
         progress.accept("Removing method annotations...");
         Consumer<String> innerProgress = indent(progress);
         Consumer<String> innerInnerProgress = indent(innerProgress);
@@ -93,7 +96,7 @@ class RemoveMethodAnnotationsOperation {
                 }
         );
 
-        operation.applyOn(project,
+        operation.applyOn(javaAnalysisFiles,
                 f -> methodSet.containsMethodOfType(removeFileExtension(f.getName())),
                 innerProgress);
 
@@ -156,11 +159,10 @@ class RemoveMethodAnnotationsOperation {
     }
 
     private void applyOn(
-            JavaRefactoringProject project,
+            JavaAnalysisFiles javaAnalysisFiles,
             Predicate<File> javaFileFilter,
             Consumer<String> progress) {
-        javaRefactoringProjectImpl(project)
-                .withCompilationUnitsDo(
+        javaAnalysisFiles.withCompilationUnitsDo(
                         cu -> new MyVisitor().visit(cu, progress),
                         javaFileFilter,
                         progress);

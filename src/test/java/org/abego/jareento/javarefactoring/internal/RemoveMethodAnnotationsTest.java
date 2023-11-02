@@ -1,8 +1,9 @@
 package org.abego.jareento.javarefactoring.internal;
 
 import org.abego.commons.io.FileUtil;
+import org.abego.jareento.javaanalysis.JavaAnalysisAPI;
+import org.abego.jareento.javaanalysis.internal.JavaAnalysisFiles;
 import org.abego.jareento.javarefactoring.JavaRefactoringAPI;
-import org.abego.jareento.javarefactoring.JavaRefactoringProject;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -14,6 +15,7 @@ import static org.abego.commons.util.ServiceLoaderUtil.loadService;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class RemoveMethodAnnotationsTest {
+    private final JavaAnalysisAPI javaAnalysisAPI = loadService(JavaAnalysisAPI.class);
     private final JavaRefactoringAPI javaRefactoring = loadService(JavaRefactoringAPI.class);
 
     @Test
@@ -21,18 +23,20 @@ class RemoveMethodAnnotationsTest {
 
         TestData.copySampleProjectTo(tempDir);
 
-        JavaRefactoringProject project = javaRefactoring.newJavaRefactoringProject(tempDir);
+        JavaAnalysisFiles javaAnalysisFiles = 
+                javaAnalysisAPI.newJavaAnalysisFiles(tempDir);
+
         StringBuilder listenerLog = new StringBuilder();
 
         // remove all @Override annotations, 
         javaRefactoring.removeMethodAnnotations(
-                project,
-                mad -> mad.getAnnotationText().equals("@Override"),
-                f -> true, mad -> listenerLog.append(
+                javaAnalysisFiles,
+                md -> md.getAnnotationText().equals("@Override"),
+                f -> true, md -> listenerLog.append(
                         String.format("removing %s of %s.%s\n",
-                                mad.getAnnotationText(),
-                                mad.getTypeDeclaringMethod(),
-                                mad.getMethodSignature())),
+                                md.getAnnotationText(),
+                                md.getTypeDeclaringMethod(),
+                                md.getMethodSignature())),
                 s -> {});
 
         assertEquals("""

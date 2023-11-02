@@ -1,6 +1,7 @@
 package org.abego.jareento.javaanalysis;
 
 import org.abego.jareento.base.JareentoSyntax;
+import org.abego.jareento.javaanalysis.internal.JavaAnalysisFiles;
 
 import javax.annotation.Syntax;
 import java.io.File;
@@ -17,6 +18,8 @@ public interface JavaAnalysisProject {
     File[] getSourceRoots();
 
     File[] getDependencies();
+    
+    JavaAnalysisFiles getJavaAnalysisFiles();
 
     //endregion
     //region Type-related

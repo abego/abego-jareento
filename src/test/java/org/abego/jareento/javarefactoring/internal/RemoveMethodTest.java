@@ -1,8 +1,9 @@
 package org.abego.jareento.javarefactoring.internal;
 
 import org.abego.commons.io.FileUtil;
+import org.abego.jareento.javaanalysis.JavaAnalysisAPI;
+import org.abego.jareento.javaanalysis.internal.JavaAnalysisFiles;
 import org.abego.jareento.javarefactoring.JavaRefactoringAPI;
-import org.abego.jareento.javarefactoring.JavaRefactoringProject;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -13,6 +14,7 @@ import static org.abego.commons.util.ServiceLoaderUtil.loadService;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class RemoveMethodTest {
+    private final JavaAnalysisAPI javaAnalysisAPI = loadService(JavaAnalysisAPI.class);
     private final JavaRefactoringAPI javaRefactoring = loadService(JavaRefactoringAPI.class);
 
     @Test
@@ -20,18 +22,18 @@ class RemoveMethodTest {
 
         TestData.copySampleProjectTo(tempDir);
 
-        JavaRefactoringProject project = javaRefactoring.newJavaRefactoringProject(tempDir);
+        JavaAnalysisFiles javaAnalysisFiles = javaAnalysisAPI.newJavaAnalysisFiles(tempDir);
         StringBuilder listenerLog = new StringBuilder();
 
         // remove all methods containing "Base" in their name 
         javaRefactoring.removeMethods(
-                project,
-                mad -> mad.getMethodName().contains("Base"),
+                javaAnalysisFiles,
+                md -> md.getMethodName().contains("Base"),
                 f -> true,
-                mad -> listenerLog.append(
+                md -> listenerLog.append(
                         String.format("removing %s.%s\n",
-                                mad.getTypeDeclaringMethod(),
-                                mad.getMethodSignature())),
+                                md.getTypeDeclaringMethod(),
+                                md.getMethodSignature())),
                 s -> {});
 
         assertEquals("""

@@ -1,45 +1,52 @@
 package org.abego.jareento.cli;
 
 import org.abego.jareento.javaanalysis.JavaAnalysisAPI;
-import org.abego.jareento.javaanalysis.ProblemChecker;
 import org.abego.jareento.javaanalysis.ProblemCheckers;
 import org.abego.jareento.javaanalysis.ProblemReporters;
 import org.abego.jareento.javaanalysis.ProblemType;
 import org.abego.jareento.javaanalysis.Problems;
+import org.abego.jareento.javaanalysis.internal.JavaAnalysisFiles;
 
-import java.io.File;
 import java.io.PrintStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 import static java.util.Collections.emptyList;
 import static org.abego.commons.io.FileUtil.parseFiles;
-import static org.abego.commons.util.ListUtil.toList;
 import static org.abego.commons.util.ServiceLoaderUtil.loadService;
 
 public class CheckForProblemsApp {
     private static final int EXIT_CODE_FOUND_PROBLEMS = 1;
     private final JavaAnalysisAPI javaAnalysisAPI = loadService(JavaAnalysisAPI.class);
 
-    private record ParsedArgs(
+    /**
+     * The arguments used when running the app.
+     *
+     * @param printUsage  Show the print usage, don't check for any problems
+     * @param silent      Silent mode, less progress output
+     * @param superSilent Super Silent mode, nearly no progress output
+     * @param checkerIds  The IDs of the problem checkers to use in the run.
+     *                    Must not be empty, unless printUsage == true
+     * @param files       A {@link org.abego.jareento.javaanalysis.internal.JavaAnalysisFiles}
+     *                    instance created with these files is used in the run.
+     *                    Must not be empty, unless printUsage == true
+     */
+    private record RunParameters(
             boolean printUsage,
             boolean silent,
             boolean superSilent,
             Set<String> checkerIds,
-            List<String> sourceRootsAndDependencies) {
+            List<String> files) {
     }
 
     /**
      * Check for problems as specified by the arguments.
      * <p>
      * Calling {@code main} without arguments will prompt a "usage"
-     * description to {@link System#out}, including a list of 
+     * description to {@link System#out}, including a list of
      * available "problem checkers" and additional information.
      * <p>
      * Terminates with exit code != 0 when problems are found.
@@ -50,24 +57,24 @@ public class CheckForProblemsApp {
         var app = new CheckForProblemsApp();
 
         Problems problems = app.runWith(parseArgs(args));
-        
+
         if (!problems.isEmpty()) {
             System.exit(EXIT_CODE_FOUND_PROBLEMS);
         }
     }
 
-    private static ParsedArgs parseArgs(String[] args) {
+    private static RunParameters parseArgs(String... args) {
         boolean silent = false;
         boolean superSilent = false;
         Set<String> checkerIds = new HashSet<>();
-        List<String> sourceRootsAndDependencies = new ArrayList<>();
+        List<String> files = new ArrayList<>();
         int i = 0;
         while (i < args.length) {
             var arg = args[i++];
             if (arg.startsWith("-")) {
-                if (!sourceRootsAndDependencies.isEmpty()) {
+                if (!files.isEmpty()) {
                     throw new IllegalArgumentException(
-                            "Unexpected option '%s' after source roots.".formatted(arg));
+                            "Unexpected option '%s' after files.".formatted(arg));
                 }
                 switch (arg) {
                     case "-s" -> silent = true;
@@ -87,24 +94,33 @@ public class CheckForProblemsApp {
                             "Unexpected option '%s'".formatted(arg));
                 }
             } else {
-                sourceRootsAndDependencies.add(arg);
+                files.add(arg);
             }
         }
+        boolean printUsage = args.length == 0;
 
-        return new ParsedArgs(
-                args.length == 0, silent, superSilent, checkerIds, sourceRootsAndDependencies);
+        if (!printUsage && checkerIds.isEmpty()) {
+            throw new IllegalArgumentException("No Problem Checkers specified.");
+        }
+        if (!printUsage && files.isEmpty()) {
+            throw new IllegalArgumentException("No source root specified.");
+        }
+
+        return new RunParameters(
+                printUsage, silent, superSilent, checkerIds, files);
     }
-
-    private Problems runWith(ParsedArgs args) {
+    
+    private Problems runWith(RunParameters args) {
         if (args.printUsage()) {
             printUsage(System.out);
             printAvailableProblemCheckersAndReporters(System.out);
             return javaAnalysisAPI.newProblems(emptyList());
         }
 
-        checkArgs(args);
-
-        var problemCheckers = problemCheckersWithIds(args.checkerIds);
+        JavaAnalysisFiles files = javaAnalysisAPI.newJavaAnalysisFiles(
+                parseFiles(args.files, ";"));
+        var problemCheckers = 
+                javaAnalysisAPI.getProblemCheckersWithIds(args.checkerIds);
         if (problemCheckers.isEmpty()) {
             throw new IllegalArgumentException("No problem checkers specified.");
         }
@@ -112,45 +128,16 @@ public class CheckForProblemsApp {
         if (problemReporters.isEmpty()) {
             throw new IllegalArgumentException("No problem reporters found.");
         }
-        File[] sourceRootsAndDependencies = parseFiles(
-                args.sourceRootsAndDependencies, ";");
-
-        Consumer<String> progress = args.superSilent() ? s -> {} : System.out::println;
-        boolean processedFileToProgress = !args.silent;
-
-        printProblemsToCheck(problemCheckers, progress);
-        printSourceRootsToCheck(sourceRootsAndDependencies, progress);
+        Consumer<String> progress =
+                args.superSilent() ? s -> {} : System.out::println;
+        boolean progressOnProcessedFile = !args.silent;
 
         return javaAnalysisAPI.checkForProblemsAndWriteReports(
-                sourceRootsAndDependencies,
+                files,
                 problemCheckers,
                 problemReporters,
-                processedFileToProgress,
+                progressOnProcessedFile,
                 progress);
-    }
-
-    private static void checkArgs(ParsedArgs args) {
-        if (args.checkerIds.isEmpty()) {
-            throw new IllegalArgumentException("No Problem Checkers specified.");
-        }
-        if (args.sourceRootsAndDependencies.isEmpty()) {
-            throw new IllegalArgumentException("No source root specified.");
-        }
-    }
-
-    private static void printSourceRootsToCheck(File[] sourceRootsAndDependencies, Consumer<String> progress) {
-        progress.accept("Checking source root(s):");
-        toList(sourceRootsAndDependencies).stream()
-                .filter(File::isDirectory)
-                .forEach(f ->
-                        progress.accept("\t%s".formatted(f.getAbsolutePath())));
-    }
-
-    private static void printProblemsToCheck(ProblemCheckers problemCheckers, Consumer<String> progress) {
-        progress.accept("Checking for problem(s): %s".formatted(
-                toList(problemCheckers).stream()
-                        .map(pc -> pc.getProblemType().getID())
-                        .collect(Collectors.joining(" "))));
     }
 
     private void printAvailableProblemCheckersAndReporters(PrintStream out) {
@@ -173,6 +160,7 @@ public class CheckForProblemsApp {
         out.println();
         out.println("    -S        Super Silent mode, nearly no progress output");
         out.println();
+        //TODO: update the description (include pom.xml,...). 
         out.println("    file      Either a `source root` directory of Java source files (like");
         out.println("              'src/main/java' in a Maven project), or a `jar` file to be");
         out.println("              included as a dependency. The source code inside the `source");
@@ -209,30 +197,4 @@ public class CheckForProblemsApp {
             out.printf("\t%s\t%s%n", pr.getID(), pr.getTitle());
         }
     }
-
-    private ProblemCheckers problemCheckersWithIds(
-            Set<String> checkerIds) {
-
-        Map<String, ProblemChecker> map = new HashMap<>();
-        for (var pc : javaAnalysisAPI.getAllProblemCheckers()) {
-            map.put(pc.getProblemType().getID(), pc);
-        }
-        List<ProblemChecker> result = new ArrayList<>();
-        List<String> missingCheckers = new ArrayList<>();
-        for (var id : checkerIds) {
-            var pc = map.get(id);
-            if (pc == null) {
-                missingCheckers.add(id);
-            } else {
-                result.add(pc);
-            }
-        }
-        if (!missingCheckers.isEmpty()) {
-            throw new IllegalArgumentException(
-                    "ProblemChecker not found: %s".formatted(
-                            String.join(", ", missingCheckers)));
-        }
-        return javaAnalysisAPI.newProblemCheckers(result);
-    }
-
 }

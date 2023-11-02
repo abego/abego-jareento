@@ -1,5 +1,6 @@
 package org.abego.jareento.javaanalysis;
 
+import org.abego.jareento.javaanalysis.internal.JavaAnalysisFiles;
 import org.eclipse.jdt.annotation.Nullable;
 
 import java.io.File;
@@ -73,6 +74,46 @@ public interface JavaAnalysisAPI {
         return newJavaAnalysisProjectConfiguration(
                 name, mavenProjectDirectory, sourceRoots, null, null);
     }
+
+    /**
+     * Returns a {@link JavaAnalysisFiles} instance based on the given
+     * {@code files}.
+     * <p>
+     * A file in {@code files} can be one of these:
+     * <ul>
+     * <li>a source directory of Java code (like 'src/main/java' in a
+     * Maven project). This directory will be included in the
+     * {@link JavaAnalysisFiles#getSourceRoots()}.</li>
+     * <li>a `*.jar` file. This file will be included in the
+     * {@link JavaAnalysisFiles#getDependencies()}.</li>
+     * <li>a `pom.xml` file. Its source directory and its dependencies
+     * will be included in the {@link JavaAnalysisFiles#getDependencies()}.
+     * When no directories are given in {@code files} the source
+     * directory of the `pom.xml` is included in the
+     * {@link JavaAnalysisFiles#getSourceRoots()}.</li>
+     * </ul>
+     */
+    JavaAnalysisFiles newJavaAnalysisFiles(File... files);
+
+    /**
+     * Returns a {@link JavaAnalysisFiles} instance based on the given
+     * {@code sourcesToAnalyse} and {@code files}.
+     * <p>
+     * {@code sourcesToAnalyse} defines the 
+     * {@link JavaAnalysisFiles#getSourceRoots()}. It must not be empty. 
+     * <p>
+     * {@code files} defines the {@link JavaAnalysisFiles#getDependencies()}.
+     * A file in {@code files} can be one of these:
+     * <ul>
+     * <li>a source directory of Java code (like 'src/main/java' in a
+     * Maven project).</li>
+     * <li>a `*.jar` file.</li>
+     * <li>a `pom.xml` file. Its source directory and its dependencies
+     * will be included in the {@link JavaAnalysisFiles#getDependencies()}.</li>
+     * </ul>
+     */
+    JavaAnalysisFiles newJavaAnalysisFiles(
+            File[] sourcesToAnalyse, File... files);
     //endregion
 
     //region Problem
@@ -115,58 +156,58 @@ public interface JavaAnalysisAPI {
     ProblemCheckers getAllProblemCheckers();
 
     /**
+     * Returns the {@link ProblemReporter}s with the given {@code checkerIds}.
+     */
+    ProblemCheckers getProblemCheckersWithIds(Iterable<String> checkerIds);
+
+    /**
      * Returns all {@link ProblemReporter}s currently available.
      */
     ProblemReporters getAllProblemReporters();
-
+    
     /**
      * Checks for problems in the Java files under the source roots given in
-     * {@code sourceRootsAndDependencies}, using the provided
+     * {@code javaAnalysisFiles}, using the provided
      * {@code problemCheckers} and passes any {@link Problem} to the
      * {@code problemConsumer}, finally returning the detected {@link Problems}.
      * <p>
      *
-     * @param sourceRootsAndDependencies each file in this array is either a
-     *                                   `source root` directory of Java files
-     *                                   (like 'src/main/java' in a Maven
-     *                                   project), or a `jar` file to be
-     *                                   included as a dependency. The source
-     *                                   code inside the `source root`
-     *                                   directories is checked for problems.
-     * @param problemCheckers            The {@link ProblemChecker}s used to check for problems.
-     * @param problemConsumer            receives any detected {@link Problem}
-     *                                   (Default: {@code p -> {}})
-     * @param aboutToCheckFile           Called before checking a Java file. Only when
-     *                                   it returns {@code true} the file is actually
-     *                                   checked. Beside selecting/filtering files for
-     *                                   the problem check {@code aboutToCheckFile} may
-     *                                   also be used for progress reporting.
-     *                                   (Default: {@code f -> true})
+     * @param javaAnalysisFiles holds the sources to check, also providing
+     *                          dependencies to consider.
+     * @param problemCheckers   The {@link ProblemChecker}s used to check for problems.
+     * @param problemConsumer   receives any detected {@link Problem}
+     *                          (Default: {@code p -> {}})
+     * @param aboutToCheckFile  Called before checking a Java file. Only when
+     *                          it returns {@code true} the file is actually
+     *                          checked. Beside selecting/filtering files for
+     *                          the problem check {@code aboutToCheckFile} may
+     *                          also be used for progress reporting.
+     *                          (Default: {@code f -> true})
      */
     Problems checkForProblems(
-            File[] sourceRootsAndDependencies,
+            JavaAnalysisFiles javaAnalysisFiles,
             Iterable<ProblemChecker> problemCheckers,
             Consumer<Problem> problemConsumer,
             Predicate<File> aboutToCheckFile);
 
     /**
-     * See {@link #checkForProblems(File[], Iterable, Consumer, Predicate)}.
+     * See {@link #checkForProblems(JavaAnalysisFiles, Iterable, Consumer, Predicate)}.
      */
     default Problems checkForProblems(
-            File[] sourceRoots,
+            JavaAnalysisFiles javaAnalysisFiles,
             Iterable<ProblemChecker> problemCheckers,
             Consumer<Problem> problemConsumer) {
         return checkForProblems(
-                sourceRoots, problemCheckers, problemConsumer, f -> true);
+                javaAnalysisFiles, problemCheckers, problemConsumer, f -> true);
     }
 
     /**
-     * See {@link #checkForProblems(File[], Iterable, Consumer, Predicate)}.
+     * See {@link #checkForProblems(JavaAnalysisFiles, Iterable, Consumer, Predicate)}.
      */
     default Problems checkForProblems(
-            File[] sourceRoots, Iterable<ProblemChecker> problemCheckers) {
+            JavaAnalysisFiles javaAnalysisFiles, Iterable<ProblemChecker> problemCheckers) {
         return checkForProblems(
-                sourceRoots, problemCheckers, p -> {}, f -> true);
+                javaAnalysisFiles, problemCheckers, p -> {}, f -> true);
     }
 
     void reportProblems(
@@ -175,20 +216,20 @@ public interface JavaAnalysisAPI {
             Consumer<String> progress);
 
     /**
-     * See {@link #checkForProblems(File[], Iterable, Consumer, Predicate)} and
+     * See {@link #checkForProblems(JavaAnalysisFiles, Iterable, Consumer, Predicate)} and
      * {@link #reportProblems(Problems, Iterable, Consumer)}; returns the
      * detected {@link Problems}.
      *
-     * @param processedFileToProgress when {@code true} {@code progress}
+     * @param javaAnalysisFiles
+     * @param progressOnProcessedFile when {@code true} {@code progress}
      *                                receives a message holding the name of
-     *                                the Java source file that is about to
-     *                                be processed.
+     *                                the file that is about to be processed.
      */
     Problems checkForProblemsAndWriteReports(
-            File[] sourceRootsAndDependencies,
+            JavaAnalysisFiles javaAnalysisFiles,
             ProblemCheckers problemCheckers,
             ProblemReporters problemReporters,
-            boolean processedFileToProgress,
+            boolean progressOnProcessedFile,
             Consumer<String> progress);
 
     //endregion

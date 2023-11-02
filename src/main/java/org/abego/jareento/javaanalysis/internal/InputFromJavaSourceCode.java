@@ -6,7 +6,6 @@ import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import org.abego.commons.lang.StringUtil;
 import org.abego.jareento.shared.commons.javaparser.JavaParserUtil;
 
-import java.io.File;
 import java.util.function.Consumer;
 
 import static org.abego.commons.lang.ThrowableUtil.messageOrToString;
@@ -20,7 +19,7 @@ import static org.abego.jareento.shared.commons.javaparser.JavaParserUtil.getSto
 //TODO: include a summary of the data currently added to the project
 //TODO: Make this accessible through API? Currently not used
 class InputFromJavaSourceCode implements JavaAnalysisProjectInput {
-    private final File[] sourceRoots;
+    private final JavaAnalysisFiles javaAnalysisFiles;
     private final Consumer<String> progress;
 
     private static class AddToProjectVisitor extends VoidVisitorAdapter<Object> {
@@ -79,19 +78,21 @@ class InputFromJavaSourceCode implements JavaAnalysisProjectInput {
         }
     }
 
-    private InputFromJavaSourceCode(File[] sourceRoots, Consumer<String> progress) {
+    private InputFromJavaSourceCode(JavaAnalysisFiles javaAnalysisFiles, Consumer<String> progress) {
         this.progress = progress;
-        this.sourceRoots = sourceRoots;
+        this.javaAnalysisFiles = javaAnalysisFiles;
     }
 
     public static InputFromJavaSourceCode newInputFromJavaSourceCode(
-            File[] sourceRoots, Consumer<String> progress) {
-        return new InputFromJavaSourceCode(sourceRoots, progress);
+            JavaAnalysisFiles javaAnalysisFiles, Consumer<String> progress) {
+        return new InputFromJavaSourceCode(javaAnalysisFiles, progress);
     }
 
     @Override
     public void feed(JavaAnalysisProjectStateBuilder builder, Consumer<String> problemConsumer) {
-        JavaParserUtil.forEveryJavaFileDo(sourceRoots, cu -> 
-                new AddToProjectVisitor(builder, cu, problemConsumer).visit(cu, ""), progress);
+        JavaParserUtil.forEachJavaFileDo(
+                javaAnalysisFiles.getSourceRoots(),
+                javaAnalysisFiles.getDependencies(), cu ->
+                        new AddToProjectVisitor(builder, cu, problemConsumer).visit(cu, ""), progress);
     }
 }

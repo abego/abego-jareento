@@ -12,7 +12,6 @@ import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
-import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import com.github.javaparser.printer.DefaultPrettyPrinter;
 import com.github.javaparser.printer.Printer;
 import com.github.javaparser.printer.configuration.DefaultConfigurationOption;
@@ -31,6 +30,7 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.JarTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.abego.commons.io.FileUtil;
+import org.abego.commons.lang.ArrayUtil;
 import org.abego.commons.lang.exception.MustNotInstantiateException;
 import org.abego.commons.progress.ProgressWithRange;
 import org.abego.commons.progress.Progresses;
@@ -38,7 +38,6 @@ import org.abego.commons.var.Var;
 import org.abego.jareento.base.JareentoException;
 import org.abego.jareento.shared.SyntaxUtil;
 import org.abego.jareento.util.JavaLangUtil;
-import org.eclipse.jdt.annotation.Nullable;
 
 import java.io.File;
 import java.io.IOException;
@@ -93,10 +92,10 @@ public final class JavaParserUtil {
 
     public static void saveToFile(CompilationUnit cu) {
         String newText = LexicalPreservingPrinter.print(cu);
-        cu.getStorage().ifPresentOrElse(s->
+        cu.getStorage().ifPresentOrElse(s ->
                         //TODO: custom encoding, also when reading files.
                         FileUtil.writeText(s.getPath().toFile(), newText),
-                ()->{throw new JareentoException("No storage defined");});
+                () -> {throw new JareentoException("No storage defined");});
     }
 
 
@@ -104,25 +103,30 @@ public final class JavaParserUtil {
         return fieldNamed(Navigator.demandClass(cu, className), fieldName);
     }
 
-    public static void forEveryJavaFileDo(
-            File[] sourceRootsAndDependencies, Consumer<CompilationUnit> compilationUnitHandler) {
-        forEveryJavaFileDo(sourceRootsAndDependencies, compilationUnitHandler, e -> {});
+    public static void forEachJavaFileDo(
+            File[] sourceRoots,
+            File[] dependencies,
+            Consumer<CompilationUnit> compilationUnitHandler) {
+        forEachJavaFileDo(sourceRoots, dependencies, compilationUnitHandler, e -> {});
     }
 
-    public static void forEveryJavaFileDo(
-            File[] sourceRootsAndDependencies, Consumer<CompilationUnit> compilationUnitHandler,
+    public static void forEachJavaFileDo(
+            File[] sourceRoots,
+            File[] dependencies,
+            Consumer<CompilationUnit> compilationUnitHandler,
             Consumer<String> progress) {
-        forEveryJavaFileDo(sourceRootsAndDependencies, f -> true, compilationUnitHandler, progress);
+        forEachJavaFileDo(sourceRoots, dependencies, f -> true, compilationUnitHandler, progress);
     }
 
-    public static void forEveryJavaFileDo(
-            File[] sourceRootsAndDependencies, 
-            Predicate<File> javaFileSelector, 
+    public static void forEachJavaFileDo(
+            File[] sourceRoots,
+            File[] dependencies,
+            Predicate<File> javaFileSelector,
             Consumer<CompilationUnit> compilationUnitHandler,
             Consumer<String> progress) {
 
         SymbolResolver resolver = getSymbolResolverForSourceRootsAndDependencies(
-                sourceRootsAndDependencies);
+                ArrayUtil.concatenate(sourceRoots, dependencies));
         StaticJavaParser.getParserConfiguration().setSymbolResolver(resolver);
         usePrinterWithoutComments(StaticJavaParser.getParserConfiguration());
         // for performance and memory reasons, no comments support
@@ -134,14 +138,14 @@ public final class JavaParserUtil {
                 .endsWith(".java") && javaFileSelector.test(file);
 
         int fileCount = countFilesInDirectoriesAndDeeper(
-                sourceRootsAndDependencies, filter);
+                sourceRoots, filter);
 
         Var<Integer> index = newVar(0);
         ProgressWithRange progressWithRange = Progresses.createProgressWithRange(
                 "Processing Java files ...", fileCount,
                 newProgressListenerWithStringConsumer(progress));
         try {
-            for (File directory : sourceRootsAndDependencies) {
+            for (File directory : sourceRoots) {
                 withFilesInDirectoryAndDeeperDo(directory, filter, file -> {
                     progressWithRange.update(index.get(), file.getAbsolutePath());
                     index.set(index.get() + 1);
@@ -163,24 +167,6 @@ public final class JavaParserUtil {
         }
     }
 
-    public static void visitJavaFiles(
-            File[] sourceRoots,
-            Predicate<File> javaFileSelector,
-            Supplier<VoidVisitorAdapter<@Nullable Object>> visitorProvider,
-            Consumer<String> progress) {
-        forEveryJavaFileDo(sourceRoots, javaFileSelector,
-                cu -> visitorProvider.get().visit(cu, null),
-                progress);
-    }
-
-    public static void visitJavaFiles(
-            File[] sourceRoots,
-            Supplier<VoidVisitorAdapter<Object>> visitorProvider,
-            Consumer<String> progress) {
-        visitJavaFiles(sourceRoots, f -> true, visitorProvider, progress);
-    }
-
-
     private static int countFilesInDirectoriesAndDeeper(
             File[] directories, Predicate<File> selector) {
         Var<Integer> count = newVar(0);
@@ -191,7 +177,8 @@ public final class JavaParserUtil {
         return count.get();
     }
 
-    private static SymbolResolver getSymbolResolverForSourceRootsAndDependencies(File[] sourceRootsAndDependencies) {
+    private static SymbolResolver getSymbolResolverForSourceRootsAndDependencies(
+            File[] sourceRootsAndDependencies) {
         CombinedTypeSolver combinedSolver = new CombinedTypeSolver();
         combinedSolver.add(new ReflectionTypeSolver());
         for (File file : sourceRootsAndDependencies) {
