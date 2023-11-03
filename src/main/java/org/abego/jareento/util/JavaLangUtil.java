@@ -37,7 +37,7 @@ public final class JavaLangUtil {
             switch (m.group()) {
                 case "," -> {
                     if (level == 0) {
-                        result.add(text.substring(i, m.start()));
+                        result.add(text.substring(i, m.start()).trim());
                         i = m.end();
                     }
                 }
@@ -48,7 +48,7 @@ public final class JavaLangUtil {
             }
         }
         if (i < text.length()) {
-            result.add(text.substring(i));
+            result.add(text.substring(i).trim());
         }
 
         return result.toArray(new String[0]);
