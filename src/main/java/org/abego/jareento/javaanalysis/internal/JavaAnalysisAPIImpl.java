@@ -178,8 +178,9 @@ public class JavaAnalysisAPIImpl implements JavaAnalysisAPI {
     public void reportProblems(
             Problems problems,
             Iterable<ProblemReporter> problemReporters,
-            Consumer<String> progress) {
-        ProblemUtil.reportProblems(problems, problemReporters, progress);
+            Consumer<String> progress,
+            ProblemReporter.ReportParameter reportParameter) {
+        ProblemUtil.reportProblems(problems, problemReporters, progress, reportParameter);
     }
 
     @Override
@@ -188,13 +189,15 @@ public class JavaAnalysisAPIImpl implements JavaAnalysisAPI {
             ProblemCheckers problemCheckers,
             ProblemReporters problemReporters,
             boolean progressOnProcessedFile,
-            Consumer<String> progress) {
+            Consumer<String> progress,
+            ProblemReporter.ReportParameter reportParameter) {
         return ProblemUtil.checkForProblemsAndWriteReports(
                 javaAnalysisFiles,
                 problemCheckers,
                 problemReporters,
                 progressOnProcessedFile,
-                progress);
+                progress,
+                reportParameter);
     }
 
 }

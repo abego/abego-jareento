@@ -213,14 +213,14 @@ public interface JavaAnalysisAPI {
     void reportProblems(
             Problems problems,
             Iterable<ProblemReporter> problemReporters,
-            Consumer<String> progress);
+            Consumer<String> progress,
+            ProblemReporter.ReportParameter reportParameter);
 
     /**
      * See {@link #checkForProblems(JavaAnalysisFiles, Iterable, Consumer, Predicate)} and
-     * {@link #reportProblems(Problems, Iterable, Consumer)}; returns the
+     * {@link #reportProblems(Problems, Iterable, Consumer, ProblemReporter.ReportParameter)}; returns the
      * detected {@link Problems}.
      *
-     * @param javaAnalysisFiles
      * @param progressOnProcessedFile when {@code true} {@code progress}
      *                                receives a message holding the name of
      *                                the file that is about to be processed.
@@ -230,7 +230,8 @@ public interface JavaAnalysisAPI {
             ProblemCheckers problemCheckers,
             ProblemReporters problemReporters,
             boolean progressOnProcessedFile,
-            Consumer<String> progress);
+            Consumer<String> progress,
+            ProblemReporter.ReportParameter reportParameter);
 
     //endregion
     //endregion

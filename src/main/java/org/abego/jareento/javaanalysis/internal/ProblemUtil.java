@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 
 import static org.abego.commons.util.ListUtil.toList;
 import static org.abego.commons.util.ServiceLoaderUtil.loadServices;
+import static org.abego.jareento.javaanalysis.ProblemReporter.ReportParameter;
 import static org.abego.jareento.javaanalysis.internal.ProblemsImpl.newProblemsImpl;
 import static org.abego.jareento.shared.commons.javaparser.JavaParserUtil.fileOf;
 
@@ -89,9 +90,10 @@ class ProblemUtil {
     public static void reportProblems(
             Problems problems,
             Iterable<ProblemReporter> problemReporters,
-            Consumer<String> progress) {
+            Consumer<String> progress,
+            ReportParameter reportParameter) {
         for (var reporter : problemReporters) {
-            reporter.report(problems, progress);
+            reporter.report(problems, progress, reportParameter);
         }
     }
 
@@ -100,7 +102,8 @@ class ProblemUtil {
             Iterable<ProblemChecker> problemCheckers,
             Iterable<ProblemReporter> problemReporters,
             boolean processedFileToProgress,
-            Consumer<String> progress) {
+            Consumer<String> progress,
+            ProblemReporter.ReportParameter reportParameter) {
 
         printProblemsToCheck(problemCheckers, progress);
         printFiles("Checking source root(s):", javaAnalysisFiles.getSourceRoots(), progress);
@@ -124,7 +127,7 @@ class ProblemUtil {
 
         problems = problems.sortedByDescription();
 
-        reportProblems(problems, problemReporters, progress);
+        reportProblems(problems, problemReporters, progress, reportParameter);
 
         return problems;
     }

@@ -22,8 +22,13 @@ public final class StandardProblemReporter implements ProblemReporter {
     }
 
     @Override
-    public void report(Problems problems, Consumer<String> progress) {
-        File reportFile = new File(OUTPUT_FILE_NAME);
+    public void report(
+            Problems problems, 
+            Consumer<String> progress, 
+            ReportParameter reportParameter) {
+        
+        File reportFile = new File(
+                reportParameter.getOutputDirectory(), OUTPUT_FILE_NAME);
         try (PrintStream out = newPrintStreamToBufferedFile(reportFile)) {
             int count = problems.getSize();
             out.println(count + (count == 1 ? " problem." : " problems."));

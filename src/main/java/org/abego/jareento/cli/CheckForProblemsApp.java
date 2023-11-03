@@ -7,6 +7,7 @@ import org.abego.jareento.javaanalysis.ProblemType;
 import org.abego.jareento.javaanalysis.Problems;
 import org.abego.jareento.javaanalysis.internal.JavaAnalysisFiles;
 
+import java.io.File;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -38,6 +39,7 @@ public class CheckForProblemsApp {
             boolean printUsage,
             boolean silent,
             boolean superSilent,
+            File outputDirectory,
             Set<String> checkerIds,
             List<String> files) {
     }
@@ -66,6 +68,7 @@ public class CheckForProblemsApp {
     private static RunParameters parseArgs(String... args) {
         boolean silent = false;
         boolean superSilent = false;
+        File outputDirectory = new File(".");
         Set<String> checkerIds = new HashSet<>();
         List<String> files = new ArrayList<>();
         int i = 0;
@@ -90,6 +93,14 @@ public class CheckForProblemsApp {
                                     "Missing value for option '%s'.".formatted(arg));
                         }
                     }
+                    case "-o" -> {
+                        if (i < args.length) {
+                            outputDirectory = new File(args[i++]);
+                        } else {
+                            throw new IllegalArgumentException(
+                                    "Missing value for option '%s'.".formatted(arg));
+                        }
+                    }
                     default -> throw new IllegalArgumentException(
                             "Unexpected option '%s'".formatted(arg));
                 }
@@ -107,7 +118,7 @@ public class CheckForProblemsApp {
         }
 
         return new RunParameters(
-                printUsage, silent, superSilent, checkerIds, files);
+                printUsage, silent, superSilent, outputDirectory, checkerIds, files);
     }
     
     private Problems runWith(RunParameters args) {
@@ -119,7 +130,7 @@ public class CheckForProblemsApp {
 
         JavaAnalysisFiles files = javaAnalysisAPI.newJavaAnalysisFiles(
                 parseFiles(args.files, ";"));
-        var problemCheckers = 
+        var problemCheckers =
                 javaAnalysisAPI.getProblemCheckersWithIds(args.checkerIds);
         if (problemCheckers.isEmpty()) {
             throw new IllegalArgumentException("No problem checkers specified.");
@@ -131,13 +142,15 @@ public class CheckForProblemsApp {
         Consumer<String> progress =
                 args.superSilent() ? s -> {} : System.out::println;
         boolean progressOnProcessedFile = !args.silent;
-
+        File outputDirectory = args.outputDirectory();
+        
         return javaAnalysisAPI.checkForProblemsAndWriteReports(
                 files,
                 problemCheckers,
                 problemReporters,
                 progressOnProcessedFile,
-                progress);
+                progress,
+                () -> outputDirectory);
     }
 
     private void printAvailableProblemCheckersAndReporters(PrintStream out) {
@@ -148,13 +161,16 @@ public class CheckForProblemsApp {
 
     private static void printUsage(PrintStream out) {
         out.println("Usage:");
-        out.println("    <command> [-s] [-S] [-c problemCheckerId]+ [file]+");
+        out.println("    <command> [-s] [-S] [-o dir] [-c problemCheckerId]+ [file]+");
         out.println();
         out.println("Options:");
         out.println();
         out.println("    -c value  Activate the problem checker with the ID given in the value.");
         out.println("              This option may be occur multiple times, to check for ");
         out.println("              different kinds of problems in one run.");
+        out.println();
+        out.println("    -o dir    Write the output to the directory dir.");
+        out.println("              When missing output is written to the working directory.");
         out.println();
         out.println("    -s        Silent mode, less progress output");
         out.println();

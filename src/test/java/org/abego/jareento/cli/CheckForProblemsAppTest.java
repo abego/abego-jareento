@@ -15,13 +15,16 @@ class CheckForProblemsAppTest {
 
         assertEquals("""
                 Usage:
-                    <command> [-s] [-S] [-c problemCheckerId]+ [file]+
+                    <command> [-s] [-S] [-o dir] [-c problemCheckerId]+ [file]+
 
                 Options:
 
                     -c value  Activate the problem checker with the ID given in the value.
                               This option may be occur multiple times, to check for\s
                               different kinds of problems in one run.
+
+                    -o dir    Write the output to the directory dir.
+                              When missing output is written to the working directory.
 
                     -s        Silent mode, less progress output
 
