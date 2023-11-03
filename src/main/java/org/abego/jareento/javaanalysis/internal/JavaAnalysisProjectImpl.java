@@ -11,10 +11,12 @@ import org.abego.jareento.javaanalysis.JavaTypes;
 import org.eclipse.jdt.annotation.Nullable;
 
 import java.io.File;
+import java.net.URI;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Consumer;
 
 import static org.abego.jareento.javaanalysis.internal.EmptyIDs.emptyIDs;
 import static org.abego.jareento.javaanalysis.internal.IDsImpl.newIDs;
@@ -25,6 +27,22 @@ import static org.abego.jareento.shared.JavaMethodDeclaratorUtil.newJavaMethodDe
 
 public class JavaAnalysisProjectImpl implements JavaAnalysisProjectInternal {
     private static final Map<String, String> OBJECT_METHOD_SIGNATURES_TO_RETURN_TYPE = newObjectMethodSignatures();
+
+    public static JavaAnalysisProject newJavaAnalysisProjectFromInput(
+            URI uri,
+            JavaAnalysisProjectInput input,
+            File[] sourceRoots,
+            File[] dependencies,
+            Consumer<String> problemConsumer) {
+        JavaAnalysisProjectStateBuilder builder =
+                JavaAnalysisInternalFactories.newJavaAnalysisProjectBuilder(uri);
+        builder.setSourceRoots(sourceRoots);
+        builder.setDependencies(dependencies);
+        input.feed(builder, problemConsumer);
+        JavaAnalysisProjectStateWithSave state = builder.build();
+        state.save();
+        return newJavaAnalysisProject(state);
+    }
 
     private static Map<String, String> newObjectMethodSignatures() {
         Map<String, String> result = new HashMap<>();

@@ -111,7 +111,7 @@ class JavaAnalysisProjectStorageUsingStringGraph implements JavaAnalysisProjectS
                 () -> String.format("Adding disassembled classes... (from %s)", disassemblyFile.getAbsolutePath()),
                 durationMillis -> String.format("Classes added into project. [%d ms]", durationMillis),
                 innerProgress,
-                () -> newJavaAnalysisProjectFromInput(
+                () -> JavaAnalysisProjectImpl.newJavaAnalysisProjectFromInput(
                         projectURI,
                         InputFromJavap.newInputFromJavap(
                                 disassemblyFile, dependencies, innerInnerProgress, javaAnalysisAPI),
@@ -119,22 +119,6 @@ class JavaAnalysisProjectStorageUsingStringGraph implements JavaAnalysisProjectS
                         dependencies,
                         logStringsAsWarnings(LOGGER)));
         progress.accept(String.format("Created java analysis project '%s'.", projectURI));
-    }
-
-    private JavaAnalysisProject newJavaAnalysisProjectFromInput(
-            URI uri,
-            JavaAnalysisProjectInput input,
-            File[] sourceRoots,
-            File[] dependencies,
-            Consumer<String> problemConsumer) {
-        JavaAnalysisProjectStateBuilder builder =
-                JavaAnalysisInternalFactories.newJavaAnalysisProjectBuilder(uri);
-        builder.setSourceRoots(sourceRoots);
-        builder.setDependencies(dependencies);
-        input.feed(builder, problemConsumer);
-        JavaAnalysisProjectStateWithSave state = builder.build();
-        state.save();
-        return JavaAnalysisProjectImpl.newJavaAnalysisProject(state);
     }
 
 
