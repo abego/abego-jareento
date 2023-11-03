@@ -2,6 +2,7 @@ package org.abego.jareento.javaanalysis;
 
 import com.github.javaparser.ast.CompilationUnit;
 import org.abego.commons.io.FileUtil;
+import org.abego.jareento.javaanalysis.internal.ConsumerLogger;
 import org.abego.jareento.javaanalysis.internal.JavaAnalysisFiles;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -40,19 +41,14 @@ class ProblemCheckerTest {
         FileUtil.writeText(javaFile, "public class Main {}");
         JavaAnalysisFiles files = javaAnalysisAPI.newJavaAnalysisFiles(tempDir);
 
-        StringBuilder log = new StringBuilder();
+        ConsumerLogger<Problem> problemConsumer = new ConsumerLogger<>(
+                p -> p.getProblemType().getID() + "\t" +
+                        p.getFile()
+                                .getAbsolutePath() + ":" + p.getLineNumber());
         ProblemChecker problemChecker = new ProblemCheckerSample();
-        Consumer<Problem> problemConsumer = p -> {
-            log.append(p.getProblemType().getID());
-            log.append('\t');
-            log.append(p.getFile().getAbsolutePath());
-            log.append(':');
-            log.append(p.getLineNumber());
-            log.append('\n');
-        };
-
         javaAnalysisAPI.checkForProblems(files, toList(problemChecker), problemConsumer);
 
-        assertEquals("myId\t%s:1\n".formatted(javaFile.getAbsolutePath()), log.toString());
+        assertEquals("myId\t%s:1\n".formatted(javaFile.getAbsolutePath()),
+                problemConsumer.getText());
     }
 }
