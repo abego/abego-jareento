@@ -120,8 +120,8 @@ class ProblemUtil {
         long endTime = System.currentTimeMillis();
 
         progress.accept("%d problems found in %.3f s%n".formatted(problems.getSize(),
-                (endTime-startTime)/1000.0));
-        
+                (endTime - startTime) / 1000.0));
+
         problems = problems.sortedByDescription();
 
         reportProblems(problems, problemReporters, progress);
@@ -175,8 +175,10 @@ class ProblemUtil {
     private static void printFiles(
             String title, File[] sourceRoots, Consumer<String> output) {
         output.accept(title);
-        toList(sourceRoots).forEach(f ->
-                output.accept("\t%s".formatted(f.getAbsolutePath())));
+        toList(sourceRoots).stream()
+                .sorted(Comparator.comparing(File::getAbsolutePath))
+                .forEach(f ->
+                        output.accept("\t%s".formatted(f.getAbsolutePath())));
     }
 
     private static void printProblemsToCheck(
