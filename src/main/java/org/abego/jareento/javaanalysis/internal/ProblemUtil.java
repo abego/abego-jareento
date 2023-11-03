@@ -106,6 +106,7 @@ class ProblemUtil {
         printFiles("Checking source root(s):", javaAnalysisFiles.getSourceRoots(), progress);
         printFiles("using Dependencies:", javaAnalysisFiles.getDependencies(), progress);
 
+        long startTime = System.currentTimeMillis();
         var problems = checkForProblems(
                 javaAnalysisFiles,
                 problemCheckers,
@@ -116,7 +117,11 @@ class ProblemUtil {
                                 "Processing %s...".formatted(f.getAbsolutePath()));
                     return true;
                 });
+        long endTime = System.currentTimeMillis();
 
+        progress.accept("%d problems found in %.3f s%n".formatted(problems.getSize(),
+                (endTime-startTime)/1000.0));
+        
         problems = problems.sortedByDescription();
 
         reportProblems(problems, problemReporters, progress);
