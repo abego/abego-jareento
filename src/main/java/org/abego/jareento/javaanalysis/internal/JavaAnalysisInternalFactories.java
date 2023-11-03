@@ -1,7 +1,5 @@
 package org.abego.jareento.javaanalysis.internal;
 
-import org.abego.jareento.javaanalysis.JavaAnalysisProject;
-
 import java.net.URI;
 
 public class JavaAnalysisInternalFactories {
