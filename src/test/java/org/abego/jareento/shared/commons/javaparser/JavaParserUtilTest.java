@@ -8,6 +8,7 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSol
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.abego.commons.lang.exception.MustNotInstantiateException;
+import org.abego.commons.test.JUnit5Util;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -32,7 +33,8 @@ class JavaParserUtilTest {
         CombinedTypeSolver combinedSolver = new CombinedTypeSolver();
         combinedSolver.add(new JavaParserTypeSolver(new File(srcPath)));
         JavaSymbolSolver symbolSolver = new JavaSymbolSolver(combinedSolver);
-        StaticJavaParser.getParserConfiguration().setSymbolResolver(symbolSolver);
+        StaticJavaParser.getParserConfiguration()
+                .setSymbolResolver(symbolSolver);
 
         CompilationUnit cu = StaticJavaParser.parse(new File(classFooPath));
 
@@ -54,7 +56,8 @@ class JavaParserUtilTest {
         combinedSolver.add(new ReflectionTypeSolver());
         combinedSolver.add(new JavaParserTypeSolver(new File(srcPath)));
         JavaSymbolSolver symbolSolver = new JavaSymbolSolver(combinedSolver);
-        StaticJavaParser.getParserConfiguration().setSymbolResolver(symbolSolver);
+        StaticJavaParser.getParserConfiguration()
+                .setSymbolResolver(symbolSolver);
 
         CompilationUnit cu = StaticJavaParser.parse(new File(testeeClassPath));
 
@@ -72,5 +75,19 @@ class JavaParserUtilTest {
                 JavaParserUtil.resolveType(bazFieldInBar).getQualifiedName());
     }
 
+    @Test
+    void forEachJavaFileDoInvalidSourceRoot() {
+        File fooTxtFile = new File("foo.txt");
+        
+        JUnit5Util.assertThrowsWithMessage(
+                InvalidSourceRootException.class,
+                "Source roots must only contain directories (to Java source code) or jar files. Got: '%s'"
+                        .formatted(fooTxtFile.getAbsolutePath()),
+
+                () -> JavaParserUtil.forEachJavaFileDo(
+                        new File[]{fooTxtFile},
+                        new File[0],
+                        cu -> {}));
+    }
 
 }
