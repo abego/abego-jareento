@@ -15,7 +15,7 @@ import static org.abego.commons.util.ListUtil.toList;
 import static org.abego.commons.util.ServiceLoaderUtil.loadService;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class ProblemCheckerTest {
+public class ProblemCheckerTest {
     private static final JavaAnalysisAPI javaAnalysisAPI = loadService(JavaAnalysisAPI.class);
 
     public static class ProblemCheckerSample implements ProblemChecker {
@@ -48,7 +48,7 @@ class ProblemCheckerTest {
         ProblemChecker problemChecker = new ProblemCheckerSample();
         javaAnalysisAPI.checkForProblems(files, toList(problemChecker), problemConsumer);
 
-        assertEquals("myId\t%s:1\n".formatted(javaFile.getAbsolutePath()),
+        assertEquals("ProblemTypeSample\t%s:1\n".formatted(javaFile.getAbsolutePath()),
                 problemConsumer.getText());
     }
 }

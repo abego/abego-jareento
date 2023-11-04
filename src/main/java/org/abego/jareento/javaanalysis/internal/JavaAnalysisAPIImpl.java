@@ -35,6 +35,8 @@ import static org.abego.jareento.javaanalysis.internal.ProblemsImpl.newProblemsI
 public class JavaAnalysisAPIImpl implements JavaAnalysisAPI {
     @Nullable
     private static ProblemReporters allProblemReporters;
+    @Nullable
+    private static ProblemCheckers allProblemCheckers;
 
     @Override
     public JavaAnalysisProjectStorage getJavaAnalysisProjectStorage(URI storageURI) {
@@ -135,7 +137,14 @@ public class JavaAnalysisAPIImpl implements JavaAnalysisAPI {
 
     @Override
     public ProblemCheckers getAllProblemCheckers() {
-        return ProblemUtil.getAllProblemCheckers();
+        if (allProblemCheckers == null) {
+            List<ProblemChecker> result =
+                    toList(loadServices(ProblemChecker.class));
+            result.sort(Comparator.comparing(
+                    o -> o.getProblemType().getID()));
+            allProblemCheckers = ProblemCheckersImpl.newProblemCheckersImpl(result);
+        }
+        return allProblemCheckers;
     }
 
     @Override
@@ -170,7 +179,7 @@ public class JavaAnalysisAPIImpl implements JavaAnalysisAPI {
                     toList(loadServices(ProblemReporter.class));
             list.sort(Comparator.comparing(ProblemReporter::getID));
             ProblemReportersImpl problemReporters = ProblemReportersImpl.newProblemReportersImpl(list);
-            setAllProblemsReporters(problemReporters);
+            setAllProblemReporters(problemReporters);
         }
         return allProblemReporters;
     }
@@ -212,11 +221,19 @@ public class JavaAnalysisAPIImpl implements JavaAnalysisAPI {
                 reportParameter);
     }
 
-    public static void setAllProblemsReporters(ProblemReporters problemReporters) {
+    public static void setAllProblemReporters(ProblemReporters problemReporters) {
         allProblemReporters = problemReporters;
     }
 
-    public static void resetAllProblemsReporters() {
+    public static void resetAllProblemReporters() {
         allProblemReporters = null;
+    }
+
+    public static void setAllProblemCheckers(ProblemCheckers problemCheckers) {
+        allProblemCheckers = problemCheckers;
+    }
+
+    public static void resetAllProblemCheckers() {
+        allProblemCheckers = null;
     }
 }

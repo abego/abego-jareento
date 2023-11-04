@@ -8,17 +8,17 @@ public class ProblemTypeTest {
     public static class ProblemTypeSample implements ProblemType {
         @Override
         public String getID() {
-            return "myId";
+            return "ProblemTypeSample";
         }
 
         @Override
         public String getTitle() {
-            return "myTitle";
+            return "ProblemType introduced for tests";
         }
 
         @Override
         public String getDetails() {
-            return "myDetails";
+            return "Details of ProblemTypeSample";
         }
     }
 
@@ -48,9 +48,9 @@ public class ProblemTypeTest {
     void smokeTest() {
         ProblemType pt = new ProblemTypeSample();
 
-        assertEquals("myId", pt.getID());
-        assertEquals("myTitle", pt.getTitle());
-        assertEquals("myDetails", pt.getDetails());
-        assertEquals("myTitle", pt.getDescriptionTemplate());
+        assertEquals("ProblemTypeSample", pt.getID());
+        assertEquals("ProblemType introduced for tests", pt.getTitle());
+        assertEquals("Details of ProblemTypeSample", pt.getDetails());
+        assertEquals("ProblemType introduced for tests", pt.getDescriptionTemplate());
     }
 }

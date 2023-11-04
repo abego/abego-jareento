@@ -44,7 +44,7 @@ class ProblemUtilTest {
 
         assertEquals("""
                 1 problem.
-                /somePath/Sample.java\t1\tmyId\tmyTitle
+                /somePath/Sample.java\t1\tProblemTypeSample\tProblemType introduced for tests
                 """, FileUtil.textOf(problemsTxtFile));
     }
 }

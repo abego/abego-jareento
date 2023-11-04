@@ -2,7 +2,6 @@ package org.abego.jareento.javaanalysis.internal;
 
 import org.abego.jareento.javaanalysis.Problem;
 import org.abego.jareento.javaanalysis.ProblemChecker;
-import org.abego.jareento.javaanalysis.ProblemCheckers;
 import org.abego.jareento.javaanalysis.ProblemReporter;
 import org.abego.jareento.javaanalysis.Problems;
 import org.abego.jareento.shared.commons.javaparser.JavaParserUtil;
@@ -18,7 +17,6 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static org.abego.commons.util.ListUtil.toList;
-import static org.abego.commons.util.ServiceLoaderUtil.loadServices;
 import static org.abego.jareento.javaanalysis.ProblemReporter.ReportParameter;
 import static org.abego.jareento.javaanalysis.internal.ProblemsImpl.newProblemsImpl;
 import static org.abego.jareento.shared.commons.javaparser.JavaParserUtil.fileOf;
@@ -157,14 +155,6 @@ class ProblemUtil {
             }
         }
         return newProblemsImpl(uniqueProblems);
-    }
-
-    public static ProblemCheckers getAllProblemCheckers() {
-        List<ProblemChecker> result =
-                toList(loadServices(ProblemChecker.class));
-        result.sort(Comparator.comparing(
-                o -> o.getProblemType().getID()));
-        return ProblemCheckersImpl.newProblemCheckersImpl(result);
     }
 
     private static void printFiles(
