@@ -17,6 +17,7 @@ import java.io.File;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -26,10 +27,14 @@ import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
+import static org.abego.commons.util.ListUtil.toList;
+import static org.abego.commons.util.ServiceLoaderUtil.loadServices;
 import static org.abego.jareento.javaanalysis.internal.JavaAnalysisFilesImpl.newJavaAnalysisFilesImpl;
 import static org.abego.jareento.javaanalysis.internal.ProblemsImpl.newProblemsImpl;
 
 public class JavaAnalysisAPIImpl implements JavaAnalysisAPI {
+    @Nullable
+    private static ProblemReporters allProblemReporters;
 
     @Override
     public JavaAnalysisProjectStorage getJavaAnalysisProjectStorage(URI storageURI) {
@@ -160,7 +165,14 @@ public class JavaAnalysisAPIImpl implements JavaAnalysisAPI {
 
     @Override
     public ProblemReporters getAllProblemReporters() {
-        return ProblemUtil.getAllProblemReporters();
+        if (allProblemReporters == null) {
+            List<ProblemReporter> list =
+                    toList(loadServices(ProblemReporter.class));
+            list.sort(Comparator.comparing(ProblemReporter::getID));
+            ProblemReportersImpl problemReporters = ProblemReportersImpl.newProblemReportersImpl(list);
+            setAllProblemsReporters(problemReporters);
+        }
+        return allProblemReporters;
     }
 
     @Override
@@ -200,4 +212,11 @@ public class JavaAnalysisAPIImpl implements JavaAnalysisAPI {
                 reportParameter);
     }
 
+    public static void setAllProblemsReporters(ProblemReporters problemReporters) {
+        allProblemReporters = problemReporters;
+    }
+
+    public static void resetAllProblemsReporters() {
+        allProblemReporters = null;
+    }
 }

@@ -4,7 +4,6 @@ import org.abego.jareento.javaanalysis.Problem;
 import org.abego.jareento.javaanalysis.ProblemChecker;
 import org.abego.jareento.javaanalysis.ProblemCheckers;
 import org.abego.jareento.javaanalysis.ProblemReporter;
-import org.abego.jareento.javaanalysis.ProblemReporters;
 import org.abego.jareento.javaanalysis.Problems;
 import org.abego.jareento.shared.commons.javaparser.JavaParserUtil;
 import org.eclipse.jdt.annotation.Nullable;
@@ -158,13 +157,6 @@ class ProblemUtil {
             }
         }
         return newProblemsImpl(uniqueProblems);
-    }
-
-    public static ProblemReporters getAllProblemReporters() {
-        List<ProblemReporter> list =
-                toList(loadServices(ProblemReporter.class));
-        list.sort(Comparator.comparing(ProblemReporter::getID));
-        return ProblemReportersImpl.newProblemReportersImpl(list);
     }
 
     public static ProblemCheckers getAllProblemCheckers() {
