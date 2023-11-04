@@ -4,10 +4,26 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 import java.io.File;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class JavaMethodCallTest {
+
+    public static String callingMethodsDeclaratorTexts(JavaMethodCalls calls) {
+        return calls.stream()
+                .map(c -> c.getCallingMethod()
+                        .getMethodDeclaratorText())
+                .sorted()
+                .collect(Collectors.joining("\n"));
+    }
+
+    public static String calledScopesAndMethodSignatureTexts(JavaMethodCalls calls) {
+        return calls.stream()
+                .map(c -> c.getScope() + "#" + c.getMethodSignature().getText())
+                .sorted()
+                .collect(Collectors.joining("\n"));
+    }
 
     @Test
     void smokeTest(@TempDir File tempDir) {

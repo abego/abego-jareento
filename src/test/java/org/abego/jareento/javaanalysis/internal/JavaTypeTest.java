@@ -13,6 +13,7 @@ import org.junit.jupiter.api.io.TempDir;
 import java.io.File;
 import java.util.stream.Collectors;
 
+import static org.abego.jareento.javaanalysis.JavaMethodCallTest.callingMethodsDeclaratorTexts;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
@@ -89,10 +90,7 @@ class JavaTypeTest {
         assertEquals("""
                         calls.CallsSample$Main#meth3(calls.CallsSample$SubA, java.util.function.Consumer):void
                         calls.CallsSample$SubA#meth3(calls.CallsSample$SubA, java.util.function.Consumer):void""",
-                callsToSubAMeth1.stream()
-                        .map(c -> c.getCallingMethod()
-                                .getMethodDeclaratorText())
-                        .sorted()
-                        .collect(Collectors.joining("\n")));
+                callingMethodsDeclaratorTexts(callsToSubAMeth1));
     }
+
 }
