@@ -30,10 +30,6 @@ public class MavenUtil {
     private static final PropertiesGroup propertiesGroup =
             newPropertiesGroup("abego.maven");
 
-    public static String runMavenCommand(String argument, File mavenProjectDirectory) {
-        return runMavenCommand(new String[]{argument}, mavenProjectDirectory);
-    }
-
     public static String runMavenCommand(String[] arguments, File mavenProjectDirectory) {
         checkIsMavenProjectDirectory(mavenProjectDirectory);
 
