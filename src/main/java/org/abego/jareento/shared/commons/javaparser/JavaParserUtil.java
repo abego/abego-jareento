@@ -20,7 +20,6 @@ import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinte
 import com.github.javaparser.resolution.Navigator;
 import com.github.javaparser.resolution.SymbolResolver;
 import com.github.javaparser.resolution.TypeSolver;
-import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedMethodLikeDeclaration;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
@@ -152,8 +151,6 @@ public final class JavaParserUtil {
                     try {
                         CompilationUnit compilationUnit = StaticJavaParser.parse(file);
                         compilationUnitHandler.accept(compilationUnit);
-                    } catch (UnsolvedSymbolException e) {
-                        throw new UnresolvedSymbolException(e.getName(), file, e);
                     } catch (Exception e) {
                         throw new JareentoException(
                                 String.format("Error when parsing '%s'", file.getAbsolutePath()),
