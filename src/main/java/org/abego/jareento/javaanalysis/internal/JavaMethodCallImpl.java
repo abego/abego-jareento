@@ -5,6 +5,8 @@ import org.abego.jareento.javaanalysis.JavaMethodCall;
 import org.abego.jareento.javaanalysis.JavaMethodSignature;
 import org.abego.jareento.javaanalysis.JavaType;
 
+import java.util.Objects;
+
 import static org.abego.jareento.javaanalysis.internal.JavaMethodImpl.newJavaMethod;
 import static org.abego.jareento.javaanalysis.internal.JavaMethodSignatureImpl.newJavaMethodSignature;
 import static org.abego.jareento.javaanalysis.internal.JavaTypeImpl.newJavaType;
@@ -56,5 +58,17 @@ class JavaMethodCallImpl implements JavaMethodCall {
     @Override
     public String getBaseScope() {
         return project.baseScopeOfMethodCall(id);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof JavaMethodCallImpl that)) return false;
+        return id.equals(that.id) && project.equals(that.project);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, project);
     }
 }

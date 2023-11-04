@@ -6,6 +6,8 @@ import org.abego.jareento.javaanalysis.JavaMethodCalls;
 import org.abego.jareento.javaanalysis.JavaMethodSignature;
 import org.abego.jareento.javaanalysis.JavaMethods;
 
+import java.util.Objects;
+
 class JavaMethodImpl implements JavaMethod {
     private final String id;
     private final JavaAnalysisProjectInternal project;
@@ -103,5 +105,17 @@ class JavaMethodImpl implements JavaMethod {
     @Override
     public String getId() {
         return id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof JavaMethodImpl that)) return false;
+        return id.equals(that.id) && project.equals(that.project);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, project);
     }
 }

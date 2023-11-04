@@ -4,6 +4,7 @@ import org.abego.commons.io.FileUtil;
 import org.abego.commons.io.PrintStreamToBuffer;
 import org.abego.jareento.javaanalysis.JavaAnalysisAPI;
 import org.abego.jareento.javaanalysis.JavaMethodCalls;
+import org.abego.jareento.javaanalysis.SampleProjectUtil;
 import org.abego.jareento.javaanalysis.internal.JavaAnalysisInternalFactories;
 import org.abego.jareento.javaanalysis.internal.JavaAnalysisProjectInternal;
 import org.abego.jareento.javaanalysis.internal.JavaAnalysisProjectStateBuilder;
@@ -15,9 +16,11 @@ import java.util.Comparator;
 import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static java.util.logging.Logger.getLogger;
+import static org.abego.commons.io.ResourceUtil.textOfResource;
 import static org.abego.commons.lang.StringUtil.sortedUnixLines;
 import static org.abego.commons.lang.StringUtil.unixString;
 import static org.abego.commons.util.LoggerUtil.logStringsAsWarnings;
@@ -27,6 +30,32 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class InputFromJavapTest {
     private static final Logger LOGGER = getLogger(InputFromJavapTest.class.getName());
     private final JavaAnalysisAPI javaAnalysisAPI = loadService(JavaAnalysisAPI.class);
+
+    /**
+     * This test checks if the disassembly created for the "calls" project 
+     * is equal to the "javap-CallsSample.txt" resource.
+     * <p>
+     * The "javap-CallsSample.txt" resource is used in several other tests of
+     * this test class. The tests assume "javap-CallsSample.txt" reflects the
+     * disassembly of the "calls" project. 
+     * <p>
+     * If disassemblyCheck fails, either the "calls" project was 
+     * modified or the disassembly text checked, e.g. because a different
+     * disassembler was used. This may happen when a new JDK version is used 
+     * and the output of javap changed. In any case we have both to update
+     * the "javap-CallsSample.txt" resource and possible some tests
+     * in this Test class.
+     */
+    @Test
+    void disassemblyCheck(@TempDir File tempDir) {
+        SampleProjectUtil.setupSampleProject("calls", tempDir);
+
+        String expected = textOfResource(InputFromJavap.class, "javap-CallsSample.txt");
+        String actual = FileUtil.textOf(new File(tempDir, "storage/calls/disassembly.txt"));
+        actual = actual.replaceAll(Pattern.quote(tempDir.getAbsolutePath()), "{tempDir}");
+        actual = actual.replaceAll("Last modified \\d+ \\w+ \\d+;", "Last modified 27 Oct 2023;");
+        assertEquals(expected, actual);
+    }
 
     @Test
     void methodCalls(@TempDir File tempDir) {
@@ -156,7 +185,7 @@ class InputFromJavapTest {
             JavaAnalysisProjectInternal project, String className, BiConsumer<String, JavaMethodCalls> calledMethodAndMethodCalls) {
         project.methodsOfType(className)
                 .idStream().sorted().forEach(calledMethodId -> {
-                    JavaMethodCalls methodCalls = 
+                    JavaMethodCalls methodCalls =
                             project.methodCallsWithSignatureOnType(
                                     project.signatureOfMethod(calledMethodId), className);
                     calledMethodAndMethodCalls.accept(calledMethodId, methodCalls);
