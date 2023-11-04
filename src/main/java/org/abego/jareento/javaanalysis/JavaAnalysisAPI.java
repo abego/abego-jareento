@@ -97,9 +97,9 @@ public interface JavaAnalysisAPI {
 
     /**
      * Returns a {@link JavaAnalysisFiles} instance based on the given
-     * {@code sourcesToAnalyse} and {@code files}.
+     * {@code sourceRoots} and {@code files}.
      * <p>
-     * {@code sourcesToAnalyse} defines the 
+     * {@code sourceRoots} defines the 
      * {@link JavaAnalysisFiles#getSourceRoots()}. It must not be empty. 
      * <p>
      * {@code files} defines the {@link JavaAnalysisFiles#getDependencies()}.
@@ -113,7 +113,7 @@ public interface JavaAnalysisAPI {
      * </ul>
      */
     JavaAnalysisFiles newJavaAnalysisFiles(
-            File[] sourcesToAnalyse, File... files);
+            File[] sourceRoots, File... files);
     //endregion
 
     //region Problem

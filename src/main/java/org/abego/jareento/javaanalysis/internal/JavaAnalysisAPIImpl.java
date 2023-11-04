@@ -53,12 +53,12 @@ public class JavaAnalysisAPIImpl implements JavaAnalysisAPI {
     }
 
     @Override
-    public JavaAnalysisFiles newJavaAnalysisFiles(File[] sourcesToAnalyse, File... files) {
-        if (sourcesToAnalyse.length == 0) {
+    public JavaAnalysisFiles newJavaAnalysisFiles(File[] sourceRoots, File... files) {
+        if (sourceRoots.length == 0) {
             throw new IllegalArgumentException(
                     "sourcesToAnalyse must not be empty");
         }
-        return parseFilesForJavaAnalysisFiles(sourcesToAnalyse, files);
+        return parseFilesForJavaAnalysisFiles(sourceRoots, files);
     }
 
     private JavaAnalysisFiles parseFilesForJavaAnalysisFiles(

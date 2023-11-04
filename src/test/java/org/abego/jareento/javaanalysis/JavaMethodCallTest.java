@@ -35,16 +35,18 @@ public class JavaMethodCallTest {
         JavaMethodCalls calls = meth1.getMethodCallsFromMe();
 
         assertEquals(1, calls.getSize());
-
         JavaMethodCall call = calls.iterator().next();
 
-        assertEquals("accept(java.lang.Object)", call.getMethodSignature().getText());
+        assertEquals("accept(java.lang.Object)", call.getMethodSignature()
+                .getText());
         assertEquals("java.util.function.Consumer", call.getScope());
         assertEquals("java.util.function.Consumer", call.getBaseScope());
         assertEquals(meth1, call.getCallingMethod());
         assertEquals("calls.CallsSample$SubA", call.getCallingTypeName());
         JavaType classSubA = project.getTypeWithName("calls.CallsSample$SubA");
         assertEquals(classSubA, call.getCallingType());
+
+        assertEquals("accept(java.lang.Object)", calls.getBriefSummary());
     }
 
 
