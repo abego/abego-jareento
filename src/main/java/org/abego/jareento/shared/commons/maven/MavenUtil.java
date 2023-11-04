@@ -199,7 +199,7 @@ public class MavenUtil {
         File pomFile = new File(file, "pom.xml");
         if (!pomFile.isFile()) {
             throw new IllegalArgumentException(
-                    String.format("Maven project expected. No 'pom.xml found in '%s'",
+                    String.format("Maven project expected. No 'pom.xml' found in '%s'",
                             file.getAbsolutePath()));
         }
     }
