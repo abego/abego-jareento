@@ -11,7 +11,6 @@ import java.util.Optional;
 
 import static org.abego.jareento.shared.commons.javaparser.JavaParserUtil.parameterTypes;
 
-//TODO: increase test coverage
 public class MethodAnnotationDescriptorImpl implements MethodAnnotationDescriptor {
     private final AnnotationExpr annotationExpr;
     private final ResolvedMethodDeclaration resolvedMethodDeclaration;

@@ -1,6 +1,7 @@
 package org.abego.jareento.javarefactoring.internal;
 
 import org.abego.commons.io.FileUtil;
+import org.abego.commons.lang.StringUtil;
 import org.abego.jareento.javaanalysis.JavaAnalysisAPI;
 import org.abego.jareento.javaanalysis.internal.JavaAnalysisFiles;
 import org.abego.jareento.javarefactoring.JavaRefactoringAPI;
@@ -33,10 +34,15 @@ class RemoveMethodAnnotationsTest {
                 javaAnalysisFiles,
                 md -> md.getAnnotationText().equals("@Override"),
                 f -> true, md -> listenerLog.append(
-                        String.format("removing %s of %s.%s\n",
+                        String.format("removing %s of %s.%s - %s.%s - %s(%s)- %s\n",
                                 md.getAnnotationText(),
                                 md.getTypeDeclaringMethod(),
-                                md.getMethodSignature())),
+                                md.getMethodSignature(),
+                                md.getMethodPackageName(),
+                                md.getMethodName(),
+                                md.getQualifiedMethodName(),
+                                StringUtil.join(", ", (Object[]) md.getMethodParameterTypeNames()),
+                                md)),
                 s -> {});
 
         assertEquals("""
@@ -116,10 +122,9 @@ class RemoveMethodAnnotationsTest {
                 """, unixString(FileUtil.textOf(new File(tempDir, "com/example/Sub2.java"))));
 
         assertEquals("""
-                        removing @Override of com.example.Sub1.Sub1_InnerClass.innerMethodBase1(java.lang.String)
-                        removing @Override of com.example.Sub1.methodBase1(java.lang.String)
-                        removing @Override of com.example.Sub2.methodInterfaceA()""",
+                        removing @Override of com.example.Sub1.Sub1_InnerClass.innerMethodBase1(java.lang.String) - com.example.innerMethodBase1 - com.example.Sub1.Sub1_InnerClass.innerMethodBase1(java.lang.String)- MyMethodAnnotationDescriptor{@Override com.example.Sub1.Sub1_InnerClass.innerMethodBase1(java.lang.String)}
+                        removing @Override of com.example.Sub1.methodBase1(java.lang.String) - com.example.methodBase1 - com.example.Sub1.methodBase1(java.lang.String)- MyMethodAnnotationDescriptor{@Override com.example.Sub1.methodBase1(java.lang.String)}
+                        removing @Override of com.example.Sub2.methodInterfaceA() - com.example.methodInterfaceA - com.example.Sub2.methodInterfaceA()- MyMethodAnnotationDescriptor{@Override com.example.Sub2.methodInterfaceA()}""",
                 sortedUnixLines(listenerLog.toString()));
     }
-
 }
