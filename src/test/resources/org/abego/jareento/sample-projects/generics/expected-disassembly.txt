@@ -1,0 +1,151 @@
+Classfile jar:file://{tempDir}/target/generics.jar!/generics/GenericsMain.class
+  Last modified 27 Oct 2023; size 719 bytes
+  SHA-256 checksum 478b4c426ee106aa29c8afc9e21455d42df947bd69bec13abe92838a63c22317
+  Compiled from "GenericsMain.java"
+public class generics.GenericsMain
+  minor version: 0
+  major version: 61
+  flags: (0x0021) ACC_PUBLIC, ACC_SUPER
+  this_class: #11                         // generics/GenericsMain
+  super_class: #2                         // java/lang/Object
+  interfaces: 0, fields: 1, methods: 2, attributes: 3
+Constant pool:
+   #1 = Methodref          #2.#3          // java/lang/Object."<init>":()V
+   #2 = Class              #4             // java/lang/Object
+   #3 = NameAndType        #5:#6          // "<init>":()V
+   #4 = Utf8               java/lang/Object
+   #5 = Utf8               <init>
+   #6 = Utf8               ()V
+   #7 = Class              #8             // generics/GenericsMain$Sub
+   #8 = Utf8               generics/GenericsMain$Sub
+   #9 = Methodref          #7.#3          // generics/GenericsMain$Sub."<init>":()V
+  #10 = Fieldref           #11.#12        // generics/GenericsMain.field:Lgenerics/GenericsMain$Sub;
+  #11 = Class              #13            // generics/GenericsMain
+  #12 = NameAndType        #14:#15        // field:Lgenerics/GenericsMain$Sub;
+  #13 = Utf8               generics/GenericsMain
+  #14 = Utf8               field
+  #15 = Utf8               Lgenerics/GenericsMain$Sub;
+  #16 = Methodref          #7.#17         // generics/GenericsMain$Sub.calc:(Ljava/lang/Object;)Ljava/lang/String;
+  #17 = NameAndType        #18:#19        // calc:(Ljava/lang/Object;)Ljava/lang/String;
+  #18 = Utf8               calc
+  #19 = Utf8               (Ljava/lang/Object;)Ljava/lang/String;
+  #20 = Utf8               Signature
+  #21 = Utf8               Lgenerics/GenericsMain$Sub<Ljava/lang/Integer;>;
+  #22 = Utf8               Code
+  #23 = Utf8               LineNumberTable
+  #24 = Utf8               func
+  #25 = Utf8               (Lgenerics/GenericsMain$Sub;Ljava/lang/String;)Ljava/lang/String;
+  #26 = Utf8               (Lgenerics/GenericsMain$Sub<Ljava/lang/String;>;Ljava/lang/String;)Ljava/lang/String;
+  #27 = Utf8               SourceFile
+  #28 = Utf8               GenericsMain.java
+  #29 = Utf8               NestMembers
+  #30 = Utf8               InnerClasses
+  #31 = Utf8               Sub
+{
+  generics.GenericsMain$Sub<java.lang.Integer> field;
+    descriptor: Lgenerics/GenericsMain$Sub;
+    flags: (0x0000)
+    Signature: #21                          // Lgenerics/GenericsMain$Sub<Ljava/lang/Integer;>;
+
+  public generics.GenericsMain();
+    descriptor: ()V
+    flags: (0x0001) ACC_PUBLIC
+    Code:
+      stack=3, locals=1, args_size=1
+         0: aload_0
+         1: invokespecial #1                  // Method java/lang/Object."<init>":()V
+         4: aload_0
+         5: new           #7                  // class generics/GenericsMain$Sub
+         8: dup
+         9: invokespecial #9                  // Method generics/GenericsMain$Sub."<init>":()V
+        12: putfield      #10                 // Field field:Lgenerics/GenericsMain$Sub;
+        15: return
+      LineNumberTable:
+        line 3: 0
+        line 14: 4
+
+  public java.lang.String func(generics.GenericsMain$Sub<java.lang.String>, java.lang.String);
+    descriptor: (Lgenerics/GenericsMain$Sub;Ljava/lang/String;)Ljava/lang/String;
+    flags: (0x0001) ACC_PUBLIC
+    Code:
+      stack=2, locals=3, args_size=3
+         0: aload_1
+         1: aload_2
+         2: invokevirtual #16                 // Method generics/GenericsMain$Sub.calc:(Ljava/lang/Object;)Ljava/lang/String;
+         5: areturn
+      LineNumberTable:
+        line 11: 0
+    Signature: #26                          // (Lgenerics/GenericsMain$Sub<Ljava/lang/String;>;Ljava/lang/String;)Ljava/lang/String;
+}
+SourceFile: "GenericsMain.java"
+NestMembers:
+  generics/GenericsMain$Sub
+InnerClasses:
+  public static #31= #7 of #11;           // Sub=class generics/GenericsMain$Sub of class generics/GenericsMain
+Classfile jar:file://{tempDir}/target/generics.jar!/generics/GenericsMain$Sub.class
+  Last modified 27 Oct 2023; size 526 bytes
+  SHA-256 checksum bcb8f8a64312a9b5f9c3cb3d5ead7fd68211254d426f19a13876650931a8e1e6
+  Compiled from "GenericsMain.java"
+public class generics.GenericsMain$Sub<T extends java.lang.Object> extends java.lang.Object
+  minor version: 0
+  major version: 61
+  flags: (0x0021) ACC_PUBLIC, ACC_SUPER
+  this_class: #11                         // generics/GenericsMain$Sub
+  super_class: #2                         // java/lang/Object
+  interfaces: 0, fields: 0, methods: 2, attributes: 4
+Constant pool:
+   #1 = Methodref          #2.#3          // java/lang/Object."<init>":()V
+   #2 = Class              #4             // java/lang/Object
+   #3 = NameAndType        #5:#6          // "<init>":()V
+   #4 = Utf8               java/lang/Object
+   #5 = Utf8               <init>
+   #6 = Utf8               ()V
+   #7 = Methodref          #2.#8          // java/lang/Object.toString:()Ljava/lang/String;
+   #8 = NameAndType        #9:#10         // toString:()Ljava/lang/String;
+   #9 = Utf8               toString
+  #10 = Utf8               ()Ljava/lang/String;
+  #11 = Class              #12            // generics/GenericsMain$Sub
+  #12 = Utf8               generics/GenericsMain$Sub
+  #13 = Utf8               Code
+  #14 = Utf8               LineNumberTable
+  #15 = Utf8               calc
+  #16 = Utf8               (Ljava/lang/Object;)Ljava/lang/String;
+  #17 = Utf8               Signature
+  #18 = Utf8               (TT;)Ljava/lang/String;
+  #19 = Utf8               <T:Ljava/lang/Object;>Ljava/lang/Object;
+  #20 = Utf8               SourceFile
+  #21 = Utf8               GenericsMain.java
+  #22 = Utf8               NestHost
+  #23 = Class              #24            // generics/GenericsMain
+  #24 = Utf8               generics/GenericsMain
+  #25 = Utf8               InnerClasses
+  #26 = Utf8               Sub
+{
+  public generics.GenericsMain$Sub();
+    descriptor: ()V
+    flags: (0x0001) ACC_PUBLIC
+    Code:
+      stack=1, locals=1, args_size=1
+         0: aload_0
+         1: invokespecial #1                  // Method java/lang/Object."<init>":()V
+         4: return
+      LineNumberTable:
+        line 4: 0
+
+  java.lang.String calc(T);
+    descriptor: (Ljava/lang/Object;)Ljava/lang/String;
+    flags: (0x0000)
+    Code:
+      stack=1, locals=2, args_size=2
+         0: aload_1
+         1: invokevirtual #7                  // Method java/lang/Object.toString:()Ljava/lang/String;
+         4: areturn
+      LineNumberTable:
+        line 6: 0
+    Signature: #18                          // (TT;)Ljava/lang/String;
+}
+Signature: #19                          // <T:Ljava/lang/Object;>Ljava/lang/Object;
+SourceFile: "GenericsMain.java"
+NestHost: class generics/GenericsMain
+InnerClasses:
+  public static #26= #11 of #23;          // Sub=class generics/GenericsMain$Sub of class generics/GenericsMain

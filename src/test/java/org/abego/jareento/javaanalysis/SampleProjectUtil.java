@@ -30,14 +30,18 @@ public class SampleProjectUtil {
 
     public static final String SAMPLE_PROJECTS_ROOT_PATH = "/org/abego/jareento/sample-projects/";
 
+    public static String sampleProjectDirectoryResourcePath(String projectName) {
+        return SAMPLE_PROJECTS_ROOT_PATH + projectName+"/";
+    }
+
     /**
-     * Copies the sample project with the given {@code projectName} from the 
-     * resources to the {@code directory}, builds and packages the project and 
+     * Copies the sample project with the given {@code projectName} from the
+     * resources to the {@code directory}, builds and packages the project and
      * returns a {@link JavaAnalysisProject} for that sample project.
      * <p>
      * A sample project p has its files stored in a resource directory named
-     * {@code "p"} under SAMPLE_PROJECTS_ROOT_PATH, with its Java source file 
-     * inside a {@code "src"} directory. 
+     * {@code "p"} under SAMPLE_PROJECTS_ROOT_PATH, with its Java source file
+     * inside a {@code "src"} directory.
      * <p>
      * The sample project must be self-contained, i.e. not have any dependencies.
      */
@@ -50,10 +54,10 @@ public class SampleProjectUtil {
         File srcMainJavaDir = new File(srcMainDir, "java");
         File targetDir = new File(directory, "target");
         File classesDir = new File(targetDir, "classes");
-        File jarFile = new File(targetDir, projectName +".jar");
-        
+        File jarFile = new File(targetDir, projectName + ".jar");
+
         FileUtil.copyResourcesInLocationDeep(SampleProjectUtil.class,
-                SAMPLE_PROJECTS_ROOT_PATH + projectName+"/src", srcMainJavaDir);
+                sampleProjectDirectoryResourcePath(projectName) + "src", srcMainJavaDir);
 
         List<File> sourceFiles = allJavaFilesInDirectoryAndDeeper(srcMainJavaDir);
         var diagnostics = compileJavaFiles(sourceFiles, classesDir);
@@ -108,7 +112,7 @@ public class SampleProjectUtil {
         return dc.getDiagnostics();
     }
 
-    private static void writeJarFile(File jarFile, File contentRoot)  {
+    private static void writeJarFile(File jarFile, File contentRoot) {
         Manifest manifest = new Manifest();
         manifest.getMainAttributes()
                 .put(Attributes.Name.MANIFEST_VERSION, "1.0");
@@ -119,7 +123,7 @@ public class SampleProjectUtil {
             FileUtil.withFilesInDirectoryAndDeeperDo(contentRoot, f -> {
                 String entryName =
                         contentRoot.toPath().relativize(f.toPath()).toString()
-								.replaceAll("\\\\","/");
+                                .replaceAll("\\\\", "/");
                 addNewJarEntry(jarStream, entryName, f);
             });
         } catch (IOException e) {

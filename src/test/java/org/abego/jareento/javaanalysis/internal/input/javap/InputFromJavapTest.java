@@ -25,6 +25,7 @@ import static org.abego.commons.lang.StringUtil.sortedUnixLines;
 import static org.abego.commons.lang.StringUtil.unixString;
 import static org.abego.commons.util.LoggerUtil.logStringsAsWarnings;
 import static org.abego.commons.util.ServiceLoaderUtil.loadService;
+import static org.abego.jareento.javaanalysis.SampleProjectUtil.sampleProjectDirectoryResourcePath;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class InputFromJavapTest {
@@ -32,16 +33,16 @@ class InputFromJavapTest {
     private final JavaAnalysisAPI javaAnalysisAPI = loadService(JavaAnalysisAPI.class);
 
     /**
-     * This test checks if the disassembly created for the "calls" project 
+     * This test checks if the disassembly created for the "calls" project
      * is equal to the "javap-CallsSample.txt" resource.
      * <p>
      * The "javap-CallsSample.txt" resource is used in several other tests of
      * this test class. The tests assume "javap-CallsSample.txt" reflects the
-     * disassembly of the "calls" project. 
+     * disassembly of the "calls" project.
      * <p>
-     * If disassemblyCheck fails, either the "calls" project was 
+     * If disassemblyCheck fails, either the "calls" project was
      * modified or the disassembly text checked, e.g. because a different
-     * disassembler was used. This may happen when a new JDK version is used 
+     * disassembler was used. This may happen when a new JDK version is used
      * and the output of javap changed. In any case we have both to update
      * the "javap-CallsSample.txt" resource and possible some tests
      * in this Test class.
@@ -179,6 +180,20 @@ class InputFromJavapTest {
                 meth1(java.util.function.Consumer);meth2(java.util.function.Consumer)
                 Object()
                 """, result.toString());
+    }
+
+    @Test
+    void generics(@TempDir File tempDir) {
+        SampleProjectUtil.setupSampleProject("generics", tempDir);
+
+
+        String expected = textOfResource(InputFromJavap.class,
+                sampleProjectDirectoryResourcePath("generics")
+                        + "expected-disassembly.txt");
+        String actual = FileUtil.textOf(new File(tempDir, "storage/generics/disassembly.txt"));
+        actual = actual.replaceAll(Pattern.quote(tempDir.getAbsolutePath()), "{tempDir}");
+        actual = actual.replaceAll("Last modified \\d+ \\w+ \\d+;", "Last modified 27 Oct 2023;");
+        assertEquals(expected, actual);
     }
 
     private static void withMethodCallsToMethodsOfClassDo(
