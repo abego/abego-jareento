@@ -48,7 +48,6 @@ public class InputFromJavap implements JavaAnalysisProjectInput {
     private static final Logger LOGGER = getLogger(InputFromJavap.class.getName());
     private static final String OBJECT_CLASS_NAME = Object.class.getName();
 
-    @SuppressWarnings("FieldCanBeLocal")
     private final ProgressWithRange.Listener progressListener;
     private final File file;
     private final File[] jarFiles;
