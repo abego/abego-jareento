@@ -92,13 +92,11 @@ fi
 
 echo Updating README.md ...
 sed -i '' "s|<version>.*</version>|<version>${version}</version>|" README.md
-sed -i '' "s|https://github.com/abego/commons/releases/tag/.*|https://github.com/abego/commons/releases/tag/v${version}|" README.md
+sed -i '' "s|https://github.com/abego/abego-jareento/releases/tag/.*|https://github.com/abego/abego-jareento/releases/tag/v${version}|" README.md
 
 # --- update pom.xml files to new version ---------------------------------
 echo Updating pom.xml files ...
-misc/setartifactversion "abego-commons" "$version" "pom.xml"
-misc/setartifactversion "abego-commons" "$version" "abego-commons-base/pom.xml"
-misc/setartifactversion "abego-commons" "$version" "abego-commons-test/pom.xml"
+misc/setartifactversion "abego-jareento" "$version" "pom.xml"
 
 # --- Do the Git stuff  ---------------------------------------------------
 echo "Pushing changes to Git server..."
@@ -109,9 +107,7 @@ git push origin "v${version}" #o push the changes to the Git server, incl. tag.
 
 # --- Prepare for next development iteration ("bump version") -------------
 echo "Prepare for next development iteration..."
-misc/setartifactversion "abego-commons" "${nextVersion}-SNAPSHOT" "pom.xml"
-misc/setartifactversion "abego-commons" "${nextVersion}-SNAPSHOT" "abego-commons-base/pom.xml"
-misc/setartifactversion "abego-commons" "${nextVersion}-SNAPSHOT" "abego-commons-test/pom.xml"
+misc/setartifactversion "abego-jareento" "${nextVersion}-SNAPSHOT" "pom.xml"
 git add .
 git commit -m "build: Prepare for next development iteration"
 git push origin
@@ -131,18 +127,16 @@ echo "Automatic part of releasing ${version} completed."
 
 # --- get the path to the local Maven repository --------------------------
 m2repoDir=`mvn help:evaluate -Dexpression=settings.localRepository | grep -E '^([a-zA-Z]:|/)'`
-m2releaseDir="${m2repoDir}/org/abego/commons/abego-commons-base/${version}/"
-m2releaseDir2="${m2repoDir}/org/abego/commons/abego-commons-test/${version}/"
+m2releaseDir="${m2repoDir}/org/abego/jareento/abego-jareento/${version}/"
 
 echo
 echo "    Remaining manual steps:"
-echo "        - on https://github.com/abego/commons/releases"
+echo "        - on https://github.com/abego/abego-jareento/releases"
 echo "           - Create a new release ${version}"
 echo "           - Copy the CHANGELOG entry for ${version} to the server"
 echo "           - Add all files from local Maven repo to release on GitHub"
 
 read -p "Press Return to open GitHub, CHANGELOG and local Maven repo directory:"
 open "${m2releaseDir}"
-open "${m2releaseDir2}"
 open "CHANGELOG.md"
-open "https://github.com/abego/commons/releases"
+open "https://github.com/abego/abego-jareento/releases"
