@@ -2,7 +2,6 @@ package org.abego.jareento.javaanalysis.internal;
 
 import org.abego.jareento.javaanalysis.JavaAnalysisProject;
 import org.abego.jareento.javaanalysis.JavaMethodCalls;
-import org.abego.jareento.javaanalysis.JavaMethodSignature;
 import org.abego.jareento.javaanalysis.JavaMethodSignatures;
 import org.abego.jareento.javaanalysis.JavaType;
 import org.abego.jareento.javaanalysis.JavaTypes;
@@ -11,9 +10,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 import java.io.File;
-import java.util.stream.Collectors;
 
 import static org.abego.jareento.javaanalysis.JavaMethodCallTest.callingMethodsDeclaratorTexts;
+import static org.abego.jareento.javaanalysis.internal.JavaMethodSignatureTest.javaMethodSignaturesText;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
@@ -59,10 +58,7 @@ class JavaTypeTest {
                         meth1(java.util.function.Consumer)
                         meth3(calls.CallsSample$SubA, java.util.function.Consumer)
                         meth4(calls.CallsSample$Root, java.util.function.Consumer)""",
-                classSubAMethodSignatures.stream()
-                        .map(JavaMethodSignature::getText)
-                        .sorted()
-                        .collect(Collectors.joining("\n")));
+                javaMethodSignaturesText(classSubAMethodSignatures));
         JavaMethodSignatures classSubAInheritedMethodSignatures = classSubA.getInheritedMethodSignatures();
         assertEquals("""
                         CallsSample$Root()
@@ -80,10 +76,7 @@ class JavaTypeTest {
                         wait(long)
                         wait(long, int)
                         wait(long,int)""",
-                classSubAInheritedMethodSignatures.stream()
-                        .map(JavaMethodSignature::getText)
-                        .sorted()
-                        .collect(Collectors.joining("\n")));
+                javaMethodSignaturesText(classSubAInheritedMethodSignatures));
 
         JavaMethodCalls callsToSubAMeth1 = classSubA.getMethodCallsToTypeWithSignature(
                 "meth1(java.util.function.Consumer)");
