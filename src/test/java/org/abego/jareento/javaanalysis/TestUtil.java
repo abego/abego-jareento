@@ -14,4 +14,10 @@ public class TestUtil {
         FileUtil.writeText(javaFile, "public class Mini {\n}\n");
         return javaFile;
     }
+
+    public static File writePomFile(File directory) {
+        File pomFile = new File(directory, "pom.xml");
+        FileUtil.writeText(pomFile, "<project><modelVersion>4.0.0</modelVersion></project>");
+        return pomFile;
+    }
 }

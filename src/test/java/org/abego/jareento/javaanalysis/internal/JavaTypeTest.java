@@ -122,7 +122,7 @@ class JavaTypeTest {
     }
     
     @Test
-    void equalsTest(@TempDir File tempDir) {
+    void equalsAndHashCode(@TempDir File tempDir) {
         JavaAnalysisProject project = SampleProjectUtil.setupSampleProject("calls", tempDir);
         JavaType classRoot = project.getTypeWithName("calls.CallsSample$Root");
         JavaTypes subTypes = classRoot.getSubTypes();

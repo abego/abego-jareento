@@ -9,7 +9,7 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.Objects;
 
-class JavaAnalysisProjectConfigurationImpl implements JavaAnalysisProjectConfiguration {
+final class JavaAnalysisProjectConfigurationImpl implements JavaAnalysisProjectConfiguration {
     private final String name;
     @Nullable
     private final File mavenProjectDirectory;

@@ -29,8 +29,7 @@ class JavaAnalysisAPITest {
         File jarFile = new File(tempDir, "other.jar");
         FileUtil.writeText(jarFile, "");
         File depProject = FileUtil.mkdirs(tempDir, "otherproject");
-        File pomFile = new File(depProject, "pom.xml");
-        FileUtil.writeText(pomFile, "<project><modelVersion>4.0.0</modelVersion></project>");
+        File pomFile = TestUtil.writePomFile(depProject);
 
         JavaAnalysisFiles files = javaAnalysisAPI.newJavaAnalysisFiles(
                 sources, jarFile, pomFile);
