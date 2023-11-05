@@ -44,4 +44,16 @@ final class IDsImpl implements IDs {
     public Iterator<String> iterator() {
         return toSet().iterator();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof IDsImpl)) return false;
+        return toSet().equals(((IDs)o).toSet());
+    }
+
+    @Override
+    public int hashCode() {
+        return toSet().hashCode();
+    }
 }

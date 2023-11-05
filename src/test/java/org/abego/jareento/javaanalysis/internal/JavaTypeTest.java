@@ -10,13 +10,20 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 import java.io.File;
+import java.util.stream.Collectors;
 
 import static org.abego.jareento.javaanalysis.JavaMethodCallTest.callingMethodsDeclaratorTexts;
 import static org.abego.jareento.javaanalysis.internal.JavaMethodSignatureTest.javaMethodSignaturesText;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 class JavaTypeTest {
+    public static String javaTypesText(JavaTypes types) {
+        return types.stream().map(JavaType::getName).sorted()
+                .collect(Collectors.joining("\n"));
+    }
+
     @Test
     void smokeTest(@TempDir File tempDir) {
         JavaAnalysisProject project = SampleProjectUtil.setupSampleProject("calls", tempDir);
@@ -95,11 +102,36 @@ class JavaTypeTest {
         JavaMethodSignatures signatures = subTypes.getMethodSignatures();
 
         assertEquals("""
-                CallsSample$SubA()
-                meth1(java.util.function.Consumer)
-                meth3(calls.CallsSample$SubA, java.util.function.Consumer)
-                meth4(calls.CallsSample$Root, java.util.function.Consumer)""", 
+                        CallsSample$SubA()
+                        meth1(java.util.function.Consumer)
+                        meth3(calls.CallsSample$SubA, java.util.function.Consumer)
+                        meth4(calls.CallsSample$Root, java.util.function.Consumer)""",
                 javaMethodSignaturesText(signatures));
     }
 
+    @Test
+    void intersectedWith(@TempDir File tempDir) {
+        JavaAnalysisProject project = SampleProjectUtil.setupSampleProject("calls", tempDir);
+        JavaType classRoot = project.getTypeWithName("calls.CallsSample$Root");
+        JavaTypes subTypes = classRoot.getSubTypes();
+
+        JavaTypes types = subTypes.intersectedWith(classRoot.getSubTypesAndType());
+
+        assertEquals("calls.CallsSample$SubA",
+                javaTypesText(types));
+    }
+    
+    @Test
+    void equalsTest(@TempDir File tempDir) {
+        JavaAnalysisProject project = SampleProjectUtil.setupSampleProject("calls", tempDir);
+        JavaType classRoot = project.getTypeWithName("calls.CallsSample$Root");
+        JavaTypes subTypes = classRoot.getSubTypes();
+        JavaTypes subTypes2 = classRoot.getSubTypes();
+
+        assertEquals(subTypes, subTypes);
+        assertEquals(subTypes, subTypes2);
+        assertNotEquals(subTypes, null);
+
+        assertEquals(subTypes.hashCode(), subTypes2.hashCode());
+    }
 }
