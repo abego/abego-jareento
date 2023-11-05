@@ -7,6 +7,7 @@ import java.io.File;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 public class JavaMethodCallTest {
 
@@ -49,5 +50,21 @@ public class JavaMethodCallTest {
         assertEquals("accept(java.lang.Object)", calls.getBriefSummary());
     }
 
+    @Test
+    void equalsAndHashCode(@TempDir File tempDir) {
+        JavaAnalysisProject project = SampleProjectUtil.setupSampleProject("calls", tempDir);
+
+        JavaMethod meth1 = project.getMethodWithMethodDeclarator(
+                "calls.CallsSample$SubA#meth1(java.util.function.Consumer):void");
+
+        JavaMethodCall call1 = meth1.getMethodCallsFromMe().iterator().next();
+        JavaMethodCall call2 = meth1.getMethodCallsFromMe().iterator().next();
+
+        assertEquals(call1, call1);
+        assertEquals(call1, call2);
+        assertNotEquals(call1, null);
+        
+        assertEquals(call1.hashCode(), call2.hashCode());
+    }
 
 }
