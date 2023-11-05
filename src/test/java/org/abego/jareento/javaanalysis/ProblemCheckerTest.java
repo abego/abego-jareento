@@ -49,11 +49,12 @@ public class ProblemCheckerTest {
         JavaAnalysisFiles files = javaAnalysisAPI.newJavaAnalysisFiles(tempDir);
 
         LogFromConsumer<Problem> problemLog = newProblemLogFromConsumer();
-        javaAnalysisAPI.checkForProblems(
+        Problems problems = javaAnalysisAPI.checkForProblems(
                 files,
                 toList(getProblemCheckerSample()),
                 problemLog);
 
+        assertEquals(1, problems.getSize());
         assertEquals("ProblemTypeSample\tProblemType introduced for tests\t%s:1\n".formatted(javaFile.getAbsolutePath()),
                 problemLog.getText());
     }
