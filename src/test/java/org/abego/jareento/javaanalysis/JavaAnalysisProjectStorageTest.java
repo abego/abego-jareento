@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 import java.io.File;
-import java.net.URISyntaxException;
 
 import static org.abego.commons.util.ServiceLoaderUtil.loadService;
 import static org.junit.jupiter.api.Assertions.assertThrows;
