@@ -17,11 +17,11 @@ __Maven:__
 
 ## Setup
 
-- Make sure the Maven command line tool (`mvn`) is in the PATH or set the 
-  property `abego.maven.tool` to the path to the Maven tool. The property
-  `abego.maven.tool` is part of the `abego.maven`
+- Make sure the Maven command line tool (`mvn`) is in the PATH.
+- Alternatively, set the property `abego.maven.tool` to the path to the Maven tool. 
+  - *(The property `abego.maven.tool` is part of the `abego.maven`
   [Properties group](https://github.com/abego/commons/wiki/Properties-Group),
-  using the shared group `abego` .
+  with shared group `abego`).*
  
 ## Development
 
@@ -31,7 +31,6 @@ the [GitHub repository](https://github.com/abego/abego-jareento).
 ## Links
 
 - Sources: https://github.com/abego/abego-jareento
-- Twitter: @abego (e.g. for announcements of new releases)
 
 ## License
 
