@@ -54,7 +54,7 @@ public class ProblemCheckerTest {
                 toList(getProblemCheckerSample()),
                 problemLog);
 
-        assertEquals("ProblemTypeSample\t%s:1\n".formatted(javaFile.getAbsolutePath()),
+        assertEquals("ProblemTypeSample\tProblemType introduced for tests\t%s:1\n".formatted(javaFile.getAbsolutePath()),
                 problemLog.getText());
     }
 

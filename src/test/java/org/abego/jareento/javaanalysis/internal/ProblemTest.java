@@ -4,21 +4,33 @@ import org.abego.commons.test.JUnit5Util;
 import org.abego.jareento.javaanalysis.Problem;
 import org.abego.jareento.javaanalysis.ProblemType;
 import org.abego.jareento.javaanalysis.ProblemTypeTest;
+import org.abego.jareento.javaanalysis.Problems;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 public class ProblemTest {
     public static LogFromConsumer<Problem> newProblemLogFromConsumer() {
-        return new LogFromConsumer<>(
-                p -> "%s\t%s:%d".formatted(
-                        p.getProblemType().getID(),
-                        p.getFile().getAbsolutePath(),
-                        p.getLineNumber()));
+        return new LogFromConsumer<>(ProblemTest::shortProblemText);
+    }
+
+    public static String shortProblemText(Problem problem) {
+        return "%s\t%s\t%s:%d".formatted(
+                problem.getProblemType().getID(),
+                problem.getDescription(),
+                problem.getFile().getAbsolutePath(),
+                problem.getLineNumber());
+    }
+
+    public static String shortProblemsText(Problems problems) {
+        return problems.stream()
+                .map(ProblemTest::shortProblemText)
+                .collect(Collectors.joining("\n"));
     }
 
     @Test

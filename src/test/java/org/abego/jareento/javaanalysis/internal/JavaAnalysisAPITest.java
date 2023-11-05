@@ -6,6 +6,8 @@ import org.abego.jareento.javaanalysis.JavaAnalysisAPI;
 import org.abego.jareento.javaanalysis.Problem;
 import org.abego.jareento.javaanalysis.ProblemType;
 import org.abego.jareento.javaanalysis.ProblemTypeTest;
+import org.abego.jareento.javaanalysis.Problems;
+import org.abego.jareento.javaanalysis.TestUtil;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -13,7 +15,9 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
+import static org.abego.commons.util.ListUtil.toList;
 import static org.abego.commons.util.ServiceLoaderUtil.loadService;
+import static org.abego.jareento.javaanalysis.ProblemCheckerTest.getProblemCheckerSample;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class JavaAnalysisAPITest {
@@ -73,6 +77,20 @@ class JavaAnalysisAPITest {
         assertEquals(file.getAbsolutePath(), problem.getFile()
                 .getAbsolutePath());
         assertEquals(123, problem.getLineNumber());
+    }
+
+
+    @Test
+    void checkForProblems(@TempDir File tempDir) {
+        File javaFile = TestUtil.writeMiniJavaFile(tempDir);
+        JavaAnalysisFiles files = javaAnalysisAPI.newJavaAnalysisFiles(tempDir);
+
+        Problems problems = javaAnalysisAPI.checkForProblems(
+                files,
+                toList(getProblemCheckerSample()));
+
+        assertEquals("ProblemTypeSample\tProblemType introduced for tests\t%s:1".formatted(javaFile.getAbsolutePath()),
+                ProblemTest.shortProblemsText(problems));
     }
 
     /**
