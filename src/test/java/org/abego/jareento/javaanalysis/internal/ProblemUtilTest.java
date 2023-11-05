@@ -35,7 +35,7 @@ class ProblemUtilTest {
     void reportProblems(@TempDir File tempDir) {
         File problemsTxtFile = new File(tempDir, "problems.txt");
         StandardProblemReporter reporters = new StandardProblemReporter();
-        ConsumerLogger<String> progress = new ConsumerLogger<>(s -> s);
+        LogFromConsumer<String> progress = new LogFromConsumer<>(s -> s);
         ProblemUtil.reportProblems(
                 getProblemsSample(),
                 toList(reporters),

@@ -4,7 +4,6 @@ import org.abego.commons.io.FileUtil;
 import org.abego.commons.lang.StringUtil;
 import org.abego.commons.test.JUnit5Util;
 import org.abego.jareento.javaanalysis.JavaAnalysisAPI;
-import org.abego.jareento.javaanalysis.ProblemChecker;
 import org.abego.jareento.javaanalysis.ProblemCheckerTest;
 import org.abego.jareento.javaanalysis.ProblemCheckers;
 import org.abego.jareento.javaanalysis.internal.JavaAnalysisAPIImpl;
@@ -15,7 +14,6 @@ import java.io.File;
 
 import static java.util.Collections.emptyList;
 import static org.abego.commons.test.SystemTesting.runAndReturnSystemOut;
-import static org.abego.commons.util.ListUtil.toList;
 import static org.abego.commons.util.ServiceLoaderUtil.loadService;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -148,8 +146,7 @@ class CheckForProblemsAppTest {
 
     @Test
     void run$NoProblems(@TempDir File tempDir) {
-        ProblemChecker problemChecker = new ProblemCheckerTest.ProblemCheckerSample();
-        ProblemCheckers problemCheckers = javaAnalysisAPI.newProblemCheckers(toList(problemChecker));
+        ProblemCheckers problemCheckers = ProblemCheckerTest.getProblemCheckersSample();
         try {
             JavaAnalysisAPIImpl.setAllProblemCheckers(problemCheckers);
 

@@ -1,8 +1,7 @@
 package org.abego.jareento.javaanalysis;
 
 import com.github.javaparser.ast.CompilationUnit;
-import org.abego.commons.io.FileUtil;
-import org.abego.jareento.javaanalysis.internal.ConsumerLogger;
+import org.abego.jareento.javaanalysis.internal.LogFromConsumer;
 import org.abego.jareento.javaanalysis.internal.JavaAnalysisFiles;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -13,12 +12,13 @@ import java.util.function.Consumer;
 
 import static org.abego.commons.util.ListUtil.toList;
 import static org.abego.commons.util.ServiceLoaderUtil.loadService;
+import static org.abego.jareento.javaanalysis.internal.ProblemTest.newProblemLogFromConsumer;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ProblemCheckerTest {
     private static final JavaAnalysisAPI javaAnalysisAPI = loadService(JavaAnalysisAPI.class);
 
-    public static class ProblemCheckerSample implements ProblemChecker {
+    private static class ProblemCheckerSample implements ProblemChecker {
 
         @Override
         public ProblemType getProblemType() {
@@ -35,20 +35,27 @@ public class ProblemCheckerTest {
         }
     }
 
+    public static ProblemChecker getProblemCheckerSample() {
+        return new ProblemCheckerSample();
+    }
+
+    public static ProblemCheckers getProblemCheckersSample() {
+        return javaAnalysisAPI.newProblemCheckers(toList(getProblemCheckerSample()));
+    }
+
     @Test
     void smokeTest(@TempDir File tempDir) {
-        File javaFile = new File(tempDir, "Main.java");
-        FileUtil.writeText(javaFile, "public class Main {}");
+        File javaFile = TestUtil.writeMiniJavaFile(tempDir);
         JavaAnalysisFiles files = javaAnalysisAPI.newJavaAnalysisFiles(tempDir);
 
-        ConsumerLogger<Problem> problemConsumer = new ConsumerLogger<>(
-                p -> p.getProblemType().getID() + "\t" +
-                        p.getFile()
-                                .getAbsolutePath() + ":" + p.getLineNumber());
-        ProblemChecker problemChecker = new ProblemCheckerSample();
-        javaAnalysisAPI.checkForProblems(files, toList(problemChecker), problemConsumer);
+        LogFromConsumer<Problem> problemLog = newProblemLogFromConsumer();
+        javaAnalysisAPI.checkForProblems(
+                files,
+                toList(getProblemCheckerSample()),
+                problemLog);
 
         assertEquals("ProblemTypeSample\t%s:1\n".formatted(javaFile.getAbsolutePath()),
-                problemConsumer.getText());
+                problemLog.getText());
     }
+
 }

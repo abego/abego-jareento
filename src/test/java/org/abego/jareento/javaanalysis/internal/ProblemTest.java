@@ -12,7 +12,15 @@ import java.util.Properties;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
-class ProblemTest {
+public class ProblemTest {
+    public static LogFromConsumer<Problem> newProblemLogFromConsumer() {
+        return new LogFromConsumer<>(
+                p -> "%s\t%s:%d".formatted(
+                        p.getProblemType().getID(),
+                        p.getFile().getAbsolutePath(),
+                        p.getLineNumber()));
+    }
+
     @Test
     void smokeTest() {
         ProblemType problemType = new ProblemTypeTest.ProblemTypeSample2();

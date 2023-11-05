@@ -12,6 +12,7 @@ import org.abego.commons.io.FileUtil;
 import org.abego.commons.lang.exception.MustNotInstantiateException;
 import org.abego.commons.test.JUnit5Util;
 import org.abego.jareento.base.JareentoException;
+import org.abego.jareento.javaanalysis.TestUtil;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -82,8 +83,7 @@ class JavaParserUtilTest {
 
     @Test
     void fieldNamedMissingPathInFieldName(@TempDir File tempDir) throws FileNotFoundException {
-        File javaFile = new File(tempDir, "Main.java");
-        FileUtil.writeText(javaFile, "public class Main {}");
+        File javaFile = TestUtil.writeMiniJavaFile(tempDir);
         CompilationUnit cu = StaticJavaParser.parse(javaFile);
 
         JUnit5Util.assertThrowsWithMessage(
@@ -127,8 +127,7 @@ class JavaParserUtilTest {
 
     @Test
     void saveToFileReadOnlyFile(@TempDir File tempDir) throws FileNotFoundException {
-        File javaFile = new File(tempDir, "Main.java");
-        FileUtil.writeText(javaFile, "public class Main {}");
+        File javaFile = TestUtil.writeMiniJavaFile(tempDir);
         CompilationUnit cu = StaticJavaParser.parse(javaFile);
 
         // make file readonly, so saving will fail. 
@@ -144,8 +143,7 @@ class JavaParserUtilTest {
 
     @Test
     void lineNumberOfBeginOf(@TempDir File tempDir) throws FileNotFoundException {
-        File javaFile = new File(tempDir, "Main.java");
-        FileUtil.writeText(javaFile, "public class Main {}");
+        File javaFile = TestUtil.writeMiniJavaFile(tempDir);
         CompilationUnit cu = StaticJavaParser.parse(javaFile);
 
         assertEquals(1, JavaParserUtil.lineNumberOfBeginOf(cu));
@@ -153,8 +151,7 @@ class JavaParserUtilTest {
 
     @Test
     void positionOfBeginOf(@TempDir File tempDir) throws FileNotFoundException {
-        File javaFile = new File(tempDir, "Main.java");
-        FileUtil.writeText(javaFile, "public class Main {}");
+        File javaFile = TestUtil.writeMiniJavaFile(tempDir);
         CompilationUnit cu = StaticJavaParser.parse(javaFile);
 
         assertEquals(1, JavaParserUtil.positionOfBeginOf(cu).line);
@@ -162,8 +159,7 @@ class JavaParserUtilTest {
 
     @Test
     void compilationUnitOf(@TempDir File tempDir) throws FileNotFoundException {
-        File javaFile = new File(tempDir, "Main.java");
-        FileUtil.writeText(javaFile, "public class Main {}");
+        File javaFile = TestUtil.writeMiniJavaFile(tempDir);
         CompilationUnit cu = StaticJavaParser.parse(javaFile);
         TypeDeclaration<?> type1 = cu.getType(0);
 
