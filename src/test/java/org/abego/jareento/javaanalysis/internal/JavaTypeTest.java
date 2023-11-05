@@ -86,4 +86,20 @@ class JavaTypeTest {
                 callingMethodsDeclaratorTexts(callsToSubAMeth1));
     }
 
+    @Test
+    void getMethodSignatures(@TempDir File tempDir) {
+        JavaAnalysisProject project = SampleProjectUtil.setupSampleProject("calls", tempDir);
+        JavaType classRoot = project.getTypeWithName("calls.CallsSample$Root");
+        JavaTypes subTypes = classRoot.getSubTypes();
+
+        JavaMethodSignatures signatures = subTypes.getMethodSignatures();
+
+        assertEquals("""
+                CallsSample$SubA()
+                meth1(java.util.function.Consumer)
+                meth3(calls.CallsSample$SubA, java.util.function.Consumer)
+                meth4(calls.CallsSample$Root, java.util.function.Consumer)""", 
+                javaMethodSignaturesText(signatures));
+    }
+
 }
