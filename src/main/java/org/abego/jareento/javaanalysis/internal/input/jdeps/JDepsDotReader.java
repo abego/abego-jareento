@@ -39,7 +39,7 @@ import java.util.regex.Pattern;
 
 /**
  * Reads "DOT" files of the jdeps tool and generates events for parsed elements,
- * to be processed by interested listener {@link EventHandler}.
+ * to be processed by interested {@link EventHandler}.
  * <p>
  * If you want to generate the "DOT" files for a project following the standard
  * Maven directory run this command after having compiled your project:
@@ -114,9 +114,16 @@ class JDepsDotReader {
             do {
                 lineNumber++;
                 text = reader.readLine();
-                m = EDGE_LINE_PATTERN.matcher(text);
                 boolean eventFired = false;
-                if (m.matches()) {
+                if (text == null) {
+                    handler.onError(new JareentoException(
+                            "Reached end of file but missing '}'"), lineNumber); //NON-NLS
+                    endReached = true;
+                    eventFired = true;
+                } else {
+                    m = EDGE_LINE_PATTERN.matcher(text);
+                }
+                if (text != null && m.matches()) {
                     if (m.group(1) != null && m.group(2) != null) {
                         handler.onEdge(m.group(1), m.group(2), lineNumber);
                         eventFired = true;
