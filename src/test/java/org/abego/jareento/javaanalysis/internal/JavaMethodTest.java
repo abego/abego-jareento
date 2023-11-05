@@ -49,4 +49,14 @@ class JavaMethodTest {
         assertEquals("java.util.function.Consumer#accept(java.lang.Object)",
                 calledScopesAndMethodSignatureTexts(callsFromMe));
     }
+    
+    @Test
+    void getMethodsDirectlyOverridingMe$getterCase(@TempDir File tempDir) {
+        JavaAnalysisProject project = SampleProjectUtil.setupSampleProject("calls", tempDir);
+
+        JavaMethod toStringMethod = project.getMethodWithMethodDeclarator(
+                "calls.CallsSample$SubA#toString():java.lang.String");
+      
+        assertTrue(toStringMethod.getMethodsDirectlyOverridingMe().isEmpty());
+    }
 }
