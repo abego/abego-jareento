@@ -99,12 +99,6 @@ public class InputFromJavap implements JavaAnalysisProjectInput {
             if (isInterface) {
                 builder.setIsInterfaceOfClass(rawClassname, true);
             }
-            //TODO shall we also include generic type information?
-//                if (isGenericType(typeName)) {
-//                    builder.addClass(typeName);
-//                    builder.addClassInClassFile(typeName, currentClassfile[0]);
-//                    builder.addClassHasRawType(typeName, rawClassname);
-//                }
             updateTypeParameters(typeParameters, typeName);
             methodTypeParameters.clear();
             if (extendedTypes.length != 0) {
