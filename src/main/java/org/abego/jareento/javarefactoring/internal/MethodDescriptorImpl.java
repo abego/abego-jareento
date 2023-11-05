@@ -10,7 +10,6 @@ import java.util.Optional;
 
 import static org.abego.jareento.shared.commons.javaparser.JavaParserUtil.parameterTypes;
 
-//TODO: increase test coverage
 class MethodDescriptorImpl implements MethodDescriptor {
     private final ResolvedMethodDeclaration resolvedMethodDeclaration;
 

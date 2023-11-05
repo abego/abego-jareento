@@ -1,6 +1,7 @@
 package org.abego.jareento.javarefactoring.internal;
 
 import org.abego.commons.io.FileUtil;
+import org.abego.commons.lang.StringUtil;
 import org.abego.jareento.javaanalysis.JavaAnalysisAPI;
 import org.abego.jareento.javaanalysis.internal.JavaAnalysisFiles;
 import org.abego.jareento.javarefactoring.JavaRefactoringAPI;
@@ -31,9 +32,12 @@ class RemoveMethodTest {
                 md -> md.getMethodName().contains("Base"),
                 f -> true,
                 md -> listenerLog.append(
-                        String.format("removing %s.%s\n",
+                        String.format("removing %s.%s - %s - %s - (%s)\n",
                                 md.getTypeDeclaringMethod(),
-                                md.getMethodSignature())),
+                                md.getMethodSignature(),
+                                md.getQualifiedMethodName(),
+                                md.getMethodPackageName(),
+                                StringUtil.join(", ", (Object[])md.getMethodParameterTypeNames()))),
                 s -> {});
 
         assertEquals("""
@@ -96,12 +100,12 @@ class RemoveMethodTest {
                 """, unixString(FileUtil.textOf(new File(tempDir, "com/example/Sub2.java"))));
 
         assertEquals("""
-                removing com.example.Base.Base_InnerClass.innerMethodBase1(java.lang.String)
-                removing com.example.Base.Base_InnerClass.innerMethodBase2(java.lang.String)
-                removing com.example.Base.methodBase1(java.lang.String)
-                removing com.example.Base.methodBase2(java.lang.String)
-                removing com.example.Sub1.Sub1_InnerClass.innerMethodBase1(java.lang.String)
-                removing com.example.Sub1.methodBase1(java.lang.String)
+                removing com.example.Base.Base_InnerClass.innerMethodBase1(java.lang.String) - com.example.Base.Base_InnerClass.innerMethodBase1 - com.example - (java.lang.String)
+                removing com.example.Base.Base_InnerClass.innerMethodBase2(java.lang.String) - com.example.Base.Base_InnerClass.innerMethodBase2 - com.example - (java.lang.String)
+                removing com.example.Base.methodBase1(java.lang.String) - com.example.Base.methodBase1 - com.example - (java.lang.String)
+                removing com.example.Base.methodBase2(java.lang.String) - com.example.Base.methodBase2 - com.example - (java.lang.String)
+                removing com.example.Sub1.Sub1_InnerClass.innerMethodBase1(java.lang.String) - com.example.Sub1.Sub1_InnerClass.innerMethodBase1 - com.example - (java.lang.String)
+                removing com.example.Sub1.methodBase1(java.lang.String) - com.example.Sub1.methodBase1 - com.example - (java.lang.String)
                 """, listenerLog.toString());
     }
 
