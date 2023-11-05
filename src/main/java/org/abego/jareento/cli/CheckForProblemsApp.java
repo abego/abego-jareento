@@ -22,7 +22,7 @@ import static org.abego.commons.util.ServiceLoaderUtil.loadService;
 public class CheckForProblemsApp {
     private static final int EXIT_CODE_FOUND_PROBLEMS = 1;
     private final JavaAnalysisAPI javaAnalysisAPI = loadService(JavaAnalysisAPI.class);
-
+    private final PrintStream out; 
     /**
      * The arguments used when running the app.
      *
@@ -44,6 +44,10 @@ public class CheckForProblemsApp {
             List<String> files) {
     }
 
+    public CheckForProblemsApp(PrintStream out) {
+        this.out = out;
+    }
+
     /**
      * Check for problems as specified by the arguments.
      * <p>
@@ -56,7 +60,7 @@ public class CheckForProblemsApp {
      * by the application.
      */
     public static void main(String... args) {
-        var app = new CheckForProblemsApp();
+        var app = new CheckForProblemsApp(System.out);
 
         Problems problems = app.runWith(parseArgs(args));
 
@@ -123,8 +127,8 @@ public class CheckForProblemsApp {
     
     private Problems runWith(RunParameters args) {
         if (args.printUsage()) {
-            printUsage(System.out);
-            printAvailableProblemCheckersAndReporters(System.out);
+            printUsage(out);
+            printAvailableProblemCheckersAndReporters(out);
             return javaAnalysisAPI.newProblems(emptyList());
         }
 
@@ -140,7 +144,7 @@ public class CheckForProblemsApp {
             throw new IllegalArgumentException("No problem reporters found.");
         }
         Consumer<String> progress =
-                args.superSilent() ? s -> {} : System.out::println;
+                args.superSilent() ? s -> {} : out::println;
         boolean progressOnProcessedFile = !args.silent;
         File outputDirectory = args.outputDirectory();
         
