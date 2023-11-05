@@ -7,7 +7,11 @@ Breaking changes are written in **bold**.
 
 ## [Unreleased]
 
-## [0.1.0] - 2023-11-05
+## [0.2.0] - 2023-11-05
 
 - Initial Release
+
+## [0.1.0] - 2023-11-05
+
+- Internal Release only
 
