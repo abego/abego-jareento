@@ -2,6 +2,7 @@ package org.abego.jareento.shared.commons.maven;
 
 import org.abego.commons.io.FileUtil;
 import org.abego.commons.test.JUnit5Util;
+import org.abego.jareento.javaanalysis.TestUtil;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -59,11 +60,11 @@ class MavenUtilTest {
                         .formatted(someFile.getAbsolutePath()),
                 () -> MavenUtil.classpathOfMavenProject(someFile));
     }
-    
+
     @Test
     void malformedPOM(@TempDir File tempDir) {
-        File pomFile = new File(tempDir,"pom.xml");
-        FileUtil.writeText(pomFile,"<foo></foo>");
+        File pomFile = new File(tempDir, "pom.xml");
+        FileUtil.writeText(pomFile, "<foo></foo>");
 
         IllegalStateException e = JUnit5Util.assertThrowsWithMessage(IllegalStateException.class,
                 "Error when calculating classpath of Maven project '%s'"
@@ -72,5 +73,14 @@ class MavenUtilTest {
         String causeMessage = e.getCause().getMessage();
         assertTrue(causeMessage.contains("[ERROR] Malformed POM"));
         assertTrue(causeMessage.contains("[ERROR] 'modelVersion' is missing. @ line 1, column 5"));
+    }
+
+    @Test
+    void runMavenCommand(@TempDir File tempDir) {
+        TestUtil.writePomFile(tempDir);
+        
+        String output = MavenUtil.runMavenCommand(new String[]{"--version"}, tempDir);
+        
+        assertTrue(output.contains("Apache Maven"));
     }
 }
