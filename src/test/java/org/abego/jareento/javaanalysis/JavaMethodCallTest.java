@@ -6,8 +6,8 @@ import org.junit.jupiter.api.io.TempDir;
 import java.io.File;
 import java.util.stream.Collectors;
 
+import static org.abego.jareento.javaanalysis.TestUtil.assertEqualsAndHashCodeOK;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 public class JavaMethodCallTest {
 
@@ -60,11 +60,7 @@ public class JavaMethodCallTest {
         JavaMethodCall call1 = meth1.getMethodCallsFromMe().iterator().next();
         JavaMethodCall call2 = meth1.getMethodCallsFromMe().iterator().next();
 
-        assertEquals(call1, call1);
-        assertEquals(call1, call2);
-        assertNotEquals(call1, null);
-        
-        assertEquals(call1.hashCode(), call2.hashCode());
+        assertEqualsAndHashCodeOK(call1, call2);
     }
 
 }

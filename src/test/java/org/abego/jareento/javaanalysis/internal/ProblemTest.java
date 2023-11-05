@@ -11,8 +11,8 @@ import java.io.File;
 import java.util.Properties;
 import java.util.stream.Collectors;
 
+import static org.abego.jareento.javaanalysis.TestUtil.assertEqualsAndHashCodeOK;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 public class ProblemTest {
     public static LogFromConsumer<Problem> newProblemLogFromConsumer() {
@@ -62,11 +62,7 @@ public class ProblemTest {
         assertEquals(details, p.getDetails());
         assertEquals("pt2Description-bar", p.getDescription());
 
-        assertEquals(p, p);
-        assertEquals(p, p2);
-        assertNotEquals(p, null);
-        assertNotEquals(p, "problem");
-        assertEquals(p.hashCode(), p2.hashCode());
+        assertEqualsAndHashCodeOK(p, p2);
     }
 
     @Test

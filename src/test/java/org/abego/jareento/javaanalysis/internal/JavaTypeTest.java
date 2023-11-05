@@ -13,10 +13,10 @@ import java.io.File;
 import java.util.stream.Collectors;
 
 import static org.abego.jareento.javaanalysis.JavaMethodCallTest.callingMethodsDeclaratorTexts;
+import static org.abego.jareento.javaanalysis.TestUtil.assertEqualsAndHashCodeOK;
 import static org.abego.jareento.javaanalysis.internal.JavaMethodSignatureTest.javaMethodSignaturesText;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 class JavaTypeTest {
     public static String javaTypesText(JavaTypes types) {
@@ -128,10 +128,6 @@ class JavaTypeTest {
         JavaTypes subTypes = classRoot.getSubTypes();
         JavaTypes subTypes2 = classRoot.getSubTypes();
 
-        assertEquals(subTypes, subTypes);
-        assertEquals(subTypes, subTypes2);
-        assertNotEquals(subTypes, null);
-
-        assertEquals(subTypes.hashCode(), subTypes2.hashCode());
+        assertEqualsAndHashCodeOK(subTypes, subTypes2);
     }
 }

@@ -9,8 +9,7 @@ import org.junit.jupiter.api.io.TempDir;
 import java.io.File;
 
 import static org.abego.commons.util.ServiceLoaderUtil.loadService;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.abego.jareento.javaanalysis.TestUtil.assertEqualsAndHashCodeOK;
 
 class JavaAnalysisProjectConfigurationTest {
     private final JavaAnalysisAPI javaAnalysisAPI = loadService(JavaAnalysisAPI.class);
@@ -31,10 +30,6 @@ class JavaAnalysisProjectConfigurationTest {
                         mavenDir,
                         new File[]{sourcesDir});
 
-        assertEquals(configuration1,configuration1);
-        assertEquals(configuration1,configuration2);
-        assertNotEquals(configuration1,null);
-        
-        assertEquals(configuration1.hashCode(),configuration2.hashCode());
+        assertEqualsAndHashCodeOK(configuration1, configuration2);
     }
 }
