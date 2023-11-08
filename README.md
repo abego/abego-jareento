@@ -11,7 +11,7 @@ __Maven:__
 <dependency>
     <groupId>org.abego.jareento</groupId>
     <artifactId>abego-jareento</artifactId>
-    <version>0.2.0</version>
+    <version>0.2.1</version>
 </dependency>
 ```
 
