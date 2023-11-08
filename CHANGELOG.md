@@ -7,6 +7,12 @@ Breaking changes are written in **bold**.
 
 ## [Unreleased]
 
+## [0.2.1] - 2023-11-08
+
+### Security
+- fix: upgrade JavaParser dependency, to avoid vulnerabilities 
+  guava 31.1-jre has two threats
+
 ## [0.2.0] - 2023-11-05
 
 - Initial Release
